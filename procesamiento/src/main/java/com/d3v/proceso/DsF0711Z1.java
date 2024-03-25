@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class dsF0711Z1 {
+public class DsF0711Z1 {
     private String monto;
     
     private String idIntrumentoPago;
@@ -16,7 +16,7 @@ public class dsF0711Z1 {
     
     private String unidadTiempo;
     
-    public dsF0711Z1() {
+    public DsF0711Z1() {
       setMonto("");
       setIdIntrumentoPago("");
       setInstrumentoPago("");

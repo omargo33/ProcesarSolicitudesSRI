@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class dsF57011Z1 {
+public class DsF57011Z1 {
   private String szComputerID;
 
   private String mnJobNumber;
@@ -282,7 +282,7 @@ public class dsF57011Z1 {
 
   private String szRise;
 
-  public dsF57011Z1() {
+  public DsF57011Z1() {
     setSzComputerID("");
     setMnJobNumber("0");
     setSzBachType("");

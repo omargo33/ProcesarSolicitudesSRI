@@ -1,16 +1,15 @@
 package com.d3v.proceso;
 
-import com.fundamentos.conexion.managerBD;
+import com.fundamentos.conexion.ManagerBD;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import com.d3v.utilitarios.MainFiles;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
+@Slf4j
 public class EditLineNegociacion {
-  private static String PAQUETE_OBJETO = "com.d3v.proceso";
   
   private int transaccionID;
   
@@ -169,7 +168,7 @@ public class EditLineNegociacion {
     setCorreo("");
   }
   
-  public void saveTransaction(managerBD BD, String esquema) {
+  public void saveTransaction(ManagerBD BD, String esquema) {
     String a = getPaymentAmount();
     String b = a.substring(getPaymentAmount().length() - 1);
     if (b.equals("."))
@@ -183,42 +182,45 @@ public class EditLineNegociacion {
       setTransaccionID(nno.getDSF00221().getNextNumber());
     } 
     String query = "";
-    query = "INSERT INTO  " + esquema + ".t0711z1  ( szTransaccionID ,   iComputerID ,   szDocEmpresa ,   szDocType ,   mnDocDocument ,   mnSequence ,   mnSubSequence ,   szTypeOperation ,   szID ,   szCreationDateTime ,   szCashPointReferenceID ,   szCashPointOfficeReferenceID ,   szCashPointPaymentGroupReferenceID ,   szPaymentTransactionID ,   mnPaymentAmount ,   jdValueDate ,   szItemText ,   szPayerContractAccountID ,   szChequeID ,   szHouseBankID ,   szHouseBankAccountInternalID ,   szHouseBankCountryCode ,   szPrintYN ,   szReversalCashPointReferenceID ,   szReversalCashPointOfficeReferenceID ,   szReversalPaymentTransactionID ,   szReversalValueDate ,   szStatusReversal ,   mnClosingDocumentAmount,   szUsuarioOriginador,   szUsuarioCierre,   szUsuarioModficador,   jdFechaOrigen,   jdFechaCierre,   jdFechaModificador,   szStatusPayment,   szMsgError,   szRefUsuario1,   szRefUsuario2,   szRefUsuario3,   szRefUsuario4,   szNamePayment,   szCodigoEmpresa,   szAreaNegocio,   szRol,   szSelectionCAorLegacy,   szIdentificadorFiscal,   szRazonSocial,   szDireccion,   szTelefono,   szCorreo  )  VALUES ('" + getTransaccionID() + "',  '" + getComputerID() + "',  '" + getDocEmpresa() + "',  '" + getDocType() + "',  '" + getDocDocument() + "',  '" + getSequence() + "',  '" + getSubSequence() + "',  '" + getTypeOperation() + "',  '" + getId() + "',  '" + getCreationDateTime() + "',  '" + getCashPointReferenceID() + "',  '" + getCashPointOfficeReferenceID() + "',  '" + getCashPointPaymentGroupReferenceID() + "',  '" + getPaymentTransactionID() + "',  '" + getPaymentAmount() + "',  '" + getValueDate() + "',  '" + getItemText() + "',  '" + getPayerContractAccountID() + "',  '" + getChequeID() + "',  '" + getHouseBankID() + "',  '" + getHouseBankAccountInternalID() + "',  '" + getHouseBankCountryCode() + "',  '" + getPrintYN() + "',  '" + getReversalCashPointReferenceID() + "',  '" + getReversalCashPointOfficeReferenceID() + "',  '" + getReversalPaymentTransactionID() + "',  '" + getReversalValueDate() + "',  '" + getStatusReversal() + "',  '" + getClosingDocumentAmount() + "', '" + getUsuarioOriginador() + "', '" + getUsuarioCierre() + "', '" + getUsuarioModficador() + "', '" + getFechaOrigen() + "', '" + getFechaCierre() + "', '" + getFechaModificada() + "', '" + getStatusPayment() + "', '" + getMsgError() + "', '" + getRefUsuario1() + "', '" + getRefUsuario2() + "', '" + getRefUsuario3() + "', '" + getRefUsuario4() + "', '" + getNamePayment() + "', '" + getCodigoEmpresa() + "', '" + getAreaNegocio() + "', '" + getRol() + "', '" + getSelectionCAorLegacy() + "', '" + getIdentificadorFiscal() + "', '" + getRazonSocial() + "', '" + getDireccion() + "', '" + getTelefono() + "', '" + getCorreo() + "' );";
-    MainFiles.escribirLogDefault(new Object[] { PAQUETE_OBJETO + ".EditLineRecaudacion()", query });
+    query = "INSERT INTO  " + esquema + ".t0711z1  ( szTransaccionID ,   iComputerID ,   szDocEmpresa ,   szDocType ,   mnDocDocument ,   mnSequence ,   mnSubSequence ,   szTypeOperation ,   szID ,   szCreationDateTime ,   szCashPointReferenceID ,   szCashPointOfficeReferenceID ,   szCashPointPaymentGroupReferenceID ,   szPaymentTransactionID ,   mnPaymentAmount ,   jdValueDate ,   szItemText ,   szPayerContractAccountID ,   szChequeID ,   szHouseBankID ,   szHouseBankAccountInternalID ,   szHouseBankCountryCode ,   szPrintYN ,   szReversalCashPointReferenceID ,   szReversalCashPointOfficeReferenceID ,   szReversalPaymentTransactionID ,   szReversalValueDate ,   szStatusReversal ,   mnClosingDocumentAmount,   szUsuarioOriginador,   szUsuarioCierre,   szUsuarioModficador,   jdFechaOrigen,   jdFechaCierre,   jdFechaModificador,   szStatusPayment,   szMsgError,   szRefUsuario1,   szRefUsuario2,   szRefUsuario3,   szRefUsuario4,   szNamePayment,   szCodigoEmpresa,   szAreaNegocio,   szRol,   szSelectionCAorLegacy,   szIdentificadorFiscal,   szRazonSocial,   szDireccion,   szTelefono,   szCorreo  )  VALUES ('" + getTransaccionID() + "',  '" + getComputerID() + "',  '" + getDocEmpresa() + "',  '" + getDocType() + "',  '" + getDocDocument() + "',  '" + getSequence() + "',  '" + getSubSequence() + "',  '" + getTypeOperation() + "',  '" + getId() + "',  '" + getCreationDateTime() + "',  '" + getCashPointReferenceID() + "',  '" + getCashPointOfficeReferenceID() + "',  '" + getCashPointPaymentGroupReferenceID() + "',  '" + getPaymentTransactionID() + "',  '" + getPaymentAmount() + "',  '" + getValueDate() + "',  '" + getItemText() + "',  '" + getPayerContractAccountID() + "',  '" + getChequeID() + "',  '" + getHouseBankID() + "',  '" + getHouseBankAccountInternalID() + "',  '" + getHouseBankCountryCode() + "',  '" + getPrintYN() + "',  '" + getReversalCashPointReferenceID() + "',  '" + getReversalCashPointOfficeReferenceID() + "',  '" + getReversalPaymentTransactionID() + "',  '" + getReversalValueDate() + "',  '" + getStatusReversal() + "',  '" + getClosingDocumentAmount() + "', '" + getUsuarioOriginador() + "', '" + getUsuarioCierre() + "', '" + getUsuarioModficador() + "', '" + getFechaOrigen() + "', '" + getFechaCierre() + "', '" + getFechaModificada() + "', '" + getStatusPayment() + "', '" + getMsgError() + "', '" + getRefUsuario1() + "', '" + getRefUsuario2() + "', '" + getRefUsuario3() + "', '" + getRefUsuario4() + "', '" + getNamePayment() + "', '" + getCodigoEmpresa() + "', '" + getAreaNegocio() + "', '" + getRol() + "', '" + getSelectionCAorLegacy() + "', '" + getIdentificadorFiscal() + "', '" + getRazonSocial() + "', '" + getDireccion() + "', '" + getTelefono() + "', '" + getCorreo() + "' );";    
+    log.error("Query: {}", query);    
     if (!BD.sqlInsert(query) || BD.sqlCommit());
-    MainFiles.escribirLogDefault(new Object[] { PAQUETE_OBJETO + ".EditLineRecaudacion()", Integer.valueOf(getDocDocument()), getTypeOperation(), getPaymentTransactionID(), BD.getMsjError() });
+    log.error("Error: {}", BD.getMsjError());
   }
   
-  public void updTransaction(managerBD BD, String esquema) {
+  public void updTransaction(ManagerBD BD, String esquema) {
     String query = "";
-    query = "UPDATE " + esquema + ".t0711z1 SET szStatusPayment =  '" + getStatusPayment() + "' , szMsgError = '" + getMsgError() + "' WHERE  szDocEmpresa = '" + getDocEmpresa() + "' AND   szDocType = '" + getDocType() + "' AND   mnDocDocument = '" + getDocDocument() + "' ;";
-    MainFiles.escribirLogDefault(new Object[] { PAQUETE_OBJETO + ".updTransaction()", query });
+    query = "UPDATE " + esquema + ".t0711z1 SET szStatusPayment =  '" + getStatusPayment() + "' , szMsgError = '" + getMsgError() + "' WHERE  szDocEmpresa = '" + getDocEmpresa() + "' AND   szDocType = '" + getDocType() + "' AND   mnDocDocument = '" + getDocDocument() + "' ;";    
+    log.error("Query: {}", query);
     if (!BD.sqlUpdate(query) || BD.sqlCommit());
   }
   
-  public void AnulacionCierreCaja(managerBD BD, String esquema) {
+  public void AnulacionCierreCaja(ManagerBD BD, String esquema) {
     String query = "";
-    query = "UPDATE " + esquema + ".t0711z1 SET szReversalCashPointReferenceID =  '" + getReversalCashPointReferenceID() + "' , szReversalPaymentTransactionID = '" + getReversalPaymentTransactionID() + "',  szReversalValueDate = '" + getReversalValueDate() + "',  szStatusReversal = '" + getStatusReversal() + "',  szMsgError = '" + getMsgError() + "' WHERE  szCashPointPaymentGroupReferenceID = '" + getCashPointPaymentGroupReferenceID() + "' AND   szDocType = 'CC' and szStatusReversal not in ('A') ;";
-    MainFiles.escribirLogDefault(new Object[] { PAQUETE_OBJETO + ".AnulacionCierreCaja()", query });
+    query = "UPDATE " + esquema + ".t0711z1 SET szReversalCashPointReferenceID =  '" + getReversalCashPointReferenceID() + "' , szReversalPaymentTransactionID = '" + getReversalPaymentTransactionID() + "',  szReversalValueDate = '" + getReversalValueDate() + "',  szStatusReversal = '" + getStatusReversal() + "',  szMsgError = '" + getMsgError() + "' WHERE  szCashPointPaymentGroupReferenceID = '" + getCashPointPaymentGroupReferenceID() + "' AND   szDocType = 'CC' and szStatusReversal not in ('A') ;";    
+    log.error("Query: {}", query);
     if (!BD.sqlUpdate(query) || BD.sqlCommit());
   }
   
-  public void AnulacionComprobante(managerBD BD, String esquema) {
+  public void AnulacionComprobante(ManagerBD BD, String esquema) {
     String query = "";
     query = "UPDATE " + esquema + ".t0711z1 SET szUsuarioModficador =  '" + getUsuarioModficador() + "' , szReversalCashPointReferenceID = '" + getReversalPaymentTransactionID() + "',  szReversalValueDate = '" + getReversalValueDate() + "',  szStatusReversal = '" + getStatusReversal() + "'  WHERE  szPaymentTransactionID = '" + getPaymentTransactionID() + "' ;";
-    MainFiles.escribirLogDefault(new Object[] { PAQUETE_OBJETO + ".AnulacionComprobante()", query });
+    
+    log.error("Query: {}", query);
     if (!BD.sqlUpdate(query) || BD.sqlCommit());
   }
   
-  public void marcarRegCierreCaja(managerBD BD, String esquema) {
+  public void marcarRegCierreCaja(ManagerBD BD, String esquema) {
     String query = "UPDATE " + esquema + ".t0711z1 SET szStatusPayment =  '" + getStatusPayment() + "' , szUsuarioCierre = '" + getUsuarioOriginador() + "' , jdFechaCierre = '" + getFechaOrigen() + "' , szRefUsuario3 = '" + getDocType() + "-" + getDocDocument() + "-" + getDocEmpresa() + "' WHERE  szCashPointPaymentGroupReferenceID = '" + getCashPointPaymentGroupReferenceID() + "' and szTypeOperation not in ('00') ;";
-    MainFiles.escribirLogDefault(new Object[] { PAQUETE_OBJETO + ".marcarRegCierreCaja()", query });
+    
+    log.error("Query: {}", query);
     if (!BD.sqlUpdate(query) || BD.sqlCommit());
   }
   
-  public void limpiaGrupoPagos(managerBD BD, String esquema) {
+  public void limpiaGrupoPagos(ManagerBD BD, String esquema) {
     String query = " UPDATE " + esquema + ".t079804  SET szCierreCaja = ' ' ,  iDocNumber = 0 , szTypeDoc = ' ' ,  szCompanyDoc = ' '  WHERE  szCodEmpresa = '" + getDocEmpresa() + "' AND  szCodOficina = '" + getCashPointOfficeReferenceID() + "' AND   szCodCaja = '" + getCashPointReferenceID() + "' AND   jdFechaEmision = '" + getValueDate() + "' AND   szDocType = '" + getDocType() + "' ;";
-    MainFiles.escribirLogDefault(new Object[] { PAQUETE_OBJETO + ".limpiaGrupoPagos()", query });
+    
+    log.error("Query: {}", query);
     if (!BD.sqlUpdate(query) || BD.sqlCommit());
   }
   

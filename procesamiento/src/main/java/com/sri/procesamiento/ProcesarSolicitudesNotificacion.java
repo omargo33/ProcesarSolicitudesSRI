@@ -2,7 +2,7 @@
 package com.sri.procesamiento;
 
 import com.d3v.proceso.EditLineFactura;
-import com.fundamentos.conexion.managerBD;
+import com.fundamentos.conexion.ManagerBD;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,7 +58,7 @@ public class ProcesarSolicitudesNotificacion {
             
             try {
               
-                managerBD BD = new managerBD("com.mysql.jdbc.Driver", "jdbc:mysql://50.31.188.7/" + clientes.getBaseDatos() + "?autoReconnect=true&useSSL=false");
+                ManagerBD BD = new ManagerBD("com.mysql.jdbc.Driver", "jdbc:mysql://50.31.188.7/" + clientes.getBaseDatos() + "?autoReconnect=true&useSSL=false");
                 if (BD.initDBMySql(clientes.getUsuario(), Configuracion.CREDENCIAL_MAESTRA)) {
                                         
                     log.error("Procesando detalle del usuario -> {}", clientes.getSriUsuario());
@@ -81,7 +81,7 @@ public class ProcesarSolicitudesNotificacion {
                         try {
                             if (documento.getEstadoSolicitud().equals("200")) {
                                 //Registrar Archivos Descargado
-                                managerBD BD_ = new managerBD("com.mysql.jdbc.Driver", "jdbc:mysql://50.31.188.7/" + clientes.getBaseDatos() + "?autoReconnect=true&useSSL=false");
+                                ManagerBD BD_ = new ManagerBD("com.mysql.jdbc.Driver", "jdbc:mysql://50.31.188.7/" + clientes.getBaseDatos() + "?autoReconnect=true&useSSL=false");
                                 if (BD_.initDBMySql(clientes.getUsuario(), Configuracion.CREDENCIAL_MAESTRA));
 
                                 try {

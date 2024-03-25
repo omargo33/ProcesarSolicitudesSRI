@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.sri</groupId>
 	<artifactId>procesamiento</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>procesamiento</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -22,14 +22,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-
 		<!-- lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-
 		<!-- dependencia de mysql 5 -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -42,23 +40,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<!-- org.json.JSONObject; -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20231013</version>
-		</dependency>
-
-		<!-- TODO BORRAR!!! -->
-<!-- https://mvnrepository.com/artifact/javax.mail/mail -->
-<dependency>
-    <groupId>javax.mail</groupId>
-    <artifactId>mail</artifactId>
-    <version>1.4</version>
-</dependency>
-
-
+		</dependency>		
 	</dependencies>
 	<build>
 		<plugins>

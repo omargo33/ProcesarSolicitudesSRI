@@ -5,12 +5,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class dsF00221 {
+public class DsF00221 {
     private String objeto;
     
     private int nextNumber;
     
-    public dsF00221() {
+    public DsF00221() {
       setObjeto("");
       setNextNumber(0);
     }  

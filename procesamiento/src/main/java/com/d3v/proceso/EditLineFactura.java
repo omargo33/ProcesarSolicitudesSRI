@@ -2,7 +2,7 @@ package com.d3v.proceso;
 
 import com.d3v.utilitarios.Pagos;
 import com.d3v.utilitarios.UDC;
-import com.fundamentos.conexion.managerBD;
+import com.fundamentos.conexion.ManagerBD;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,11 +31,11 @@ import org.xml.sax.InputSource;
 @Setter
 @Slf4j
 public class EditLineFactura {
-  dsF57011Z1 comprobanteCabecera = new dsF57011Z1();
+  DsF57011Z1 comprobanteCabecera = new DsF57011Z1();
   
-  List<dsF57011Z1> comprobanteDetalle;
+  List<DsF57011Z1> comprobanteDetalle;
   
-  List<dsF0711Z1> pagosDetalle;
+  List<DsF0711Z1> pagosDetalle;
   
   float mntotalSinImpuestos = 0.0F;
   
@@ -67,7 +67,7 @@ public class EditLineFactura {
   
   public EditLineFactura() {
     setComprobanteDetalle(new ArrayList<>());
-    setComprobanteCabecera(new dsF57011Z1());
+    setComprobanteCabecera(new DsF57011Z1());
     setPagosDetalle(new ArrayList<>());
     setXml("");
   }
@@ -76,8 +76,8 @@ public class EditLineFactura {
     return xml.replaceAll("\\s*(<\\?xml[^>]*\\?>)\\s*", "$1");
   }
   
-  public void procesarComprobante(managerBD BD, String esquema, String xmlAutorizado, String empresaDocumento, String tipoDocumento, String nroDocumento, String empresaComprobante, String tipoComprobante, String nroComprobante) {
-    String prologoXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+  public void procesarComprobante(ManagerBD BD, String esquema, String xmlAutorizado, String empresaDocumento, String tipoDocumento, String nroDocumento, String empresaComprobante, String tipoComprobante, String nroComprobante) {
+    //String prologoXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     cadenaXML(xmlAutorizado);
     boolean procesarOK = true;
     String comprobante = "";
@@ -125,7 +125,7 @@ public class EditLineFactura {
         String nroTrabajo = String.valueOf(nno.getDSF00221().getNextNumber());
         try {
           EditLineSalesZ1 pZ1 = new EditLineSalesZ1();
-          dsF57011Z1 detalleTemporal = new dsF57011Z1();
+          DsF57011Z1 detalleTemporal = new DsF57011Z1();
           BeanUtils.copyProperties(this.comprobanteDetalle.get(i), detalleTemporal);
           pZ1.setDSF57011Z1(detalleTemporal);
           pZ1.getDSF57011Z1().setSzDocumentCompany(empresaDocumento);
@@ -161,12 +161,12 @@ public class EditLineFactura {
         neg.setSequence(i + 1);
         neg.setCreationDateTime(MainFechaString.fechaFormateada(new Date(), "yyyy-MM-dd hh:mm:ss"));
         neg.setPaymentTransactionID(empresaDocumento + tipoDocumento + nroDocumento + neg.getSequence());
-        neg.setPaymentAmount(((dsF0711Z1)this.pagosDetalle.get(i)).getMonto());
-        neg.setTypeOperation(((dsF0711Z1)this.pagosDetalle.get(i)).getIdIntrumentoPago());
+        neg.setPaymentAmount(((DsF0711Z1)this.pagosDetalle.get(i)).getMonto());
+        neg.setTypeOperation(((DsF0711Z1)this.pagosDetalle.get(i)).getIdIntrumentoPago());
         UDC udc = new UDC();
         udc.setModulo("57");
         udc.setConstante("PY");
-        udc.setDescripcion2(((dsF0711Z1)this.pagosDetalle.get(i)).getIdIntrumentoPago());
+        udc.setDescripcion2(((DsF0711Z1)this.pagosDetalle.get(i)).getIdIntrumentoPago());
         udc.retrieveDescripcion2(BD, esquema);
         neg.setTypeOperation(udc.getCodigoDefinidoUsuario());
         neg.setValueDate(MainFechaString.fechaFormateada(new Date(), "yyyy-MM-dd"));
@@ -196,7 +196,7 @@ public class EditLineFactura {
     String estab = "";
     String ptoEmi = "";
     String secuencial = "";
-    dsF57011Z1 comprobante = new dsF57011Z1();
+    DsF57011Z1 comprobante = new DsF57011Z1();
     Document document = parseXmlFile(xml);
     NodeList nodeLst = document.getElementsByTagName("infoTributaria");
     int i;
@@ -295,7 +295,7 @@ public class EditLineFactura {
     nodeLst = document.getElementsByTagName("pago");
     for (i = 0; i < nodeLst.getLength(); i++) {
       Node nodo = nodeLst.item(i);
-      dsF0711Z1 tmp = new dsF0711Z1();
+      DsF0711Z1 tmp = new DsF0711Z1();
       for (int l = 0; l < nodo.getChildNodes().getLength(); l++) {
         if (nodo.getChildNodes().item(l).getNodeName() != "#text") {
           if (nodo.getChildNodes().item(l).getNodeName().equalsIgnoreCase("formaPago")) {
@@ -315,7 +315,7 @@ public class EditLineFactura {
     nodeLst = document.getElementsByTagName("detalle");
     for (i = 0; i < nodeLst.getLength(); i++) {
       Node nodo = nodeLst.item(i);
-      dsF57011Z1 detalle = new dsF57011Z1();
+      DsF57011Z1 detalle = new DsF57011Z1();
       comprobante.setSzReferenceLegal(estab + "-" + ptoEmi + "-" + secuencial);
       BeanUtils.copyProperties(comprobante, detalle);
       for (int l = 0; l < nodo.getChildNodes().getLength(); l++) {

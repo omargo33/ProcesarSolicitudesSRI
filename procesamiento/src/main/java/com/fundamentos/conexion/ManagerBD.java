@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-public class managerBD {
+public class ManagerBD {
   private String DRIVER_NAME;
   
   private String DATABASE_URL;
@@ -28,7 +28,7 @@ public class managerBD {
   
   public String msjError;
   
-  public managerBD(String driver, String url) {
+  public ManagerBD(String driver, String url) {
     this.DRIVER_NAME = driver;
     this.DATABASE_URL = url;
   }

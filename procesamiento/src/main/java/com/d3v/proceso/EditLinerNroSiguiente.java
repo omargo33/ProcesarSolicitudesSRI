@@ -1,6 +1,6 @@
 package com.d3v.proceso;
 
-import com.fundamentos.conexion.managerBD;
+import com.fundamentos.conexion.ManagerBD;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,17 +10,17 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @Slf4j
 public class EditLinerNroSiguiente {
-  dsF0022 DSF0022 = new dsF0022();
+  DsF0022 DSF0022 = new DsF0022();
   
-  dsF00221 DSF00221 = new dsF00221();
+  DsF00221 DSF00221 = new DsF00221();
   
   private String esquema;
   
-  managerBD BD;
+  ManagerBD BD;
   
   public EditLinerNroSiguiente() {
-    setDSF0022(new dsF0022());
-    setDSF00221(new dsF00221());
+    setDSF0022(new DsF0022());
+    setDSF00221(new DsF00221());
     setEsquema("");
     setBD(null);
   }

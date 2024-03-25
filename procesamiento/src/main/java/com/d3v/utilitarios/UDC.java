@@ -1,6 +1,6 @@
 package com.d3v.utilitarios;
 
-import com.fundamentos.conexion.managerBD;
+import com.fundamentos.conexion.ManagerBD;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +26,7 @@ public class UDC {
   
   private String hardCode;
   
-  public void retrieve(managerBD BD, String esquema) {
+  public void retrieve(ManagerBD BD, String esquema) {
     String[][] registro = (String[][])null;
     String query = "";
     try {
@@ -43,7 +43,7 @@ public class UDC {
     } 
   }
   
-  public void retrieveDescripcion2(managerBD BD, String esquema) {
+  public void retrieveDescripcion2(ManagerBD BD, String esquema) {
     String[][] registro = (String[][])null;
     String query = "";
     try {
