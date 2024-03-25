@@ -9,9 +9,15 @@ import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import lombok.Getter;
+import lombok.Setter;
+
+
+@Getter
+@Setter
 public class MainFiles {
-  private String path;
-  
+
+  private String path;  
   private boolean exitInmediate;
   
   private static String PAQUETE_OBJETO = "cron.utilidades.MainFiles";
@@ -19,16 +25,6 @@ public class MainFiles {
   public MainFiles(String Path) {
     this.path = Path;
     setExitInmediate(true);
-  }
-  
-  MainFiles() {}
-  
-  public String getPath() {
-    return this.path;
-  }
-  
-  public File archivo() {
-    return new File(this.path);
   }
   
   public String getText() {
@@ -46,6 +42,7 @@ public class MainFiles {
     } 
   }
   
+  @Override
   public String toString() {
     return getText();
   }
@@ -70,13 +67,6 @@ public class MainFiles {
     setText((new MainConversiones()).encripta(text));
   }
   
-  public boolean isExitInmediate() {
-    return this.exitInmediate;
-  }
-  
-  public void setExitInmediate(boolean exitInmediate) {
-    this.exitInmediate = exitInmediate;
-  }
   
   public static String escribirLog(String f, String s) {
     try {

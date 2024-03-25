@@ -3,10 +3,15 @@ package com.d3v.proceso;
 import com.d3v.utilitarios.MainFiles;
 import com.fundamentos.conexion.managerBD;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 public class EditLineSalesZ1 {
   dsF57011Z1 DSF57011Z1 = new dsF57011Z1();
   
@@ -197,29 +202,6 @@ public class EditLineSalesZ1 {
     } catch (Exception e) {
       MainFiles.escribirLogDefault(new Object[] { PAQUETE_OBJETO + ".masterFuncionSalesZ1()", "Exepcion en proceso maestro registrar el Pedido en la Z1", query });
     } 
-  }
+  } 
   
-  public dsF57011Z1 getDSF57011Z1() {
-    return this.DSF57011Z1;
-  }
-  
-  public void setDSF57011Z1(dsF57011Z1 DSF57011Z1) {
-    this.DSF57011Z1 = DSF57011Z1;
-  }
-  
-  public List<dsF57011Z1> getListDSF57011Z1() {
-    return this.listDSF57011Z1;
-  }
-  
-  public void setListDSF57011Z1(List<dsF57011Z1> listDSF57011Z1) {
-    this.listDSF57011Z1 = listDSF57011Z1;
-  }
-  
-  public void setEsquema(String esquema) {
-    this.esquema = esquema;
-  }
-  
-  public void setBD(managerBD BD) {
-    this.BD = BD;
-  }
 }

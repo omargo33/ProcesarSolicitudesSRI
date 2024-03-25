@@ -1,5 +1,10 @@
 package com.d3v.proceso;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class dsF00221 {
     private String objeto;
     
@@ -8,21 +13,6 @@ public class dsF00221 {
     public dsF00221() {
       setObjeto("");
       setNextNumber(0);
-    }
-    
-    public String getObjeto() {
-      return this.objeto;
-    }
-    
-    public void setObjeto(String objeto) {
-      this.objeto = objeto;
-    }
-    
-    public int getNextNumber() {
-      return this.nextNumber;
-    }
-    
-    public void setNextNumber(int nextNumber) {
-      this.nextNumber = nextNumber;
-    }
+    }  
+  
   }

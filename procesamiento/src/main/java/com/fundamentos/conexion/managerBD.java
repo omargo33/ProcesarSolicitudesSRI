@@ -11,6 +11,10 @@ import java.util.Locale;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 
+import lombok.extern.slf4j.Slf4j;
+
+
+@Slf4j
 public class managerBD {
   private String DRIVER_NAME;
   
@@ -105,7 +109,7 @@ public class managerBD {
       DriverManager.setLoginTimeout(60);
       this.con = DriverManager.getConnection(this.DATABASE_URL);
       this.stt = this.con.createStatement();
-      System.out.println("Ingresa a Excel");
+      log.info("Ingresa a Excel");
     } catch (ClassNotFoundException ex) {
       ex.printStackTrace();
       setMsjError(ex.getMessage());

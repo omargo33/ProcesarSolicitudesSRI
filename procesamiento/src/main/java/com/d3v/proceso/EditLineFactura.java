@@ -3,6 +3,11 @@ package com.d3v.proceso;
 import com.d3v.utilitarios.Pagos;
 import com.d3v.utilitarios.UDC;
 import com.fundamentos.conexion.managerBD;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
 import com.d3v.utilitarios.MainFechaString;
 import java.io.StringReader;
 import java.text.ParseException;
@@ -22,6 +27,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+@Getter
+@Setter
+@Slf4j
 public class EditLineFactura {
   dsF57011Z1 comprobanteCabecera = new dsF57011Z1();
   
@@ -140,8 +148,8 @@ public class EditLineFactura {
           pZ1.setEsquema(esquema);
           pZ1.setBD(BD);
           pZ1.editLine("2");
-        } catch (Exception e) {
-          System.err.println("Genero una expcial registrar el comprobante: " + e.toString());
+        } catch (Exception e) {          
+          log.error(" Genero una expcial registrar el comprobante: {}", e.toString());
         } 
       } 
       for (i = 0; i < this.pagosDetalle.size(); i++) {
@@ -282,7 +290,7 @@ public class EditLineFactura {
         } 
       } 
     } catch (Exception e) {
-      System.out.println("Se genero una exepcial analizar la informaciadicional");
+      log.error("Se genero una exepcial analizar la informaciadicional {}", e.toString());
     } 
     nodeLst = document.getElementsByTagName("pago");
     for (i = 0; i < nodeLst.getLength(); i++) {
@@ -392,8 +400,7 @@ public class EditLineFactura {
       InputSource is = new InputSource(new StringReader(in));
       return db.parse(is);
     } catch (Exception e) {
-      System.out.println(getClass().getName() + ".parseXmlFile() " + e
-          .toString());
+      log.error("Genero una exepcial parsear el archivo xml: {}", e.toString());      
       return null;
     } 
   }
@@ -426,7 +433,7 @@ public class EditLineFactura {
       sdf.setLenient(false);
       fechaFormato = sdf.parse(fecha);
     } catch (ParseException ex) {
-      System.err.println("Genero una exepcial formatear la fecha: " + ex.toString());
+      log.error("Genero una exepcial formatear la fecha: {}", ex.toString());
     } 
     return fechaFormato;
   }
@@ -449,37 +456,5 @@ public class EditLineFactura {
     sdf.setLenient(false);
     fechaFormato = sdf.format(fecha);
     return fechaFormato;
-  }
-  
-  public dsF57011Z1 getComprobanteCabecera() {
-    return this.comprobanteCabecera;
-  }
-  
-  public void setComprobanteCabecera(dsF57011Z1 comprobanteCabecera) {
-    this.comprobanteCabecera = comprobanteCabecera;
-  }
-  
-  public List<dsF57011Z1> getComprobanteDetalle() {
-    return this.comprobanteDetalle;
-  }
-  
-  public void setComprobanteDetalle(List<dsF57011Z1> comprobanteDetalle) {
-    this.comprobanteDetalle = comprobanteDetalle;
-  }
-  
-  public List<dsF0711Z1> getPagosDetalle() {
-    return this.pagosDetalle;
-  }
-  
-  public void setPagosDetalle(List<dsF0711Z1> pagosDetalle) {
-    this.pagosDetalle = pagosDetalle;
-  }
-  
-  public String getXml() {
-    return this.xml;
-  }
-  
-  public void setXml(String xml) {
-    this.xml = xml;
   }
 }

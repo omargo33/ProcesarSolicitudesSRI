@@ -2,6 +2,13 @@ package com.d3v.proceso;
 
 import com.fundamentos.conexion.managerBD;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+@Getter
+@Setter
+@Slf4j
 public class EditLinerNroSiguiente {
   dsF0022 DSF0022 = new dsF0022();
   
@@ -37,17 +44,17 @@ public class EditLinerNroSiguiente {
         this.DSF0022.setNextNumber(Integer.parseInt(pfTemp.substring(2) + "000001"));
         query = "INSERT INTO " + this.esquema + ".t0022 (szCompany, szTypeDoc, mnPeriodoFiscal, szDescripcion, mnNextNumber)VALUES ('" + this.DSF0022.getCompany() + "' ,'" + this.DSF0022.getTypeDoc() + "', '" + this.DSF0022.getAnioFiscal() + "', '" + this.DSF0022.getDescripcion() + "', '" + this.DSF0022.getNextNumber() + "');";
         if (this.BD.sqlInsert(query) && this.BD.sqlCommit()) {
-          System.out.println("Registro automatico NN exitoso!");
+          log.info("Registro automatico NN exitoso!");
           updateNN = true;
         } else {
-          System.out.println("Problemas al registrar NN automatico");
+          log.info("Problemas al registrar NN automatico");
         } 
       } 
       if (updateNN) {
         int nextNumberNew = this.DSF0022.getNextNumber() + 1;
         query = "UPDATE " + this.esquema + ".t0022 SET mnNextNumber =  '" + nextNumberNew + "' WHERE szCompany = '" + this.DSF0022.getCompany() + "' AND szTypeDoc = '" + this.DSF0022.getTypeDoc() + "' AND mnPeriodoFiscal = '" + this.DSF0022.getAnioFiscal() + "' ;";
         if (this.BD.sqlUpdate(query) && this.BD.sqlCommit())
-          System.out.println("Consumo realizado NN!"); 
+        log.info("Consumo realizado NN!"); 
       } 
     } 
   }
@@ -68,50 +75,19 @@ public class EditLinerNroSiguiente {
         this.DSF00221.setNextNumber(1);
         query = "INSERT INTO " + this.esquema + ".t00221(szObjeto, mnNextNumber)VALUES ('" + this.DSF00221.getObjeto() + "', '" + this.DSF00221.getNextNumber() + "' );";
         if (this.BD.sqlInsert(query) && this.BD.sqlCommit()) {
-          System.out.println("Registro automatico NN por Objeto Exitoso!");
+          log.info("Registro automatico NN por Objeto Exitoso!");
           updateNN = true;
         } else {
-          System.out.println("Problemas al registrar NN por Objeto automatico");
+          log.info("Problemas al registrar NN por Objeto automatico");
         } 
       } 
       if (updateNN) {
         int nextNumberNew = this.DSF00221.getNextNumber() + 1;
         query = "UPDATE " + this.esquema + ".t00221 SET mnNextNumber =  '" + nextNumberNew + "' WHERE szObjeto = '" + this.DSF00221.getObjeto() + "' ;";
         if (this.BD.sqlUpdate(query) && this.BD.sqlCommit())
-          System.out.println("Consumo realizado NN por Objeto!"); 
+        log.info("Consumo realizado NN por Objeto!"); 
       } 
     } 
-  }
+  }  
   
-  public dsF0022 getDSF0022() {
-    return this.DSF0022;
-  }
-  
-  public void setDSF0022(dsF0022 DSF0022) {
-    this.DSF0022 = DSF0022;
-  }
-  
-  public dsF00221 getDSF00221() {
-    return this.DSF00221;
-  }
-  
-  public void setDSF00221(dsF00221 DSF00221) {
-    this.DSF00221 = DSF00221;
-  }
-  
-  public String getEsquema() {
-    return this.esquema;
-  }
-  
-  public void setEsquema(String esquema) {
-    this.esquema = esquema;
-  }
-  
-  public managerBD getBD() {
-    return this.BD;
-  }
-  
-  public void setBD(managerBD BD) {
-    this.BD = BD;
-  }
 }

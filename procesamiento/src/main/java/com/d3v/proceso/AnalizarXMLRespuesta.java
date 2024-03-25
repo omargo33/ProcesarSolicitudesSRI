@@ -10,6 +10,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import lombok.extern.slf4j.Slf4j;
+
+
+@Slf4j
 class AnalizarXMLRespuesta {
   private String XML;
   
@@ -32,8 +36,7 @@ class AnalizarXMLRespuesta {
       InputSource is = new InputSource(new StringReader(in));
       return db.parse(is);
     } catch (Exception e) {
-      System.out.println(getClass().getName() + ".parseXmlFile() " + e
-          .toString());
+      log.error("Error al parsear el archivo XML: {}", e.toString());
       return null;
     } 
   }
