@@ -13,26 +13,25 @@ import javax.swing.JOptionPane;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 @Slf4j
 public class ManagerBD {
   private String DRIVER_NAME;
-  
+
   private String DATABASE_URL;
-  
+
   public Connection con;
-  
+
   public CallableStatement callp;
-  
+
   public Statement stt;
-  
+
   public String msjError;
-  
+
   public ManagerBD(String driver, String url) {
     this.DRIVER_NAME = driver;
     this.DATABASE_URL = url;
   }
-  
+
   public boolean initDBMySql(String User, String Pass) {
     try {
       Class.forName(this.DRIVER_NAME).newInstance();
@@ -52,10 +51,10 @@ public class ManagerBD {
       ex.printStackTrace();
       setMsjError(ex.getMessage());
       return false;
-    } 
+    }
     return true;
   }
-  
+
   public boolean initDBSqlServer(String User, String Pass) {
     try {
       Class.forName(this.DRIVER_NAME).newInstance();
@@ -75,10 +74,10 @@ public class ManagerBD {
       ex.printStackTrace();
       setMsjError(ex.getMessage());
       return false;
-    } 
+    }
     return true;
   }
-  
+
   public boolean initDBOracle(String User, String Pass) {
     try {
       Locale.setDefault(new Locale("es", "ES"));
@@ -99,10 +98,10 @@ public class ManagerBD {
       ex.printStackTrace();
       setMsjError(ex.getMessage());
       return false;
-    } 
+    }
     return true;
   }
-  
+
   public boolean initExcel() {
     try {
       Class.forName(this.DRIVER_NAME).newInstance();
@@ -122,10 +121,10 @@ public class ManagerBD {
       ex.printStackTrace();
       setMsjError(ex.getMessage());
       return false;
-    } 
+    }
     return true;
   }
-  
+
   public boolean sqlCommit() {
     try {
       this.con.commit();
@@ -134,9 +133,9 @@ public class ManagerBD {
       e.printStackTrace();
       setMsjError(e.getMessage());
       return false;
-    } 
+    }
   }
-  
+
   public boolean sqlRollBack() {
     try {
       this.con.rollback();
@@ -144,50 +143,50 @@ public class ManagerBD {
     } catch (SQLException e) {
       setMsjError(e.getMessage());
       return false;
-    } 
+    }
   }
-  
+
   public void setMsjError(String msj) {
     this.msjError = msj;
   }
-  
+
   public String getMsjError() {
     return this.msjError;
   }
-  
+
   public Connection getMiConeccion() {
     return this.con;
   }
-  
+
   public void Close(Statement stm) {
     if (stm != null)
       try {
         stm.close();
       } catch (SQLException e) {
         e.printStackTrace();
-      }  
+      }
   }
-  
+
   public boolean desconectar() {
     if (this.con != null)
       try {
         this.con.close();
       } catch (SQLException e) {
         e.printStackTrace();
-      }  
+      }
     return true;
   }
-  
+
   public CallableStatement ejecutaProcedure(String sql) {
     try {
       this.callp = this.con.prepareCall(sql);
     } catch (SQLException ex) {
       ex.printStackTrace();
       this.callp = null;
-    } 
+    }
     return this.callp;
   }
-  
+
   public Date getConverFecha(String fe) {
     Date f = null;
     try {
@@ -196,10 +195,11 @@ public class ManagerBD {
       this.callp.setInt(2, Integer.parseInt(fe));
       this.callp.execute();
       f = this.callp.getDate(1);
-    } catch (SQLException sQLException) {}
+    } catch (SQLException sQLException) {
+    }
     return f;
   }
-  
+
   public ResultSet sqlResultSet(String query) {
     try {
       ResultSet rs = this.stt.executeQuery(query);
@@ -207,11 +207,11 @@ public class ManagerBD {
     } catch (SQLException e) {
       JOptionPane.showMessageDialog(null, e, "Error al intentar ejecutar la Sentencia " + e.getMessage(), 0);
       return null;
-    } 
+    }
   }
-  
+
   public String[][] sqlString(String consulta) {
-    String[][] res = (String[][])null;
+    String[][] res = (String[][]) null;
     ResultSet rst = null;
     Vector<String> vec = null;
     Vector<Vector<String>> tuplas = null;
@@ -222,25 +222,25 @@ public class ManagerBD {
       while (rst.next()) {
         vec = new Vector();
         for (int j = 1; j <= col; j++)
-          vec.add(rst.getString(j)); 
+          vec.add(rst.getString(j));
         tuplas.add(vec);
-      } 
+      }
       if (tuplas == null || vec == null)
-        return (String[][])null; 
+        return (String[][]) null;
       res = new String[tuplas.size()][vec.size()];
       for (int i = 0; i < tuplas.size(); i++) {
         Vector<String> aux = tuplas.elementAt(i);
         for (int j = 0; j < aux.size(); j++)
-          res[i][j] = aux.elementAt(j); 
-      } 
+          res[i][j] = aux.elementAt(j);
+      }
     } catch (Exception c) {
       c.printStackTrace();
-    } 
+    }
     return res;
   }
-  
+
   public String[][] sqlProcedure(ResultSet rs) {
-    String[][] res = (String[][])null;
+    String[][] res = (String[][]) null;
     ResultSet rst = null;
     Vector<String> vec = null;
     Vector<Vector<String>> tuplas = null;
@@ -251,45 +251,45 @@ public class ManagerBD {
       while (rst.next()) {
         vec = new Vector();
         for (int j = 1; j <= col; j++)
-          vec.add(rst.getString(j)); 
+          vec.add(rst.getString(j));
         tuplas.add(vec);
-      } 
+      }
       if (tuplas == null || vec == null)
-        return (String[][])null; 
+        return (String[][]) null;
       res = new String[tuplas.size()][vec.size()];
       for (int i = 0; i < tuplas.size(); i++) {
         Vector<String> aux = tuplas.elementAt(i);
         for (int j = 0; j < aux.size(); j++)
-          res[i][j] = aux.elementAt(j); 
-      } 
+          res[i][j] = aux.elementAt(j);
+      }
     } catch (Exception c) {
       c.printStackTrace();
-    } 
+    }
     return res;
   }
-  
+
   public boolean sqlInsert(String consulta) {
     try {
       if (this.stt.executeUpdate(consulta) > 0)
-        return true; 
+        return true;
     } catch (SQLException ex) {
       ex.printStackTrace();
       setMsjError(ex.getMessage());
-    } 
+    }
     return false;
   }
-  
+
   public boolean sqlUpdate(String consulta) {
     try {
       if (this.stt.executeUpdate(consulta) > 0)
-        return true; 
+        return true;
     } catch (SQLException ex) {
       ex.printStackTrace();
       setMsjError(ex.getMessage());
-    } 
+    }
     return false;
   }
-  
+
   public boolean sqlVOID(String consulta) {
     try {
       this.stt.execute(consulta);
@@ -297,20 +297,20 @@ public class ManagerBD {
     } catch (Exception e) {
       e.printStackTrace();
       return false;
-    } 
+    }
   }
-  
+
   public boolean sqlExisteDato(String sql) {
     String[][] d = sqlString(sql);
     try {
       if (d.length > 0)
-        return true; 
+        return true;
     } catch (NullPointerException e) {
       return false;
-    } 
+    }
     return false;
   }
-  
+
   public String tipoDato(String d) {
     Double a = null;
     try {
@@ -320,25 +320,27 @@ public class ManagerBD {
         d = "default";
       } else {
         d = "'" + d + "'";
-      } 
-    } 
+      }
+    }
     return d;
   }
-  
+
   public int getConverJuliano(String fe) {
     int f = 0;
     try {
       this.callp.setString(2, fe);
       this.callp.execute();
       f = this.callp.getInt(1);
-    } catch (SQLException sQLException) {}
+    } catch (SQLException sQLException) {
+    }
     return f;
   }
-  
+
   public void getPrepaConverJuliano() {
     try {
       this.callp = this.con.prepareCall("{? = call date2jde(?)}");
       this.callp.registerOutParameter(1, 6);
-    } catch (SQLException sQLException) {}
+    } catch (SQLException sQLException) {
+    }
   }
 }
