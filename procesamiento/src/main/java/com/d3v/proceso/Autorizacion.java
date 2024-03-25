@@ -12,21 +12,21 @@ import lombok.Setter;
 @Setter
 public class Autorizacion {
   private String estado;
-  
+
   private String fechaAutorizacion;
-  
+
   private Date fecha;
-  
+
   private String ambiente;
-  
+
   private String comprobante;
-  
+
   private String numeroAutorizacion;
-  
+
   private String tipoComprobante;
-  
+
   private List<MensajeAutorizacion> listaMensajeAutorizacion;
-  
+
   public Autorizacion() {
     setAmbiente("");
     setComprobante("");
@@ -36,24 +36,21 @@ public class Autorizacion {
     setListaMensajeAutorizacion(new ArrayList<>());
     setTipoComprobante("");
   }
-  
+
+  @Override
   public String toString() {
-    return "\nambiente: " + getAmbiente() + "\ncomprobante: " + 
-      getComprobante() + "\nestado: " + 
-      getEstado() + "\nfecha autorizacion: " + 
-      getFechaAutorizacion() + "\ntipo comprobante: " + 
-      getTipoComprobante() + "\nmensajes: " + 
-      listaMensajesToString();
+    return "Autorizacion [estado=" + estado + ", fecha=" + fecha + ", fechaAutorizacion=" + fechaAutorizacion
+        + ", ambiente=" + ambiente + ", comprobante=" + comprobante + ", numeroAutorizacion=" + numeroAutorizacion
+        + ", tipoComprobante=" + tipoComprobante + ", listaMensajeAutorizacion=" + listaMensajesToString() + "]";
   }
-  
-  
+
   public String listaMensajesToString() {
     String respuesta = "";
     for (MensajeAutorizacion a : getListaMensajeAutorizacion())
-      respuesta = respuesta + a.toString(); 
+      respuesta = respuesta + a.toString();
     return respuesta;
   }
-  
+
   public Date getFecha() {
     try {
       SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -62,6 +59,6 @@ public class Autorizacion {
       return fechaDate;
     } catch (Exception ex) {
       return new Date();
-    } 
+    }
   }
 }
