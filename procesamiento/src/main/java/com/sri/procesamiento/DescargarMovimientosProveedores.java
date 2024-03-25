@@ -1,8 +1,10 @@
 
 package com.sri.procesamiento;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,12 +13,17 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+
+@Getter
+@Setter
+@Slf4j
 public class DescargarMovimientosProveedores {
 
     String respuestaSolicitud;
@@ -49,7 +56,7 @@ public class DescargarMovimientosProveedores {
 
             // Obtener el código de respuesta
             int responseCode = connection.getResponseCode();
-            System.out.println("Código de respuesta: " + responseCode);
+            log.info("Código de respuesta: {}", responseCode);
 
             // Leer la respuesta del servicio
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -62,8 +69,7 @@ public class DescargarMovimientosProveedores {
             reader.close();
 
             // Imprimir la respuesta
-            System.out.println("Respuesta del servicio:");
-            System.out.println(response.toString());
+            log.info("Respuesta del servicio: {}", response.toString());
 
             setRespuestaSolicitud(response.toString());
 
@@ -80,8 +86,8 @@ public class DescargarMovimientosProveedores {
             JSONObject jsonObject = new JSONObject(json);
 
             // Obtenemos el valor del campo "status"
-            String status = jsonObject.getString("status");
-            System.out.println("Status: " + status);
+            String status = jsonObject.getString("status");            
+            log.info("Status: {}", status);
 
             // Obtenemos el array de objetos "data"
             JSONArray dataArray = jsonObject.getJSONArray("data");
@@ -124,7 +130,7 @@ public class DescargarMovimientosProveedores {
                         int count = resultSet.getInt(1);
                         if (count > 0) {
                             registroExistente = true;
-                            System.out.println("El registro con access_key " + accessKey + " ya existe en la base de datos.");
+                            log.info("El registro con access_key {} ya existe en la base de datos", accessKey );
                         }
                     }
                 } catch (SQLException e) {
@@ -159,9 +165,9 @@ public class DescargarMovimientosProveedores {
 
                         int rowsInserted = statement.executeUpdate();
                         if (rowsInserted > 0) {
-                            System.out.println("Inserción exitosa.");
+                            log.info("Inserción exitosa.");
                         } else {
-                            System.out.println("No se pudo insertar el registro.");
+                            log.info("No se pudo insertar el registro.");                            
                         }
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -169,21 +175,7 @@ public class DescargarMovimientosProveedores {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Se generó una excepción al analizar la solicitud: " + e.toString());
+            log.error("Se generó una excepción al analizar la solicitud: {}", e.toString());
         }
     }
-
-    
-
-    public String getRespuestaSolicitud() {
-        return respuestaSolicitud;
-    }
-
-    public void setRespuestaSolicitud(String respuestaSolicitud) {
-        this.respuestaSolicitud = respuestaSolicitud;
-    }
-
-    
-    
-    
 }

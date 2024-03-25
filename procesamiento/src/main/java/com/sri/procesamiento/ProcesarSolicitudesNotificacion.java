@@ -3,8 +3,12 @@ package com.sri.procesamiento;
 
 import com.d3v.proceso.EditLineFactura;
 import com.fundamentos.conexion.managerBD;
+
+import lombok.extern.slf4j.Slf4j;
+
 import java.sql.ResultSet;
 
+@Slf4j
 public class ProcesarSolicitudesNotificacion {
 
     public static String CARPETA_EMPRESA = "COMPROBANTES";
@@ -44,29 +48,28 @@ public class ProcesarSolicitudesNotificacion {
                         clientes.getBaseDatos());
 
             } catch (Exception e) {
-                System.err.println("Genero un error al descargar la solicitud. " + e.toString());
+                log.error("Genero un error al descargar la solicitud. {}", e.toString());
             }
         }
 
         /*Descarga y procesamiento de comprobantes a nivel de detalle*/
         for (int i = 1; i <= 3; i++) {
-
             clientes.solicitudConfiguracion(String.valueOf(i));
             
             try {
               
                 managerBD BD = new managerBD("com.mysql.jdbc.Driver", "jdbc:mysql://50.31.188.7/" + clientes.getBaseDatos() + "?autoReconnect=true&useSSL=false");
                 if (BD.initDBMySql(clientes.getUsuario(), Configuracion.CREDENCIAL_MAESTRA)) {
-
-                    System.err.println("Procesando detalle del usuario -> " + clientes.getSriUsuario() + "");
+                                        
+                    log.error("Procesando detalle del usuario -> {}", clientes.getSriUsuario());
 
                     String query = "SELECT a.access_key FROM resumenDocumentosProveedores a WHERE a.access_key NOT IN (SELECT b.szClaveAcceso FROM  t57011 b )";
 
                     ResultSet data = BD.sqlResultSet(query);
                     while (data.next()) {
 
-                        String claveAcceso = data.getString("access_key");
-                        System.err.println("->" + claveAcceso);
+                        String claveAcceso = data.getString("access_key");                        
+                        log.error("-> {}" + claveAcceso);
                    
                         ConsultaDocumento documento = new ConsultaDocumento();
                         documento.procesarSolicitud(
@@ -94,23 +97,22 @@ public class ProcesarSolicitudesNotificacion {
                                             "");
 
                                 } catch (Exception e) {
-                                    System.out.println("Se genero una expeción: " + e.toString());
+                                    log.error("Se genero una expeción: ", e.toString());
+                                    
                                 }
                                 BD_.desconectar();
                             }
 
                         } catch (Exception e) {
-                            System.err.println("Se genero una excepcion al registrar el comprobante " + claveAcceso);
+                            log.error("Se genero una excepcion al registrar el comprobante {}", claveAcceso);
                         }
                     }
                 }
-
              
                 BD.desconectar();
             } catch (Exception e) {
-                System.err.println("Error al procesar la solicitud" + clientes.getBaseDatos() + " ->" + e.toString());
+                log.error("Error al procesar la solicitud {} -> {}", clientes.getBaseDatos(), e.toString());
             }
         }
-
     }
 }

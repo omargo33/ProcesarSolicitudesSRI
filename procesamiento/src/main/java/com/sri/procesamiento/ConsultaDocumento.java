@@ -1,7 +1,9 @@
-
 package com.sri.procesamiento;
 
-import com.mysql.jdbc.PreparedStatement;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,24 +11,28 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+@Getter
+@Setter
+@Slf4j
 public class ConsultaDocumento {
 
     String respuestaSolicitud;
     String estadoSolicitud;
-    
-    public void procesarSolicitud(String token, String usuario, String credencial, String claveAcceso){
-        
+
+    public void procesarSolicitud(String token, String usuario, String credencial, String claveAcceso) {
+
         try {
 
             String url = Configuracion.URL_DOCUMENTOS;
             URL apiUrl = new URL(url + "/" + claveAcceso);
-            
+
             // Abrir conexión HTTP
             HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
             connection.setRequestMethod("GET");
@@ -34,16 +40,15 @@ public class ConsultaDocumento {
             connection.setRequestProperty("Authorization", "Bearer " + token);
 
             String credencialEncode = usuario + ":" + credencial;
-            connection.setRequestProperty("X-SRI-Credentials", 
-                    Base64.getEncoder().encodeToString(credencialEncode.getBytes(StandardCharsets.UTF_8)) );
-
+            connection.setRequestProperty("X-SRI-Credentials",
+                    Base64.getEncoder().encodeToString(credencialEncode.getBytes(StandardCharsets.UTF_8)));
 
             // Habilitar el envío de datos
             connection.setDoOutput(true);
 
             // Obtener el código de respuesta
             int responseCode = connection.getResponseCode();
-            System.out.println("Código de respuesta: " + responseCode);
+            log.info("Código de respuesta: {}", responseCode);
             setEstadoSolicitud(String.valueOf(responseCode));
 
             // Leer la respuesta del servicio
@@ -57,8 +62,7 @@ public class ConsultaDocumento {
             reader.close();
 
             // Imprimir la respuesta
-            System.out.println("Respuesta del servicio:");
-            System.out.println(response.toString());
+            log.info("Respuesta del servicio: {}", response.toString());
 
             setRespuestaSolicitud(response.toString());
 
@@ -76,7 +80,7 @@ public class ConsultaDocumento {
 
             // Obtenemos el valor del campo "status"
             String status = jsonObject.getString("status");
-            System.out.println("Status: " + status);
+            log.info("Status: {}", status);
 
             // Obtenemos el array de objetos "data"
             JSONArray dataArray = jsonObject.getJSONArray("data");
@@ -107,7 +111,8 @@ public class ConsultaDocumento {
                 boolean registroExistente = false;
 
                 try (java.sql.Connection conn = DriverManager.getConnection(
-                        "jdbc:mysql://50.31.188.7/" + baseDatos + "?autoReconnect=true&useSSL=false&connectTimeout=5000",
+                        "jdbc:mysql://50.31.188.7/" + baseDatos
+                                + "?autoReconnect=true&useSSL=false&connectTimeout=5000",
                         usuarioBD,
                         credencialBD)) {
                     String query = "SELECT COUNT(*) FROM resumenDocumentosProveedores WHERE access_key = ?";
@@ -119,7 +124,7 @@ public class ConsultaDocumento {
                         int count = resultSet.getInt(1);
                         if (count > 0) {
                             registroExistente = true;
-                            System.out.println("El registro con access_key " + accessKey + " ya existe en la base de datos.");
+                            log.info("El registro con access_key {} ya existe en la base de datos.", accessKey);
                         }
                     }
                 } catch (SQLException e) {
@@ -129,7 +134,8 @@ public class ConsultaDocumento {
                 // Insertar el registro si no existe
                 if (!registroExistente) {
                     try (java.sql.Connection conn = DriverManager.getConnection(
-                            "jdbc:mysql://50.31.188.7/" + baseDatos + "?autoReconnect=true&useSSL=false&connectTimeout=5000",
+                            "jdbc:mysql://50.31.188.7/" + baseDatos
+                                    + "?autoReconnect=true&useSSL=false&connectTimeout=5000",
                             usuarioBD,
                             credencialBD)) {
                         String query = "INSERT INTO resumenDocumentosProveedores (access_key, document_id, ruc_issuer, commercial_name, social_name_issuer, issued_at, establishment, point_issue, sequence, document_type, document_type_id, issued_at_formatted, total_value_without_taxes, tip, total_discount, total_amount, taxpayer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -154,39 +160,18 @@ public class ConsultaDocumento {
 
                         int rowsInserted = statement.executeUpdate();
                         if (rowsInserted > 0) {
-                            System.out.println("Inserción exitosa.");
+                            log.info("Inserción exitosa.");
                         } else {
-                            System.out.println("No se pudo insertar el registro.");
+                            log.info("No se pudo insertar el registro.");
                         }
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        log.error("Se generó una excepción al insertar el registro: {}", e.toString());
                     }
                 }
             }
         } catch (Exception e) {
-            System.err.println("Se generó una excepción al analizar la solicitud: " + e.toString());
+            log.error("Se generó una excepción al analizar la solicitud: {}", e.toString());
         }
     }
 
-    
-
-    public String getRespuestaSolicitud() {
-        return respuestaSolicitud;
-    }
-
-    public void setRespuestaSolicitud(String respuestaSolicitud) {
-        this.respuestaSolicitud = respuestaSolicitud;
-    }
-
-    public String getEstadoSolicitud() {
-        return estadoSolicitud;
-    }
-
-    public void setEstadoSolicitud(String estadoSolicitud) {
-        this.estadoSolicitud = estadoSolicitud;
-    }
-
-    
-    
-    
 }
