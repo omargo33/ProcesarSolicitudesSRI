@@ -18,9 +18,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Embeddable
-public class T57011Pk implements Serializable{
+public class T57011Pk implements Serializable {
 
-    @Column(name = "szComputerID")
+    @Column(name = "szComputerID", length = 200)
     private String szComputerID;
 
     @Column(name = "mnJobNumber")
@@ -29,16 +29,19 @@ public class T57011Pk implements Serializable{
     @Column(name = "mnDocumentNumber")
     private Integer mnDocumentNumber;
 
-    @Column(name = "szDocumentType")
+    @Column(name = "szDocumentType", length = 2)
     private String szDocumentType;
 
-    @Column(name = "szDocumentCompany")
+    @Column(name = "szDocumentCompany", length = 5)
     private String szDocumentCompany;
 
     @Column(name = "mnInvoiceNumber")
     private Integer mnInvoiceNumber;
 
-    @Column(name = "szInvoiceCompany")
+    @Column(name = "szInvoiceType", length = 2)
+    private String szInvoiceType;
+
+    @Column(name = "szInvoiceCompany", length = 5)
     private String szInvoiceCompany;
 
     @Column(name = "mnLineNumber")
@@ -74,13 +77,18 @@ public class T57011Pk implements Serializable{
         if (szDocumentType != null ? !szDocumentType.equals(that.szDocumentType) : that.szDocumentType != null) {
             return false;
         }
-        if (szDocumentCompany != null ? !szDocumentCompany.equals(that.szDocumentCompany) : that.szDocumentCompany != null) {
+        if (szDocumentCompany != null ? !szDocumentCompany.equals(that.szDocumentCompany)
+                : that.szDocumentCompany != null) {
             return false;
         }
         if (mnInvoiceNumber != that.mnInvoiceNumber) {
             return false;
         }
-        if (szInvoiceCompany != null ? !szInvoiceCompany.equals(that.szInvoiceCompany) : that.szInvoiceCompany != null) {
+        if (szInvoiceType != null ? !szInvoiceType.equals(that.szInvoiceType) : that.szInvoiceType != null) {
+            return false;
+        }
+        if (szInvoiceCompany != null ? !szInvoiceCompany.equals(that.szInvoiceCompany)
+                : that.szInvoiceCompany != null) {
             return false;
         }
         if (mnLineNumber != that.mnLineNumber) {
@@ -92,17 +100,19 @@ public class T57011Pk implements Serializable{
         if (mnSubSequenceNumber != that.mnSubSequenceNumber) {
             return false;
         }
-        return szJobTypeDescription != null ? szJobTypeDescription.equals(that.szJobTypeDescription) : that.szJobTypeDescription == null;
+        return szJobTypeDescription != null ? szJobTypeDescription.equals(that.szJobTypeDescription)
+                : that.szJobTypeDescription == null;
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         int result = szComputerID != null ? szComputerID.hashCode() : 0;
         result = 31 * result + (mnJobNumber != null ? mnJobNumber.hashCode() : 0);
         result = 31 * result + (mnDocumentNumber != null ? mnDocumentNumber.hashCode() : 0);
         result = 31 * result + (szDocumentType != null ? szDocumentType.hashCode() : 0);
         result = 31 * result + (szDocumentCompany != null ? szDocumentCompany.hashCode() : 0);
         result = 31 * result + (mnInvoiceNumber != null ? mnInvoiceNumber.hashCode() : 0);
+        result = 31 * result + (szInvoiceType != null ? szInvoiceType.hashCode() : 0);
         result = 31 * result + (szInvoiceCompany != null ? szInvoiceCompany.hashCode() : 0);
         result = 31 * result + (mnLineNumber != null ? mnLineNumber.hashCode() : 0);
         result = 31 * result + (mnSequenceNumber != null ? mnSequenceNumber.hashCode() : 0);
@@ -110,5 +120,4 @@ public class T57011Pk implements Serializable{
         result = 31 * result + (szJobTypeDescription != null ? szJobTypeDescription.hashCode() : 0);
         return result;
     }
-    
 }

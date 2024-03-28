@@ -51,7 +51,8 @@ import lombok.Setter;
  * 
  * Y la llave primera esta compuesta por szComputerID, mnJobNumber,
  * mnDocumentNumber, szDocumentType, szDocumentCompany, mnInvoiceNumber,
- * szInvoiceCompany, mnLineNumber, mnSequenceNumber, mnSubSequenceNumber y
+ * szInvoiceType, szInvoiceCompany, mnLineNumber, mnSequenceNumber,
+ * mnSubSequenceNumber y
  * szJobTypeDescription
  * 
  * @author omargo33
@@ -78,7 +79,6 @@ public class T57011 implements Serializable {
 
     @Column(name = "szReference", length = 20)
     private String szReference;
-    
 
     @Column(name = "szNumber", length = 15)
     private String szNumber;
@@ -146,7 +146,7 @@ public class T57011 implements Serializable {
     @Column(name = "mnCodItemNumberShort")
     private Integer mnCodItemNumberShort;
 
-    @Column(name = "szPrintDataYN", length =2)
+    @Column(name = "szPrintDataYN", length = 2)
     private String szPrintDataYN;
 
     @Column(name = "szDescription", length = 250)
@@ -228,21 +228,19 @@ public class T57011 implements Serializable {
     private String szDescriptionTaxArea;
 
     @Column(name = "mnTaxAuthority")
-    private Integer mnTaxAuthority;
-
-    ///TODO
+    private Double mnTaxAuthority;
 
     @Column(name = "mnTaxAuthority2")
-    private Integer mnTaxAuthority2;
+    private Double mnTaxAuthority2;
 
     @Column(name = "mnTaxAuthority3")
-    private Integer mnTaxAuthority3;
+    private Double mnTaxAuthority3;
 
     @Column(name = "mnTaxAuthority4")
-    private Integer mnTaxAuthority4;
+    private Double mnTaxAuthority4;
 
     @Column(name = "mnTaxAuthority5")
-    private Integer mnTaxAuthority5;
+    private Double mnTaxAuthority5;
 
     @Column(name = "mnTaxRate1")
     private Double mnTaxRate1;
@@ -259,7 +257,7 @@ public class T57011 implements Serializable {
     @Column(name = "mnTaxRate5")
     private Double mnTaxRate5;
 
-    @Column(name = "szTaxCalculationMethod", length = 50)
+    @Column(name = "szTaxCalculationMethod", length = 20)
     private String szTaxCalculationMethod;
 
     @Column(name = "mnAmountTaxable")
@@ -268,34 +266,34 @@ public class T57011 implements Serializable {
     @Column(name = "mnAmountTax")
     private Double mnAmountTax;
 
-    @Column(name = "szPaymentTermsCode", length = 50)
+    @Column(name = "szPaymentTermsCode", length = 20)
     private String szPaymentTermsCode;
 
     @Column(name = "mnDiscountAvailable")
-    private Integer mnDiscountAvailable;
+    private Double mnDiscountAvailable;
 
-    @Column(name = "szUserID", length = 50)
+    @Column(name = "szUserID", length = 15)
     private String szUserID;
 
-    @Column(name = "szProgramID", length = 50)
+    @Column(name = "szProgramID", length = 300)
     private String szProgramID;
 
-    @Column(name = "szWorkStationID", length = 50)
+    @Column(name = "szWorkStationID", length = 300)
     private String szWorkStationID;
 
     @Column(name = "jdDateUpdated")
     private Date jdDateUpdated;
 
     @Column(name = "mnTimeofDay")
-    private Integer mnTimeofDay;
+    private Date mnTimeofDay;
 
     @Column(name = "mnEDIDocumentNumber")
     private Integer mnEDIDocumentNumber;
 
-    @Column(name = "szEDIDocumentType", length = 50)
+    @Column(name = "szEDIDocumentType", length = 2)
     private String szEDIDocumentType;
 
-    @Column(name = "szEDIDocumentKeyCo", length = 50)
+    @Column(name = "szEDIDocumentKeyCo", length = 5)
     private String szEDIDocumentKeyCo;
 
     @Column(name = "mnEDILineNumber")
@@ -331,16 +329,16 @@ public class T57011 implements Serializable {
     @Column(name = "mnAmountListPrice")
     private Double mnAmountListPrice;
 
-    @Column(name = "sz2ndItemNumber", length = 50)
+    @Column(name = "sz2ndItemNumber", length = 25)
     private String sz2ndItemNumber;
 
     @Column(name = "mnCarrierNumber")
     private Integer mnCarrierNumber;
 
-    @Column(name = "szAgreementSupplementDistribution", length = 50)
+    @Column(name = "szAgreementSupplementDistribution", length = 30)
     private String szAgreementSupplementDistribution;
 
-    @Column(name = "szEstablecimiento", length = 50)
+    @Column(name = "szEstablecimiento", length = 12)
     private String szEstablecimiento;
 
     @Column(name = "mnTripNumber")
@@ -349,99 +347,99 @@ public class T57011 implements Serializable {
     @Column(name = "mnWeightResult")
     private Double mnWeightResult;
 
-    @Column(name = "szDutyStatus", length = 50)
+    @Column(name = "szDutyStatus", length = 15)
     private String szDutyStatus;
 
-    @Column(name = "szLotSerialNumber", length = 50)
+    @Column(name = "szLotSerialNumber", length = 30)
     private String szLotSerialNumber;
 
-    @Column(name = "szParameterDataItem01", length = 50)
+    @Column(name = "szParameterDataItem01", length = 2000)
     private String szParameterDataItem01;
 
-    @Column(name = "szParameterDataItem02", length = 50)
+    @Column(name = "szParameterDataItem02", length = 2000)
     private String szParameterDataItem02;
 
-    @Column(name = "szParameterDataItem03", length = 50)
+    @Column(name = "szParameterDataItem03", length = 2000)
     private String szParameterDataItem03;
 
-    @Column(name = "szParameterDataItem04", length = 50)
+    @Column(name = "szParameterDataItem04", length = 2000)
     private String szParameterDataItem04;
 
-    @Column(name = "szParameterDataItem05", length = 50)
+    @Column(name = "szParameterDataItem05", length = 2000)
     private String szParameterDataItem05;
 
-    @Column(name = "szParameterDataItem06", length = 50)
+    @Column(name = "szParameterDataItem06", length = 2000)
     private String szParameterDataItem06;
 
-    @Column(name = "szParameterDataItem07", length = 50)
+    @Column(name = "szParameterDataItem07", length = 2000)
     private String szParameterDataItem07;
 
-    @Column(name = "szParameterDataItem08", length = 50)
+    @Column(name = "szParameterDataItem08", length = 2000)
     private String szParameterDataItem08;
 
-    @Column(name = "szParameterDataItem09", length = 50)
+    @Column(name = "szParameterDataItem09", length = 2000)
     private String szParameterDataItem09;
 
-    @Column(name = "szParameterDataItem10", length = 50)
+    @Column(name = "szParameterDataItem10", length = 2000)
     private String szParameterDataItem10;
 
-    @Column(name = "szLegalDocumentTitle", length = 50)
+    @Column(name = "szLegalDocumentTitle", length = 100)
     private String szLegalDocumentTitle;
 
-    @Column(name = "szClaveAcceso", length = 50)
+    @Column(name = "szClaveAcceso", length = 100)
     private String szClaveAcceso;
 
-    @Column(name = "szClaveAccesoContingencia", length = 50)
+    @Column(name = "szClaveAccesoContingencia", length = 100)
     private String szClaveAccesoContingencia;
 
-    @Column(name = "szAutorizacionElectronica", length = 50)
+    @Column(name = "szAutorizacionElectronica", length = 100)
     private String szAutorizacionElectronica;
 
-    @Column(name = "szRefAutorizacion1", length = 50)
+    @Column(name = "szRefAutorizacion1", length = 100)
     private String szRefAutorizacion1;
 
-    @Column(name = "szRefAutorizacion2", length = 50)
+    @Column(name = "szRefAutorizacion2", length = 100)
     private String szRefAutorizacion2;
 
-    @Column(name = "szRefAutorizacion3", length = 50)
+    @Column(name = "szRefAutorizacion3", length = 100)
     private String szRefAutorizacion3;
 
-    @Column(name = "szRefAutorizacion4", length = 50)
+    @Column(name = "szRefAutorizacion4", length = 100)
     private String szRefAutorizacion4;
 
-    @Column(name = "szAmbiente", length = 50)
+    @Column(name = "szAmbiente", length = 10)
     private String szAmbiente;
 
-    @Column(name = "szTipoEmision", length = 50)
+    @Column(name = "szTipoEmision", length = 10)
     private String szTipoEmision;
 
-    @Column(name = "szContribuyenteEspecial", length = 50)
+    @Column(name = "szContribuyenteEspecial", length = 15)
     private String szContribuyenteEspecial;
 
-    @Column(name = "szObligadoContabilidad", length = 50)
+    @Column(name = "szObligadoContabilidad", length = 3)
     private String szObligadoContabilidad;
 
-    @Column(name = "szMoneda", length = 50)
+    @Column(name = "szMoneda", length = 15)
     private String szMoneda;
 
-    @Column(name = "szCatSales01", length = 50)
+    @Column(name = "szCatSales01", length = 150)
     private String szCatSales01;
 
-    @Column(name = "szCatSales02", length = 50)
+    @Column(name = "szCatSales02", length = 150)
     private String szCatSales02;
 
-    @Column(name = "szCatSales03", length = 50)
+    @Column(name = "szCatSales03", length = 150)
     private String szCatSales03;
 
-    @Column(name = "szCatSales04", length = 50)
+    @Column(name = "szCatSales04", length = 150)
     private String szCatSales04;
 
-    @Column(name = "szCatSales05", length = 50)
+    @Column(name = "szCatSales05", length = 150)
     private String szCatSales05;
 
-    @Column(name = "szPeriodoFiscal", length = 50)
+    @Column(name = "szPeriodoFiscal", length = 5)
     private String szPeriodoFiscal;
 
-    @Column(name = "szRise", length = 50)
+    @Column(name = "szRise", length = 20)
     private String szRise;
 }
