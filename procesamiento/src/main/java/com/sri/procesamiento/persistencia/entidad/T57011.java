@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -87,16 +89,16 @@ public class T57011 implements Serializable {
     private String mnLegalNumber;
 
     @Column(name = "jdDateEfective")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date jdDateEfective;
 
     @Column(name = "jdDateExpired")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date jdDateExpired;
 
     @Column(name = "szOperationType", length = 100)
     private String szOperationType;
 
-    @Column(name = "szJobTypeDescription", length = 30)
-    private String szJobTypeDescription;
 
     @Column(name = "szThruCaseStatusCode", length = 3)
     private String szThruCaseStatusCode;
@@ -189,6 +191,7 @@ public class T57011 implements Serializable {
     private Double mnPercent1;
 
     @Column(name = "jdDateRequested")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date jdDateRequested;
 
     @Column(name = "szCommitted", length = 2)
@@ -198,9 +201,11 @@ public class T57011 implements Serializable {
     private String szLineType;
 
     @Column(name = "jdDateInvoice")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date jdDateInvoice;
 
     @Column(name = "jdDateNetDue")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date jdDateNetDue;
 
     @Column(name = "mnRelatedNumber")
@@ -282,9 +287,11 @@ public class T57011 implements Serializable {
     private String szWorkStationID;
 
     @Column(name = "jdDateUpdated")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date jdDateUpdated;
 
     @Column(name = "mnTimeofDay")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date mnTimeofDay;
 
     @Column(name = "mnEDIDocumentNumber")

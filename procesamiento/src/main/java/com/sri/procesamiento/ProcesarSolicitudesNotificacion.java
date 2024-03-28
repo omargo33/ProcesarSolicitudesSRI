@@ -13,7 +13,7 @@ public class ProcesarSolicitudesNotificacion {
 
     public static String CARPETA_EMPRESA = "COMPROBANTES";
     
-    public void procesar() {
+   /* public void procesar() {
 
         SolicitudToken solicitudToken = new SolicitudToken();
         solicitudToken.procesarSolicitud(Configuracion.CLIENT_ID, Configuracion.SECRET_ID, "client_credentials");
@@ -21,7 +21,7 @@ public class ProcesarSolicitudesNotificacion {
   
         Clientes clientes = new Clientes();
    
-        /*Carga de facturas masivamente*/
+        //Carga de facturas masivamente
         for (int i = 1; i <= 3; i++) {
 
             try {
@@ -52,7 +52,7 @@ public class ProcesarSolicitudesNotificacion {
             }
         }
 
-        /*Descarga y procesamiento de comprobantes a nivel de detalle*/
+        //Descarga y procesamiento de comprobantes a nivel de detalle
         for (int i = 1; i <= 3; i++) {
             clientes.solicitudConfiguracion(String.valueOf(i));
             
@@ -114,5 +114,5 @@ public class ProcesarSolicitudesNotificacion {
                 log.error("Error al procesar la solicitud {} -> {}", clientes.getBaseDatos(), e.toString());
             }
         }
-    }
+    }*/
 }

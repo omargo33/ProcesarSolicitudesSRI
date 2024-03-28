@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -74,7 +76,8 @@ public class T0711z1 implements Serializable {
     @Column(name = "mnPaymentAmount", length = 100)
     private BigDecimal mnPaymentAmount;
 
-    @Column(name = "jdValueDate", length = 100)
+    @Column(name = "jdValueDate")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date jdValueDate;
 
     @Column(name = "szItemText", length = 100)
@@ -108,6 +111,7 @@ public class T0711z1 implements Serializable {
     private String szReversalPaymentTransactionID;
 
     @Column(name = "szReversalValueDate")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date szReversalValueDate;
 
     @Column(name = "szStatusReversal", length = 3)
@@ -126,12 +130,15 @@ public class T0711z1 implements Serializable {
     private String szUsuarioModficador;
 
     @Column(name = "jdFechaOrigen")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date jdFechaOrigen;
 
     @Column(name = "jdFechaCierre")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date jdFechaCierre;
 
     @Column(name = "jdFechaModificador")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date jdFechaModificador;
 
     @Column(name = "szStatusPayment", length = 3)

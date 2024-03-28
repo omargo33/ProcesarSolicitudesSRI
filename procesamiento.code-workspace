@@ -5,6 +5,10 @@
 		},
 		{
 			"path": "procesamiento"
+		},
+		{
+			"name": "clientes",
+			"path": "cliente/clientes"
 		}
 	],
 	"settings": {

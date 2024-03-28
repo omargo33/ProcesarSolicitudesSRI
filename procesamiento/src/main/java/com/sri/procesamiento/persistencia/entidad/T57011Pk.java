@@ -53,7 +53,7 @@ public class T57011Pk implements Serializable {
     @Column(name = "mnSubSequenceNumber")
     private Integer mnSubSequenceNumber;
 
-    @Column(name = "szJobTypeDescription")
+    @Column(name = "szJobTypeDescription", length = 30)
     private String szJobTypeDescription;
 
     @Override
