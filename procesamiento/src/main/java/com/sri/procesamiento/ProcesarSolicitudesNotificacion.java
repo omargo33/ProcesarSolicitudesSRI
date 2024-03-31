@@ -13,7 +13,7 @@ public class ProcesarSolicitudesNotificacion {
 
     public static String CARPETA_EMPRESA = "COMPROBANTES";
     
-   /* public void procesar() {
+    public void procesar() {
 
         SolicitudToken solicitudToken = new SolicitudToken();
         solicitudToken.procesarSolicitud(Configuracion.CLIENT_ID, Configuracion.SECRET_ID, "client_credentials");
@@ -114,5 +114,5 @@ public class ProcesarSolicitudesNotificacion {
                 log.error("Error al procesar la solicitud {} -> {}", clientes.getBaseDatos(), e.toString());
             }
         }
-    }*/
+    }
 }

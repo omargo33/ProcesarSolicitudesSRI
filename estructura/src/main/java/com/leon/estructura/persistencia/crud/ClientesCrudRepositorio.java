@@ -1,0 +1,25 @@
+package com.leon.estructura.persistencia.crud;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+
+import com.leon.estructura.persistencia.entidad.Cliente;
+
+/**
+ * Clase para manejar los clientes crud.
+ * 
+ * @author omargo33
+ * @since 2024-03-28
+ */
+public interface ClientesCrudRepositorio extends CrudRepository<Cliente, Integer> {
+
+    /**
+     * Buscar todos los clientes cuyo estado no sea 'X'
+     * 
+     */
+    @Query(value = "SELECT c FROM Clientes c WHERE c.estado <> 'X'")
+    Optional<List<Cliente>> findAllActivos();
+}

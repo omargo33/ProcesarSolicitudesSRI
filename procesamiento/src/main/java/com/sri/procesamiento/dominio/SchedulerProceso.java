@@ -3,7 +3,7 @@ package com.sri.procesamiento.dominio;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -14,9 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@EnableScheduling
 public class SchedulerProceso {
 
-    @Autowired
     ClienteService clienteService;
 
     // cada tres minutos
@@ -30,7 +30,7 @@ public class SchedulerProceso {
                 log.info(cliente.toString());
             }
         } else {
-            log.warn("No active clients found.");
+            log.warn("No hay clientes a consultar.");
         }
     }
 }
