@@ -15,9 +15,16 @@
 	<name>procesamiento</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>com.leon</groupId>
+			<artifactId>estructura</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 
 		<!-- actuator -->
 		<dependency>
@@ -53,13 +60,13 @@
 			<artifactId>json</artifactId>
 			<version>20231013</version>
 		</dependency>
-		<!-- Validacion de JPA -->		
+		<!-- Validacion de JPA -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
-		 </dependency>
-		 
-		 <!-- devtools -->
+		</dependency>
+
+		<!-- devtools -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -74,8 +81,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
 			</plugin>
 			<plugin>

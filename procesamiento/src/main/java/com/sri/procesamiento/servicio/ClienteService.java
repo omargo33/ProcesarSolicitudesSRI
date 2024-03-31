@@ -1,4 +1,4 @@
-package com.sri.procesamiento.dominio.service;
+package com.sri.procesamiento.servicio;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,9 +8,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sri.procesamiento.persistencia.crud.ClientesCrudRepositorio;
-import com.sri.procesamiento.persistencia.entidad.Clientes;
-
+import com.leon.estructura.persistencia.crud.ClientesCrudRepositorio;
+import com.leon.estructura.persistencia.entidad.Cliente;
 /**
  * Servicio de Cliente
  * 
@@ -25,7 +24,7 @@ public class ClienteService {
    @Autowired
    private ClientesCrudRepositorio clientesCrudRepositorio;
 
-   public Optional<List<Clientes>> getAllActivos() {
+   public Optional<List<Cliente>> getAllActivos() {
       return clientesCrudRepositorio.findAllActivos();
    }
 }

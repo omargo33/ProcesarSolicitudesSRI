@@ -3,46 +3,142 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.18</version>
-		<relativePath /> <!-- lookup parent from repository -->
-	</parent>
 	<groupId>com.leon</groupId>
 	<artifactId>estructura</artifactId>
-	<version>0.0.1</version>
+	<version>1.0.0</version>
 	<name>estructura</name>
-	<description>Demo project for Spring Boot</description>
+	<packaging>jar</packaging>
+	<description>Estructura de Software</description>
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
+		<spring-boot.version>2.7.18</spring-boot.version>
+		<lombok.version>1.18.20</lombok.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<version>${spring-boot.version}</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-web</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
 			<optional>true</optional>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<version>${spring-boot.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- Validacion de JPA -->		
+		<!-- Validacion de JPA -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
-		 </dependency>
+			<version>${spring-boot.version}</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<!-- Liberar los archivos segun se los complete -->
+					<excludes>
+						<exclude>**/entidad/T03b11.java</exclude>
+						<exclude>**/entidad/T03b11Id.java</exclude>
+						<exclude>**/entidad/T03b13.java</exclude>
+						<exclude>**/entidad/T03b13Id.java</exclude>
+						<exclude>**/entidad/T0006.java</exclude>
+						<exclude>**/entidad/T0014.java</exclude>
+						<exclude>**/entidad/T0030.java</exclude>
+						<exclude>**/entidad/T0030Id.java</exclude>
+						<exclude>**/entidad/T57path.java</exclude>
+						<exclude>**/entidad/T0101.java</exclude>
+						<exclude>**/entidad/T0101rt.java</exclude>
+						<exclude>**/entidad/T0101rtId.java</exclude>
+						<exclude>**/entidad/T0411z1.java</exclude>
+						<exclude>**/entidad/T0411z1Id.java</exclude>
+						<exclude>**/entidad/T0901.java</exclude>
+						<exclude>**/entidad/T0911.java</exclude>
+						<exclude>**/entidad/T0911Id.java</exclude>
+						<exclude>**/entidad/T03012.java</exclude>
+						<exclude>**/entidad/T03012Id.java</exclude>
+						<exclude>**/entidad/T4070.java</exclude>
+						<exclude>**/entidad/T4101.java</exclude>
+						<exclude>**/entidad/T4102.java</exclude>
+						<exclude>**/entidad/T4102Id.java</exclude>
+						<exclude>**/entidad/T4105.java</exclude>
+						<exclude>**/entidad/T4106.java</exclude>
+						<exclude>**/entidad/T4106Id.java</exclude>
+						<exclude>**/entidad/T4111.java</exclude>
+						<exclude>**/entidad/T5701.java</exclude>
+						<exclude>**/entidad/T5701Id.java</exclude>
+						<exclude>**/entidad/T7101.java</exclude>
+						<exclude>**/entidad/T7102.java</exclude>
+						<exclude>**/entidad/T7102Id.java</exclude>
+						<exclude>**/entidad/T7111.java</exclude>
+						<exclude>**/entidad/T9801.java</exclude>
+						<exclude>**/entidad/T9802.java</exclude>
+						<exclude>**/entidad/T9803.java</exclude>
+						<exclude>**/entidad/T41012.java</exclude>
+						<exclude>**/entidad/T41013.java</exclude>
+						<exclude>**/entidad/T41013Id.java</exclude>
+						<exclude>**/entidad/T41019.java</exclude>
+						<exclude>**/entidad/T41019Id.java</exclude>
+						<exclude>**/entidad/T41021.java</exclude>
+						<exclude>**/entidad/T41021Id.java</exclude>
+						<exclude>**/entidad/T42011.java</exclude>
+						<exclude>**/entidad/T42011Id.java</exclude>
+						<exclude>**/entidad/T42012.java</exclude>
+						<exclude>**/entidad/T57001.java</exclude>
+						<exclude>**/entidad/T57001d.java</exclude>
+						<exclude>**/entidad/T57001Id.java</exclude>
+						<exclude>**/entidad/T57011z1.java</exclude>
+						<exclude>**/entidad/T57011z1Id.java</exclude>
+						<exclude>**/entidad/T079801.java</exclude>
+						<exclude>**/entidad/T079801Id.java</exclude>
+						<exclude>**/entidad/T079802.java</exclude>
+						<exclude>**/entidad/T079802Id.java</exclude>
+						<exclude>**/entidad/T079803.java</exclude>
+						<exclude>**/entidad/T079803Id.java</exclude>
+						<exclude>**/entidad/T079804.java</exclude>
+						<exclude>**/entidad/T079804Id.java</exclude>
+						<exclude>**/entidad/T079805.java</exclude>
+						<exclude>**/entidad/T079805Id.java</exclude>
+						<exclude>**/entidad/T079810.java</exclude>
+						<exclude>**/entidad/T079810a.java</exclude>
+						<exclude>**/entidad/T98000.java</exclude>
+						<exclude>**/entidad/T519800.java</exclude>
+						<exclude>**/entidad/T519801.java</exclude>
+						<exclude>**/entidad/T579540.java</exclude>
+						<exclude>**/entidad/T579540Id.java</exclude>
+						<exclude>**/entidad/T710101.java</exclude>
+						<exclude>**/entidad/T710101Id.java</exclude>
+						<exclude>**/entidad/T769800.java</exclude>
+						<exclude>**/entidad/T769801.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring-boot.version}</version>
 				<configuration>
 					<image>
 						<builder>paketobuildpacks/builder-jammy-base:latest</builder>

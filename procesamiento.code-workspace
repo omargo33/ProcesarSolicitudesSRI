@@ -7,8 +7,7 @@
 			"path": "procesamiento"
 		},
 		{
-			"name": "clientes",
-			"path": "cliente/clientes"
+			"path": "estructura"
 		}
 	],
 	"settings": {

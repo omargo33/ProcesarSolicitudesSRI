@@ -2,7 +2,7 @@
 package com.sri.procesamiento;
 
 import com.d3v.proceso.EditLineFactura;
-import com.fundamentos.conexion.ManagerBD;
+//import com.fundamentos.conexion.ManagerBD;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,6 +13,7 @@ public class ProcesarSolicitudesNotificacion {
 
     public static String CARPETA_EMPRESA = "COMPROBANTES";
     
+    /* 
     public void procesar() {
 
         SolicitudToken solicitudToken = new SolicitudToken();
@@ -114,5 +115,5 @@ public class ProcesarSolicitudesNotificacion {
                 log.error("Error al procesar la solicitud {} -> {}", clientes.getBaseDatos(), e.toString());
             }
         }
-    }
+    }*/
 }

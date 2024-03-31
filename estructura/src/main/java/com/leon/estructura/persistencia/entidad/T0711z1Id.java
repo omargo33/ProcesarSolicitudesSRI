@@ -1,4 +1,4 @@
-package  com.leon.estructura.persistencia.entidad;
+package com.leon.estructura.persistencia.entidad;
 
 import lombok.Data;
 
@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
 
 /**
  * JPA
@@ -16,7 +15,6 @@ import javax.persistence.Entity;
  * 
  */
 @Data
-@Entity
 @Embeddable
 public class T0711z1Id implements Serializable {
 
