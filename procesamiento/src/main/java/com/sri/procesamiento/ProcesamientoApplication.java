@@ -7,8 +7,16 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 
+//@EntityScan("com.leon.estructura.persistencia.entidad")
+//@EnableJpaRepositories("com.leon.estructura.persistencia.crud")
+
 @EntityScan("com.leon.estructura.persistencia.entidad")
-@EnableJpaRepositories("com.leon.estructura.persistencia.crud")
+@EnableJpaRepositories(                    
+    basePackages = {"com.leon.estructura.persistencia.crud"}, 
+    transactionManagerRef = "transcationManager", 
+    entityManagerFactoryRef = "entityManager")
+
+
 public class ProcesamientoApplication {
 
 	public static void main(String[] args) {

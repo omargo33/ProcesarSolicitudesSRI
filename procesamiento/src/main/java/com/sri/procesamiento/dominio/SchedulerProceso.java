@@ -9,7 +9,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.leon.estructura.persistencia.entidad.Cliente;
-import com.sri.procesamiento.servicio.ClienteService;
+import com.leon.estructura.persistencia.entidad.Parametro;
+import com.sri.procesamiento.servicio.ConfiguracionService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,13 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 public class SchedulerProceso {
 
     @Autowired
-    ClienteService clienteService;
+    ConfiguracionService clienteService;
 
     // cada tres minutos
     @Scheduled(fixedRate = 180000)
     public void reportCurrentTime() {
 
-        Optional<List<Cliente>> clientesOptional = clienteService.getAllActivos();
+        Optional<List<Cliente>> clientesOptional = clienteService.getClientes();
         if (clientesOptional.isPresent()) {
             List<Cliente> clientes = clientesOptional.get();
             for (Cliente cliente : clientes) {
@@ -33,6 +34,19 @@ public class SchedulerProceso {
             }
         } else {
             log.warn("No hay clientes a consultar.");
+        }
+
+        Optional<List<Parametro>> parametros = clienteService.getParametros();
+        
+        if (parametros.isPresent()) {
+            List<Parametro> parametrosList = parametros.get();
+            for (Parametro parametro : parametrosList) {
+                log.info(parametro.toString());
+
+                
+            }
+        } else {
+            log.warn("No hay parametros a consultar.");
         }
     }
 }
