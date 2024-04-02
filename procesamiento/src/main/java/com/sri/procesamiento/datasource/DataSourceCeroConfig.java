@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 import lombok.Data;
 
 @Component
-@ConfigurationProperties(prefix="datasource2.datasource")
+@ConfigurationProperties(prefix="datasource0.datasource")
 @Data
-public class DataSourceTwoConfig {
+public class DataSourceCeroConfig {
     private String url;
 	private String password;
 	private String username;

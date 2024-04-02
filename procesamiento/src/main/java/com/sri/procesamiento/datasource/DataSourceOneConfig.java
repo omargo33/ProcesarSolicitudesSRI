@@ -3,13 +3,11 @@ package com.sri.procesamiento.datasource;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @Component
 @ConfigurationProperties(prefix="datasource1.datasource")
-@Getter
-@Setter
+@Data
 public class DataSourceOneConfig {
     private String url;
 	private String password;
