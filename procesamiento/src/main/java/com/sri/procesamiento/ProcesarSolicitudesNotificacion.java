@@ -1,14 +1,6 @@
 
 package com.sri.procesamiento;
 
-import com.d3v.proceso.EditLineFactura;
-//import com.fundamentos.conexion.ManagerBD;
-
-import lombok.extern.slf4j.Slf4j;
-
-import java.sql.ResultSet;
-
-@Slf4j
 public class ProcesarSolicitudesNotificacion {
 
     public static String CARPETA_EMPRESA = "COMPROBANTES";

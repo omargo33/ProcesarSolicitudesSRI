@@ -1,8 +1,6 @@
 
 package com.sri.procesamiento;
 
-import static com.sri.procesamiento.Configuracion.URL_GENERAR_TOKEN;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;

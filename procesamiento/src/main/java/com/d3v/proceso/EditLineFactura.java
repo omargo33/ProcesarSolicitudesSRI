@@ -1,8 +1,6 @@
 package com.d3v.proceso;
 
 import com.d3v.utilitarios.Pagos;
-import com.d3v.utilitarios.UDC;
-import com.fundamentos.conexion.ManagerBD;
 
 import lombok.Getter;
 import lombok.Setter;

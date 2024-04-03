@@ -1,5 +1,9 @@
 package com.sri.procesamiento.datasource;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,47 +20,45 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Clase para la configuracion de las bases de datos.
+ * 
+ * Se encarga de configurar las bases de datos a las que se conecta la aplicacion.
+ * 
+ * @author omargo33
+ * @since 2024-04-02
+ * 
+ */
 @Configuration
 @EnableJpaRepositories(basePackages = "com.leon.estructura.persistencia.crud", transactionManagerRef = "transcationManager", entityManagerFactoryRef = "entityManager")
 @EnableTransactionManagement
 @RequiredArgsConstructor
 public class DataSourceConfig {
 
-    private final DataSourceCeroConfig dataSourceCeroConfig;
-    private final DataSourceOneConfig dataSourceOneConfig;
-    private final DataSourceTwoConfig dataSourceTwoConfig;
+    private final PropiedadesBaseDatos baseDatos;
 
     @Bean
     @Primary
     public DataSource dataSource() {
         DataSourceRouting routingDataSource = new DataSourceRouting();
-        routingDataSource.initDatasource(dataSourceCeroDataSource(), dataSourceOneDataSource(),
-                dataSourceTwoDataSource());
+        routingDataSource.initDatasource(getDataSourceCeroDataSource());
         return routingDataSource;
     }
 
-    public DataSource dataSourceCeroDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl(dataSourceCeroConfig.getUrl());
-        dataSource.setUsername(dataSourceCeroConfig.getUsername());
-        dataSource.setPassword(dataSourceCeroConfig.getPassword());
-        return dataSource;
-    }
+    private Map<Object, Object> getDataSourceCeroDataSource() {
 
-    public DataSource dataSourceOneDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl(dataSourceOneConfig.getUrl());
-        dataSource.setUsername(dataSourceOneConfig.getUsername());
-        dataSource.setPassword(dataSourceOneConfig.getPassword());
-        return dataSource;
-    }
+        Map<Object, Object> listaDataSources = new HashMap<>();
+        List<DataSourcePropiedad> listaPropiedades = baseDatos.getAllProperties();
 
-    public DataSource dataSourceTwoDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl(dataSourceTwoConfig.getUrl());
-        dataSource.setUsername(dataSourceTwoConfig.getUsername());
-        dataSource.setPassword(dataSourceTwoConfig.getPassword());
-        return dataSource;
+        for (DataSourcePropiedad dataSourcePropiedad : listaPropiedades) {
+            DriverManagerDataSource dataSource = new DriverManagerDataSource();
+            dataSource.setUrl(dataSourcePropiedad.getUrl());
+            dataSource.setUsername(dataSourcePropiedad.getUsername());
+            dataSource.setPassword(dataSourcePropiedad.getPassword());
+            listaDataSources.put(dataSourcePropiedad.getId(), dataSource);
+        }
+
+        return listaDataSources;
     }
 
     @Bean(name = "entityManager")
@@ -64,6 +66,7 @@ public class DataSourceConfig {
         return builder.dataSource(dataSource()).packages("com.leon.estructura.persistencia.entidad").build();
     }
 
+    @SuppressWarnings("null")
     @Bean(name = "transcationManager")
     public JpaTransactionManager transactionManager(
             @Autowired @Qualifier("entityManager") LocalContainerEntityManagerFactoryBean entityManagerFactoryBean) {

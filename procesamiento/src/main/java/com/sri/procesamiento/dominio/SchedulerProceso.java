@@ -10,9 +10,8 @@ import org.springframework.stereotype.Component;
 
 import com.leon.estructura.persistencia.entidad.Cliente;
 import com.leon.estructura.persistencia.entidad.Parametro;
-import com.sri.procesamiento.datasource.BaseDatos;
+import com.sri.procesamiento.datasource.PropiedadesBaseDatos;
 import com.sri.procesamiento.datasource.DataSourceContextHolder;
-import com.sri.procesamiento.datasource.DataSourceEnum;
 import com.sri.procesamiento.servicio.ConfiguracionService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,15 +25,13 @@ public class SchedulerProceso {
     ConfiguracionService clienteService;
 
     @Autowired
-    BaseDatos baseDatos;
+    PropiedadesBaseDatos baseDatos;
 
     // cada tres minutos
     @Scheduled(fixedRate = 180000)
     public void reportCurrentTime() {
 
-        baseDatos.getAllProperties();
-
-        DataSourceContextHolder.setBranchContext(DataSourceEnum.DATASOURCE_CERO);
+        DataSourceContextHolder.setBranchContext("config");
 
         Optional<List<Cliente>> clientesOptional = clienteService.getClientes();
         if (clientesOptional.isPresent()) {

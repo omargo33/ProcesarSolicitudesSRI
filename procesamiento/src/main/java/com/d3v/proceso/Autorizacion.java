@@ -7,9 +7,11 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class Autorizacion {
   private String estado;
 
@@ -37,12 +39,7 @@ public class Autorizacion {
     setTipoComprobante("");
   }
 
-  @Override
-  public String toString() {
-    return "Autorizacion [estado=" + estado + ", fecha=" + fecha + ", fechaAutorizacion=" + fechaAutorizacion
-        + ", ambiente=" + ambiente + ", comprobante=" + comprobante + ", numeroAutorizacion=" + numeroAutorizacion
-        + ", tipoComprobante=" + tipoComprobante + ", listaMensajeAutorizacion=" + listaMensajesToString() + "]";
-  }
+  
 
   public String listaMensajesToString() {
     String respuesta = "";
