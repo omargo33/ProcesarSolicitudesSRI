@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.leon.estructura.persistencia.entidad.Cliente;
 import com.leon.estructura.persistencia.entidad.Parametro;
+import com.sri.procesamiento.datasource.BaseDatos;
 import com.sri.procesamiento.datasource.DataSourceContextHolder;
 import com.sri.procesamiento.datasource.DataSourceEnum;
 import com.sri.procesamiento.servicio.ConfiguracionService;
@@ -24,9 +25,14 @@ public class SchedulerProceso {
     @Autowired
     ConfiguracionService clienteService;
 
+    @Autowired
+    BaseDatos baseDatos;
+
     // cada tres minutos
     @Scheduled(fixedRate = 180000)
     public void reportCurrentTime() {
+
+        baseDatos.getAllProperties();
 
         DataSourceContextHolder.setBranchContext(DataSourceEnum.DATASOURCE_CERO);
 
