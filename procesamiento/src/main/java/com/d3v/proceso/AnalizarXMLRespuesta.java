@@ -12,23 +12,22 @@ import org.xml.sax.InputSource;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 @Slf4j
 class AnalizarXMLRespuesta {
   private String XML;
-  
+
   private Autorizacion autorizacionOk;
-  
+
   private List<Autorizacion> listaAutorizacion;
-  
+
   public AnalizarXMLRespuesta() {
     setAutorizacionOk(new Autorizacion());
   }
-  
+
   public void procesar(String in) {
     setXML(in);
   }
-  
+
   public Document parseXmlFile(String in) {
     try {
       DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -38,9 +37,9 @@ class AnalizarXMLRespuesta {
     } catch (Exception e) {
       log.error("Error al parsear el archivo XML: {}", e.toString());
       return null;
-    } 
+    }
   }
-  
+
   public void descuartizaXML() {
     setListaAutorizacion(new ArrayList<>());
     Document document = parseXmlFile(getXML());
@@ -50,15 +49,15 @@ class AnalizarXMLRespuesta {
       Autorizacion autorizacion = new Autorizacion();
       for (int k = 0; k < nodo.getChildNodes().getLength(); k++) {
         if (nodo.getChildNodes().item(k).getNodeName().equalsIgnoreCase("estado"))
-          autorizacion.setEstado(nodo.getChildNodes().item(k).getTextContent()); 
+          autorizacion.setEstado(nodo.getChildNodes().item(k).getTextContent());
         if (nodo.getChildNodes().item(k).getNodeName().equalsIgnoreCase("numeroAutorizacion"))
-          autorizacion.setNumeroAutorizacion(nodo.getChildNodes().item(k).getTextContent()); 
+          autorizacion.setNumeroAutorizacion(nodo.getChildNodes().item(k).getTextContent());
         if (nodo.getChildNodes().item(k).getNodeName().equalsIgnoreCase("ambiente"))
-          autorizacion.setAmbiente(nodo.getChildNodes().item(k).getTextContent()); 
+          autorizacion.setAmbiente(nodo.getChildNodes().item(k).getTextContent());
         if (nodo.getChildNodes().item(k).getNodeName().equalsIgnoreCase("comprobante"))
-          autorizacion.setComprobante(nodo.getChildNodes().item(k).getTextContent()); 
+          autorizacion.setComprobante(nodo.getChildNodes().item(k).getTextContent());
         if (nodo.getChildNodes().item(k).getNodeName().equalsIgnoreCase("fechaAutorizacion"))
-          autorizacion.setFechaAutorizacion(nodo.getChildNodes().item(k).getTextContent()); 
+          autorizacion.setFechaAutorizacion(nodo.getChildNodes().item(k).getTextContent());
         if (nodo.getChildNodes().item(k).getNodeName().equalsIgnoreCase("mensajes")) {
           NodeList nodeLstMensajes = nodo.getChildNodes().item(k).getChildNodes();
           for (int j = 0; j < nodeLstMensajes.getLength(); j++) {
@@ -66,24 +65,24 @@ class AnalizarXMLRespuesta {
             MensajeAutorizacion mensajeAutorizacion = new MensajeAutorizacion();
             for (int l = 0; l < nodoMensaje.getChildNodes().getLength(); l++) {
               if (nodoMensaje.getChildNodes().item(l).getNodeName().equalsIgnoreCase("identificador"))
-                mensajeAutorizacion.setIdentificador(nodoMensaje.getChildNodes().item(l).getTextContent()); 
+                mensajeAutorizacion.setIdentificador(nodoMensaje.getChildNodes().item(l).getTextContent());
               if (nodoMensaje.getChildNodes().item(l).getNodeName().equalsIgnoreCase("mensaje"))
-                mensajeAutorizacion.setMensaje(nodoMensaje.getChildNodes().item(l).getTextContent()); 
+                mensajeAutorizacion.setMensaje(nodoMensaje.getChildNodes().item(l).getTextContent());
               if (nodoMensaje.getChildNodes().item(l).getNodeName().equalsIgnoreCase("tipo"))
-                mensajeAutorizacion.setTipo(nodoMensaje.getChildNodes().item(l).getTextContent()); 
-            } 
+                mensajeAutorizacion.setTipo(nodoMensaje.getChildNodes().item(l).getTextContent());
+            }
             autorizacion.getListaMensajeAutorizacion().add(mensajeAutorizacion);
-          } 
-        } 
-      } 
+          }
+        }
+      }
       if (autorizacion.getEstado().equalsIgnoreCase("AUTORIZADO")) {
         autorizacion.setTipoComprobante(descuartizaComprobante(autorizacion.getComprobante()));
         setAutorizacionOk(autorizacion);
-      } 
+      }
       getListaAutorizacion().add(autorizacion);
-    } 
+    }
   }
-  
+
   public String descuartizaComprobante(String xmlComprobante) {
     String tipoComprobante = null;
     Document document = parseXmlFile(xmlComprobante);
@@ -92,32 +91,32 @@ class AnalizarXMLRespuesta {
       Node nodo = nodeLst.item(i);
       for (int k = 0; k < nodo.getChildNodes().getLength(); k++) {
         if (nodo.getChildNodes().item(k).getNodeName().equalsIgnoreCase("codDoc"))
-          tipoComprobante = nodo.getChildNodes().item(k).getTextContent(); 
-      } 
-    } 
+          tipoComprobante = nodo.getChildNodes().item(k).getTextContent();
+      }
+    }
     return tipoComprobante;
   }
-  
+
   public String getXML() {
     return this.XML;
   }
-  
+
   public void setXML(String XML) {
     this.XML = XML;
   }
-  
+
   public Autorizacion getAutorizacionOk() {
     return this.autorizacionOk;
   }
-  
+
   public void setAutorizacionOk(Autorizacion autorizacionOk) {
     this.autorizacionOk = autorizacionOk;
   }
-  
+
   public List<Autorizacion> getListaAutorizacion() {
     return this.listaAutorizacion;
   }
-  
+
   public void setListaAutorizacion(List<Autorizacion> listaAutorizacion) {
     this.listaAutorizacion = listaAutorizacion;
   }

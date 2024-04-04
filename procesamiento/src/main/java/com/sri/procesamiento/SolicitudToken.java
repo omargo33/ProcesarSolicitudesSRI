@@ -22,11 +22,11 @@ public class SolicitudToken {
 
     String token;
 
-    public void procesarSolicitud(String clientId, String clientSecret, String grantType) {
+    public void procesarSolicitud(String url, String clientId, String clientSecret, String grantType) {
 
         try {
 
-            String url = URL_GENERAR_TOKEN;
+            
             URL apiUrl = new URL(url);
 
             String urlParameters = "client_id=" + URLEncoder.encode(clientId, "UTF-8") +

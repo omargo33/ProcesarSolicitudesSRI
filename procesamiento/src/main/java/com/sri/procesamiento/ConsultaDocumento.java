@@ -27,11 +27,9 @@ public class ConsultaDocumento {
     String respuestaSolicitud;
     String estadoSolicitud;
 
-    public void procesarSolicitud(String token, String usuario, String credencial, String claveAcceso) {
+    public void procesarSolicitud(String url, String token, String usuario, String credencial, String claveAcceso) {
 
         try {
-
-            String url = Configuracion.URL_DOCUMENTOS;
             URL apiUrl = new URL(url + "/" + claveAcceso);
 
             // Abrir conexión HTTP
@@ -61,16 +59,14 @@ public class ConsultaDocumento {
                 response.append(line);
             }
             reader.close();
+            connection.disconnect();
 
             // Imprimir la respuesta
             log.info("Respuesta del servicio: {}", response.toString());
 
-            setRespuestaSolicitud(response.toString());
-
-            // Cerrar la conexión
-            connection.disconnect();
+            setRespuestaSolicitud(response.toString());            
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error en la consulta de documentos {}",e.toString());
         }
 
     }
@@ -117,7 +113,7 @@ public class ConsultaDocumento {
                         usuarioBD,
                         credencialBD)) {
                     String query = "SELECT COUNT(*) FROM resumenDocumentosProveedores WHERE access_key = ?";
-                    PreparedStatement statement = (PreparedStatement) conn.prepareStatement(query);
+                    PreparedStatement statement = conn.prepareStatement(query);
                     statement.setString(1, accessKey);
 
                     ResultSet resultSet = statement.executeQuery();
@@ -129,7 +125,7 @@ public class ConsultaDocumento {
                         }
                     }
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    log.error("Error al leer la base de datos. {}", e.toString());
                 }
 
                 // Insertar el registro si no existe
@@ -140,7 +136,7 @@ public class ConsultaDocumento {
                             usuarioBD,
                             credencialBD)) {
                         String query = "INSERT INTO resumenDocumentosProveedores (access_key, document_id, ruc_issuer, commercial_name, social_name_issuer, issued_at, establishment, point_issue, sequence, document_type, document_type_id, issued_at_formatted, total_value_without_taxes, tip, total_discount, total_amount, taxpayer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        PreparedStatement statement = (PreparedStatement) conn.prepareStatement(query);
+                        PreparedStatement statement = conn.prepareStatement(query);
                         statement.setString(1, accessKey);
                         statement.setInt(2, documentId);
                         statement.setString(3, rucIssuer);

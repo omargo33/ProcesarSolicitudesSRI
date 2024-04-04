@@ -5,13 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
+@Data
 public class Autorizacion {
   private String estado;
 
@@ -40,14 +36,25 @@ public class Autorizacion {
   }
 
   
-
-  public String listaMensajesToString() {
+  /**
+   * Metodo para listar los mensajes de autorizacion
+   * 
+   * @return
+   */
+  //TODO: no le veo utilizado
+  public String listarMensajesToString() {
     String respuesta = "";
     for (MensajeAutorizacion a : getListaMensajeAutorizacion())
       respuesta = respuesta + a.toString();
     return respuesta;
   }
 
+  
+  /**
+   * Metodo para obtener una fecha con formato particular.
+   * 
+   * @return
+   */
   public Date getFecha() {
     try {
       SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");

@@ -1,11 +1,10 @@
 package com.d3v.proceso;
 
-import com.d3v.utilitarios.Pagos;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import com.d3v.utilitarios.Bundle;
 import com.d3v.utilitarios.MainFechaString;
 import java.io.StringReader;
 import java.text.ParseException;
@@ -29,6 +28,9 @@ import org.xml.sax.InputSource;
 @Setter
 @Slf4j
 public class EditLineFactura {
+  
+  Bundle bundle = new Bundle();
+  
   DsF57011Z1 comprobanteCabecera = new DsF57011Z1();
   
   List<DsF57011Z1> comprobanteDetalle;
@@ -99,50 +101,50 @@ public class EditLineFactura {
           EditLinerNroSiguiente nn = new EditLinerNroSiguiente();
           nn.setBD(BD);
           nn.setEsquema(esquema);
-          nn.getDSF0022().setAnioFiscal(Integer.valueOf(MainFechaString.fechaFormateada(new Date(), "yyyy")).intValue());
-          nn.getDSF0022().setCompany(empresaComprobante);
-          nn.getDSF0022().setTypeDoc(tipoComprobante);
+          nn.getDsf0022().setAnioFiscal(Integer.parseInt(MainFechaString.fechaFormateada(new Date(), "yyyy")));
+          nn.getDsf0022().setCompany(empresaComprobante);
+          nn.getDsf0022().setTypeDoc(tipoComprobante);
           nn.editLine("1");
-          nroDocumento = String.valueOf(nn.getDSF0022().getNextNumber());
+          nroDocumento = String.valueOf(nn.getDsf0022().getNextNumber());
         } 
         if (nroComprobante.isEmpty() || nroComprobante.equals("") || nroComprobante.equals(" ")) {
           EditLinerNroSiguiente nn = new EditLinerNroSiguiente();
           nn.setBD(BD);
           nn.setEsquema(esquema);
-          nn.getDSF0022().setAnioFiscal(Integer.valueOf(MainFechaString.fechaFormateada(new Date(), "yyyy")).intValue());
-          nn.getDSF0022().setCompany(empresaDocumento);
-          nn.getDSF0022().setTypeDoc(tipoDocumento);
+          nn.getDsf0022().setAnioFiscal(Integer.parseInt(MainFechaString.fechaFormateada(new Date(), "yyyy")));
+          nn.getDsf0022().setCompany(empresaDocumento);
+          nn.getDsf0022().setTypeDoc(tipoDocumento);
           nn.editLine("1");
-          nroComprobante = String.valueOf(nn.getDSF0022().getNextNumber());
+          nroComprobante = String.valueOf(nn.getDsf0022().getNextNumber());
         } 
         EditLinerNroSiguiente nno = new EditLinerNroSiguiente();
         nno.setBD(BD);
         nno.setEsquema(esquema);
-        nno.getDSF00221().setObjeto("t57011z1");
+        nno.getDsf00221().setObjeto("t57011z1");
         nno.editlineObjeto("1");
-        String nroTrabajo = String.valueOf(nno.getDSF00221().getNextNumber());
+        String nroTrabajo = String.valueOf(nno.getDsf00221().getNextNumber());
         try {
           EditLineSalesZ1 pZ1 = new EditLineSalesZ1();
           DsF57011Z1 detalleTemporal = new DsF57011Z1();
           BeanUtils.copyProperties(this.comprobanteDetalle.get(i), detalleTemporal);
-          pZ1.setDSF57011Z1(detalleTemporal);
-          pZ1.getDSF57011Z1().setSzDocumentCompany(empresaDocumento);
-          pZ1.getDSF57011Z1().setSzDocumentType(tipoDocumento);
-          pZ1.getDSF57011Z1().setMnDocumentNumber(nroDocumento);
-          pZ1.getDSF57011Z1().setMnLineNumber(String.valueOf(i + 1));
-          pZ1.getDSF57011Z1().setSzInvoiceCompany(empresaComprobante);
-          pZ1.getDSF57011Z1().setSzInvoiceType(tipoComprobante);
-          pZ1.getDSF57011Z1().setMnInvoiceNumber(nroComprobante);
-          pZ1.getDSF57011Z1().setMnLegalNumber("9999999999");
-          pZ1.getDSF57011Z1().setMnJobNumber(nroTrabajo);
-          pZ1.getDSF57011Z1().setSzUserID("ROBOT");
-          pZ1.getDSF57011Z1().setJdDateUpdated(MainFechaString.fechaFormateada(new Date(), "yyyy-MM-dd"));
-          pZ1.getDSF57011Z1().setSzMember("LOADINV");
-          pZ1.getDSF57011Z1().setSzWorkStationID("-");
-          pZ1.getDSF57011Z1().setSzComputerID("-");
-          pZ1.getDSF57011Z1().setMnTimeofDay(MainFechaString.getHora());
-          pZ1.getDSF57011Z1().setSzAutorizacionElectronica(nroAutorizacion);
-          pZ1.getDSF57011Z1().setSzRefAutorizacion1(fechaAutorizacion);
+          pZ1.setDsf57011Z1(detalleTemporal);
+          pZ1.getDsf57011Z1().setSzDocumentCompany(empresaDocumento);
+          pZ1.getDsf57011Z1().setSzDocumentType(tipoDocumento);
+          pZ1.getDsf57011Z1().setMnDocumentNumber(nroDocumento);
+          pZ1.getDsf57011Z1().setMnLineNumber(String.valueOf(i + 1));
+          pZ1.getDsf57011Z1().setSzInvoiceCompany(empresaComprobante);
+          pZ1.getDsf57011Z1().setSzInvoiceType(tipoComprobante);
+          pZ1.getDsf57011Z1().setMnInvoiceNumber(nroComprobante);
+          pZ1.getDsf57011Z1().setMnLegalNumber("9999999999");
+          pZ1.getDsf57011Z1().setMnJobNumber(nroTrabajo);
+          pZ1.getDsf57011Z1().setSzUserID("ROBOT");
+          pZ1.getDsf57011Z1().setJdDateUpdated(MainFechaString.fechaFormateada(new Date(), "yyyy-MM-dd"));
+          pZ1.getDsf57011Z1().setSzMember("LOADINV");
+          pZ1.getDsf57011Z1().setSzWorkStationID("-");
+          pZ1.getDsf57011Z1().setSzComputerID("-");
+          pZ1.getDsf57011Z1().setMnTimeofDay(MainFechaString.getHora());
+          pZ1.getDsf57011Z1().setSzAutorizacionElectronica(nroAutorizacion);
+          pZ1.getDsf57011Z1().setSzRefAutorizacion1(fechaAutorizacion);
           pZ1.setEsquema(esquema);
           pZ1.setBD(BD);
           pZ1.editLine("2");
@@ -152,19 +154,22 @@ public class EditLineFactura {
       } 
       for (i = 0; i < this.pagosDetalle.size(); i++) {
         EditLineNegociacion neg = new EditLineNegociacion();
-        neg.setDocDocument((new Integer(nroDocumento)).intValue());
+        neg.setDocDocument(
+        Integer.parseInt(nroDocumento)
+        
+        );
         neg.setDocEmpresa(empresaDocumento);
         neg.setDocType(tipoDocumento);
         neg.setId(empresaDocumento + tipoDocumento + nroDocumento);
         neg.setSequence(i + 1);
         neg.setCreationDateTime(MainFechaString.fechaFormateada(new Date(), "yyyy-MM-dd hh:mm:ss"));
         neg.setPaymentTransactionID(empresaDocumento + tipoDocumento + nroDocumento + neg.getSequence());
-        neg.setPaymentAmount(((DsF0711Z1)this.pagosDetalle.get(i)).getMonto());
-        neg.setTypeOperation(((DsF0711Z1)this.pagosDetalle.get(i)).getIdIntrumentoPago());
+        neg.setPaymentAmount((this.pagosDetalle.get(i)).getMonto());
+        neg.setTypeOperation((this.pagosDetalle.get(i)).getIdIntrumentoPago());
         UDC udc = new UDC();
         udc.setModulo("57");
         udc.setConstante("PY");
-        udc.setDescripcion2(((DsF0711Z1)this.pagosDetalle.get(i)).getIdIntrumentoPago());
+        udc.setDescripcion2((this.pagosDetalle.get(i)).getIdIntrumentoPago());
         udc.retrieveDescripcion2(BD, esquema);
         neg.setTypeOperation(udc.getCodigoDefinidoUsuario());
         neg.setValueDate(MainFechaString.fechaFormateada(new Date(), "yyyy-MM-dd"));
@@ -262,7 +267,7 @@ public class EditLineFactura {
           comprobante.setSzMoneda(nodo.getChildNodes().item(k).getTextContent()); 
         if (nodo.getChildNodes().item(k).getNodeName().equalsIgnoreCase("propina")) {
           comprobante.setMnAmountSalesTaxTotal1(nodo.getChildNodes().item(k).getTextContent());
-          this.mnPropina += Float.valueOf(comprobante.getMnAmountSalesTaxTotal1()).floatValue();
+          this.mnPropina += Float.parseFloat(comprobante.getMnAmountSalesTaxTotal1());
         } 
       } 
     } 
@@ -298,7 +303,10 @@ public class EditLineFactura {
         if (nodo.getChildNodes().item(l).getNodeName() != "#text") {
           if (nodo.getChildNodes().item(l).getNodeName().equalsIgnoreCase("formaPago")) {
             tmp.setIdIntrumentoPago(nodo.getChildNodes().item(l).getTextContent());
-            tmp.setInstrumentoPago((new Pagos()).consultarDescripcion(nodo.getChildNodes().item(l).getTextContent()));
+            
+            String formaPago = bundle.getMessage("desc_"+nodo.getChildNodes().item(l).getTextContent());
+            
+            tmp.setInstrumentoPago(formaPago);
           } 
           if (nodo.getChildNodes().item(l).getNodeName().equalsIgnoreCase("total"))
             tmp.setMonto(nodo.getChildNodes().item(l).getTextContent()); 
@@ -348,27 +356,27 @@ public class EditLineFactura {
                 detalle.setMnDiscountAmount("0"); 
               if (procesarAcumuladores) {
                 if (detalle.getMnTaxRate1().equals("2")) {
-                  this.mntotalSinImpuestos += Float.valueOf(detalle.getMnAmountExtendedPrice()).floatValue();
-                  this.mntotalDescuentos += Float.valueOf(detalle.getMnDiscountAmount()).floatValue();
+                  this.mntotalSinImpuestos += Float.parseFloat(detalle.getMnAmountExtendedPrice());
+                  this.mntotalDescuentos += Float.parseFloat(detalle.getMnDiscountAmount());
                   if (!detalle.getMnTaxRate2().equals("0")) {
                     if (detalle.getMnTaxRate2().equals("2"))
                       this.szPorcentajeIVAVigente = "12"; 
                     if (detalle.getMnTaxRate2().equals("3"))
                       this.szPorcentajeIVAVigente = "14"; 
-                    this.mnbaseIVAVigente += Float.valueOf(detalle.getMnAmountExtendedPrice()).floatValue();
-                    this.mnIVAVigente += Float.valueOf(detalle.getMnAmountTax()).floatValue();
+                    this.mnbaseIVAVigente += Float.parseFloat(detalle.getMnAmountExtendedPrice());
+                    this.mnIVAVigente += Float.parseFloat(detalle.getMnAmountTax());
                   } else {
-                    this.mnbaseIVA0 += Float.valueOf(detalle.getMnAmountExtendedPrice()).floatValue();
+                    this.mnbaseIVA0 += Float.parseFloat(detalle.getMnAmountExtendedPrice());
                   } 
-                  this.mntotalConImpuestos += Float.valueOf(detalle.getMnAmountExtendedPrice()).floatValue() + Float.valueOf(detalle.getMnAmountTax()).floatValue();
+                  this.mntotalConImpuestos += Float.parseFloat(detalle.getMnAmountExtendedPrice()) + Float.parseFloat(detalle.getMnAmountTax());
                 } 
                 if (detalle.getMnTaxRate1().equals("3")) {
-                  this.mnTotalICE += Float.valueOf(detalle.getMnAmountExtendedPrice()).floatValue();
-                  this.mnBaseICE += Float.valueOf(detalle.getMnAmountTax()).floatValue();
+                  this.mnTotalICE += Float.parseFloat(detalle.getMnAmountExtendedPrice());
+                  this.mnBaseICE += Float.parseFloat(detalle.getMnAmountTax());
                 } 
                 if (detalle.getMnTaxRate1().equals("5")) {
-                  this.mnTotalIRBPNR += Float.valueOf(detalle.getMnAmountExtendedPrice()).floatValue();
-                  this.mnBaseIRBPNR += Float.valueOf(detalle.getMnAmountTax()).floatValue();
+                  this.mnTotalIRBPNR += Float.parseFloat(detalle.getMnAmountExtendedPrice());
+                  this.mnBaseIRBPNR += Float.parseFloat(detalle.getMnAmountTax());
                 } 
               } 
             } 
@@ -381,11 +389,11 @@ public class EditLineFactura {
       this.comprobanteCabecera = detalle;
     } 
     if (!comprobante.getMnAmountSalesTaxTotal1().equals("")) {
-      Float propina = new Float(0.0F);
+      Float propina = Float.valueOf(0.0F);
       try {
-        propina = new Float(comprobante.getMnAmountSalesTaxTotal1());
+        propina = Float.valueOf(comprobante.getMnAmountSalesTaxTotal1());
       } catch (Exception e) {
-        propina = new Float(0.0F);
+        propina = Float.valueOf(0.0F);
       } 
       this.mntotalConImpuestos += propina.floatValue();
     } 
@@ -412,7 +420,7 @@ public class EditLineFactura {
     } 
   }
   
-  public static Date StringToDate(String fecha, String caracter, int op) {
+  public static Date stringToDate(String fecha, String caracter, int op) {
     String formato = "yyyy" + caracter + "MM" + caracter + "dd";
     if (op == 1) {
       formato = "yyyy" + caracter + "dd" + caracter + "MM";
@@ -436,7 +444,7 @@ public class EditLineFactura {
     return fechaFormato;
   }
   
-  public static String DateToString(Date fecha, String caracter, int op) {
+  public static String dateToString(Date fecha, String caracter, int op) {
     String formato = "yyyy" + caracter + "MM" + caracter + "dd";
     if (op == 1) {
       formato = "yyyy" + caracter + "dd" + caracter + "MM";

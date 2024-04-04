@@ -28,14 +28,14 @@ public class DescargarMovimientosProveedores {
 
     String respuestaSolicitud;
     
-    public void procesarSolicitud(String token, String usuario, String credencial, String mes, String anio){
+    public void procesarSolicitud(String url, String token, String usuario, String credencial, String mes, String anio){
         
         try {
      
             String urlParameters = "month=" + URLEncoder.encode(mes, "UTF-8")
                     + "&year=" + URLEncoder.encode(anio, "UTF-8");
 
-            String url = Configuracion.URL_DOCUMENTOS_PROVEEDORES;
+            
             URL apiUrl = new URL(url + "?" + urlParameters);
 
  
@@ -76,7 +76,7 @@ public class DescargarMovimientosProveedores {
             // Cerrar la conexión
             connection.disconnect();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("No se puede procesar la solicitud. {}", e.toString());
         }
 
     }
@@ -122,7 +122,7 @@ public class DescargarMovimientosProveedores {
                         usuarioBD,
                         credencialBD)) {
                     String query = "SELECT COUNT(*) FROM resumenDocumentosProveedores WHERE access_key = ?";
-                    PreparedStatement statement = (PreparedStatement) conn.prepareStatement(query);
+                    PreparedStatement statement = conn.prepareStatement(query);
                     statement.setString(1, accessKey);
 
                     ResultSet resultSet = statement.executeQuery();
@@ -134,7 +134,7 @@ public class DescargarMovimientosProveedores {
                         }
                     }
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    log.error("Error al verificar si el registro ya existe en la base de datos. {}", e.toString());
                 }
 
                 // Insertar el registro si no existe
@@ -144,7 +144,7 @@ public class DescargarMovimientosProveedores {
                             usuarioBD,
                             credencialBD)) {
                         String query = "INSERT INTO resumenDocumentosProveedores (access_key, document_id, ruc_issuer, commercial_name, social_name_issuer, issued_at, establishment, point_issue, sequence, document_type, document_type_id, issued_at_formatted, total_value_without_taxes, tip, total_discount, total_amount, taxpayer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        PreparedStatement statement = (PreparedStatement) conn.prepareStatement(query);
+                        PreparedStatement statement = conn.prepareStatement(query);
                         statement.setString(1, accessKey);
                         statement.setInt(2, documentId);
                         statement.setString(3, rucIssuer);
@@ -170,7 +170,8 @@ public class DescargarMovimientosProveedores {
                             log.info("No se pudo insertar el registro.");                            
                         }
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        log.error("Error no se puede insertar en la base de datos. {}", e.toString());
+                
                     }
                 }
             }
