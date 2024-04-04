@@ -1,5 +1,5 @@
 
-package com.sri.procesamiento;
+package com.leon.batch;
 
 import lombok.Getter;
 import lombok.Setter;

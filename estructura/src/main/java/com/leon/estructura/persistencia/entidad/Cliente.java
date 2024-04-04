@@ -21,7 +21,6 @@ import javax.persistence.Column;
  * @version 1.0
  * 
  */
-
 @Data
 @Entity
 @Table(name = "clientes")

@@ -165,7 +165,7 @@ public class EditLineNegociacion {
     setCorreo("");
   }
 
-  public void saveTransaction(ManagerBD BD, String esquema) {
+  public void saveTransaction(Object BD, String esquema) {
     String a = getPaymentAmount();
     String b = a.substring(getPaymentAmount().length() - 1);
     if (b.equals("."))
@@ -198,21 +198,21 @@ public class EditLineNegociacion {
         + "', '" + getIdentificadorFiscal() + "', '" + getRazonSocial() + "', '" + getDireccion() + "', '"
         + getTelefono() + "', '" + getCorreo() + "' );";
     log.error("Query: {}", query);
-    if (!BD.sqlInsert(query) || BD.sqlCommit())
-      log.error("Error: {}", BD.getMsjError());
+    /*if (!BD.sqlInsert(query) || BD.sqlCommit())
+      log.error("Error: {}", BD.getMsjError());*/
   }
 
-  public void updTransaction(ManagerBD BD, String esquema) {
+  public void updTransaction(Object BD, String esquema) {
     String query = "";
     query = "UPDATE " + esquema + ".t0711z1 SET szStatusPayment =  '" + getStatusPayment() + "' , szMsgError = '"
         + getMsgError() + "' WHERE  szDocEmpresa = '" + getDocEmpresa() + "' AND   szDocType = '" + getDocType()
         + "' AND   mnDocDocument = '" + getDocDocument() + "' ;";
     log.error("Query: {}", query);
-    if (!BD.sqlUpdate(query) || BD.sqlCommit())
-      ;
+    /*if (!BD.sqlUpdate(query) || BD.sqlCommit())
+      ;*/
   }
 
-  public void anulacionCierreCaja(ManagerBD BD, String esquema) {
+  public void anulacionCierreCaja(Object BD, String esquema) {
     String query = "";
     query = "UPDATE " + esquema + ".t0711z1 SET szReversalCashPointReferenceID =  '" + getReversalCashPointReferenceID()
         + "' , szReversalPaymentTransactionID = '" + getReversalPaymentTransactionID() + "',  szReversalValueDate = '"
@@ -220,11 +220,11 @@ public class EditLineNegociacion {
         + getMsgError() + "' WHERE  szCashPointPaymentGroupReferenceID = '" + getCashPointPaymentGroupReferenceID()
         + "' AND   szDocType = 'CC' and szStatusReversal not in ('A') ;";
     log.error("Query: {}", query);
-    if (!BD.sqlUpdate(query) || BD.sqlCommit())
-      ;
+    /*if (!BD.sqlUpdate(query) || BD.sqlCommit())
+      ;*/
   }
 
-  public void anulacionComprobante(ManagerBD BD, String esquema) {
+  public void anulacionComprobante(Object BD, String esquema) {
     String query = "";
     query = "UPDATE " + esquema + ".t0711z1 SET szUsuarioModficador =  '" + getUsuarioModficador()
         + "' , szReversalCashPointReferenceID = '" + getReversalPaymentTransactionID() + "',  szReversalValueDate = '"
@@ -232,11 +232,11 @@ public class EditLineNegociacion {
         + "'  WHERE  szPaymentTransactionID = '" + getPaymentTransactionID() + "' ;";
 
     log.error("Query: {}", query);
-    if (!BD.sqlUpdate(query) || BD.sqlCommit())
-      ;
+    /*if (!BD.sqlUpdate(query) || BD.sqlCommit())
+      ;*/
   }
 
-  public void marcarRegCierreCaja(ManagerBD BD, String esquema) {
+  public void marcarRegCierreCaja(Object BD, String esquema) {
     String query = "UPDATE " + esquema + ".t0711z1 SET szStatusPayment =  '" + getStatusPayment()
         + "' , szUsuarioCierre = '" + getUsuarioOriginador() + "' , jdFechaCierre = '" + getFechaOrigen()
         + "' , szRefUsuario3 = '" + getDocType() + "-" + getDocDocument() + "-" + getDocEmpresa()
@@ -244,11 +244,11 @@ public class EditLineNegociacion {
         + "' and szTypeOperation not in ('00') ;";
 
     log.error("Query: {}", query);
-    if (!BD.sqlUpdate(query) || BD.sqlCommit())
-      ;
+    /*if (!BD.sqlUpdate(query) || BD.sqlCommit())
+      ;*/
   }
 
-  public void limpiaGrupoPagos(ManagerBD BD, String esquema) {
+  public void limpiaGrupoPagos(Object BD, String esquema) {
     String query = " UPDATE " + esquema
         + ".t079804  SET szCierreCaja = ' ' ,  iDocNumber = 0 , szTypeDoc = ' ' ,  szCompanyDoc = ' '  WHERE  szCodEmpresa = '"
         + getDocEmpresa() + "' AND  szCodOficina = '" + getCashPointOfficeReferenceID() + "' AND   szCodCaja = '"
@@ -256,8 +256,8 @@ public class EditLineNegociacion {
         + getDocType() + "' ;";
 
     log.error("Query: {}", query);
-    if (!BD.sqlUpdate(query) || BD.sqlCommit())
-      ;
+    /*if (!BD.sqlUpdate(query) || BD.sqlCommit())
+      ;*/
   }
 
 }

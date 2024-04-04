@@ -1,5 +1,6 @@
-package com.sri.procesamiento.servicio;
+package com.leon.batch.servicio;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,7 @@ import com.leon.estructura.persistencia.crud.ClientesCrudRepositorio;
 import com.leon.estructura.persistencia.crud.ParametroCrudRepositorio;
 import com.leon.estructura.persistencia.entidad.Cliente;
 import com.leon.estructura.persistencia.entidad.Parametro;
-import com.sri.procesamiento.Constantes;
+import com.leon.batch.Constantes;
 
 /**
  * Servicio de Cliente
@@ -43,15 +44,14 @@ public class ConfiguracionService {
 
    public Optional<List<Parametro>> getParametros() {
       return parametroCrudRepositorio.findByIndices(
-            List.of(
-                  Constantes.INDEX_USER_ID,
-                  Constantes.INDEX_SECRET_ID,
-                  Constantes.INDEX_MASTER_CREDENCIAL,
-                  Constantes.INDEX_URL_TOKEN,
-                  Constantes.INDEX_URL_SOLICITUD_DOCUMENTOS_RECIBIDOS,
-                  Constantes.INDEX_URL_DOCUMENTOS_ENVIADOS,
-                  Constantes.INDEX_PATH_CERTIFICADO_DIGITAL)
-
+         Arrays.asList(
+            Constantes.INDEX_USER_ID,
+            Constantes.INDEX_SECRET_ID,
+            Constantes.INDEX_MASTER_CREDENCIAL,
+            Constantes.INDEX_URL_TOKEN,
+            Constantes.INDEX_URL_SOLICITUD_DOCUMENTOS_RECIBIDOS,
+            Constantes.INDEX_URL_DOCUMENTOS_ENVIADOS,
+            Constantes.INDEX_PATH_CERTIFICADO_DIGITAL)
       );
    }
 }

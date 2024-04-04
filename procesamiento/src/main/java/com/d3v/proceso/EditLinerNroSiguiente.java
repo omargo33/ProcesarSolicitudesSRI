@@ -14,6 +14,8 @@ public class EditLinerNroSiguiente {
 
   private String esquema;
 
+  private Object BD;
+
   public EditLinerNroSiguiente() {
     setDsf0022(new DsF0022());
     setDsf00221(new DsF00221());
@@ -28,7 +30,7 @@ public class EditLinerNroSiguiente {
       query = "SELECT * FROM " + this.esquema + ".t0022 WHERE szCompany = '" + this.dsf0022.getCompany()
           + "' AND szTypeDoc = '" + this.dsf0022.getTypeDoc() + "' AND mnPeriodoFiscal = '"
           + this.dsf0022.getAnioFiscal() + "' ;";
-      registro = this.BD.sqlString(query);
+      //registro = this.BD.sqlString(query);
       if (registro != null) {
         for (int i = 0; i < registro.length; i++) {
           this.dsf0022.setDescripcion(registro[i][3]);
@@ -43,20 +45,20 @@ public class EditLinerNroSiguiente {
             + ".t0022 (szCompany, szTypeDoc, mnPeriodoFiscal, szDescripcion, mnNextNumber)VALUES ('"
             + this.dsf0022.getCompany() + "' ,'" + this.dsf0022.getTypeDoc() + "', '" + this.dsf0022.getAnioFiscal()
             + "', '" + this.dsf0022.getDescripcion() + "', '" + this.dsf0022.getNextNumber() + "');";
-        if (this.BD.sqlInsert(query) && this.BD.sqlCommit()) {
+        /*if (this.BD.sqlInsert(query) && this.BD.sqlCommit()) {
           log.info("Registro automatico NN exitoso!");
           updateNN = true;
         } else {
           log.info("Problemas al registrar NN automatico");
-        }
+        }*/
       }
       if (updateNN) {
         int nextNumberNew = this.dsf0022.getNextNumber() + 1;
         query = "UPDATE " + this.esquema + ".t0022 SET mnNextNumber =  '" + nextNumberNew + "' WHERE szCompany = '"
             + this.dsf0022.getCompany() + "' AND szTypeDoc = '" + this.dsf0022.getTypeDoc()
             + "' AND mnPeriodoFiscal = '" + this.dsf0022.getAnioFiscal() + "' ;";
-        if (this.BD.sqlUpdate(query) && this.BD.sqlCommit())
-          log.info("Consumo realizado NN!");
+       /*  if (this.BD.sqlUpdate(query) && this.BD.sqlCommit())
+          log.info("Consumo realizado NN!");*/
       }
     }
   }
@@ -67,7 +69,7 @@ public class EditLinerNroSiguiente {
     boolean updateNN = false;
     if (typeMode.equalsIgnoreCase("1")) {
       query = "SELECT * FROM " + this.esquema + ".t00221 WHERE szObjeto = '" + this.dsf00221.getObjeto() + "' ;";
-      registro = this.BD.sqlString(query);
+      //registro = this.BD.sqlString(query);
       if (registro != null) {
         for (int i = 0; i < registro.length; i++) {
           this.dsf00221.setNextNumber(Integer.parseInt(registro[i][1]));
@@ -77,19 +79,19 @@ public class EditLinerNroSiguiente {
         this.dsf00221.setNextNumber(1);
         query = "INSERT INTO " + this.esquema + ".t00221(szObjeto, mnNextNumber)VALUES ('" + this.dsf00221.getObjeto()
             + "', '" + this.dsf00221.getNextNumber() + "' );";
-        if (this.BD.sqlInsert(query) && this.BD.sqlCommit()) {
+       /* if (this.BD.sqlInsert(query) && this.BD.sqlCommit()) {
           log.info("Registro automatico NN por Objeto Exitoso!");
           updateNN = true;
         } else {
           log.info("Problemas al registrar NN por Objeto automatico");
-        }
+        }*/
       }
       if (updateNN) {
         int nextNumberNew = this.dsf00221.getNextNumber() + 1;
         query = "UPDATE " + this.esquema + ".t00221 SET mnNextNumber =  '" + nextNumberNew + "' WHERE szObjeto = '"
             + this.dsf00221.getObjeto() + "' ;";
-        if (this.BD.sqlUpdate(query) && this.BD.sqlCommit())
-          log.info("Consumo realizado NN por Objeto!");
+        /*if (this.BD.sqlUpdate(query) && this.BD.sqlCommit())
+          log.info("Consumo realizado NN por Objeto!");*/
       }
     }
   }

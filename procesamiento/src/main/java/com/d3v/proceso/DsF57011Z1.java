@@ -1,11 +1,11 @@
 package com.d3v.proceso;
 
-import com.d3v.utilitarios.MainFechaString;
-
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+
+import com.leon.batch.utilitarios.MainFechaString;
 
 @Getter
 @Setter

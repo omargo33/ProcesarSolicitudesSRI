@@ -1,11 +1,14 @@
 
-package com.sri.procesamiento;
+package com.leon.batch;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ProcesarSolicitudesNotificacion {
 
     public static String CARPETA_EMPRESA = "COMPROBANTES";
     
-    /* 
+     /*
     public void procesar() {
 
         SolicitudToken solicitudToken = new SolicitudToken();

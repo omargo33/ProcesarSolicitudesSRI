@@ -1,4 +1,4 @@
-package com.sri.procesamiento;
+package com.leon.batch;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -74,6 +74,7 @@ public class ConsultaDocumento {
     public void analizarRespuesta(String json, String usuarioBD, String credencialBD, String baseDatos) {
         try {
             JSONObject jsonObject = new JSONObject(json);
+            //Object jsonObject = new JSONObject(json);
 
             // Obtenemos el valor del campo "status"
             String status = jsonObject.getString("status");

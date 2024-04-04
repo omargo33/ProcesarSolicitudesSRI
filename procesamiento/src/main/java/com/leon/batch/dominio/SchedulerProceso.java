@@ -1,4 +1,5 @@
-package com.sri.procesamiento.dominio;
+package com.leon.batch.dominio;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -10,9 +11,9 @@ import org.springframework.stereotype.Component;
 
 import com.leon.estructura.persistencia.entidad.Cliente;
 import com.leon.estructura.persistencia.entidad.Parametro;
-import com.sri.procesamiento.datasource.PropiedadesBaseDatos;
-import com.sri.procesamiento.datasource.DataSourceContextHolder;
-import com.sri.procesamiento.servicio.ConfiguracionService;
+import com.leon.batch.datasource.PropiedadesBaseDatos;
+import com.leon.batch.datasource.DataSourceContextHolder;
+import com.leon.batch.servicio.ConfiguracionService;
 
 import lombok.extern.slf4j.Slf4j;
 

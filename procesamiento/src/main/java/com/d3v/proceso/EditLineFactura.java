@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import com.d3v.utilitarios.Bundle;
-import com.d3v.utilitarios.MainFechaString;
 import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +21,9 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+
+import com.leon.batch.utilitarios.Bundle;
+import com.leon.batch.utilitarios.MainFechaString;
 
 @Getter
 @Setter
@@ -76,7 +77,7 @@ public class EditLineFactura {
     return xml.replaceAll("\\s*(<\\?xml[^>]*\\?>)\\s*", "$1");
   }
   
-  public void procesarComprobante(ManagerBD BD, String esquema, String xmlAutorizado, String empresaDocumento, String tipoDocumento, String nroDocumento, String empresaComprobante, String tipoComprobante, String nroComprobante) {
+  public void procesarComprobante(Object BD, String esquema, String xmlAutorizado, String empresaDocumento, String tipoDocumento, String nroDocumento, String empresaComprobante, String tipoComprobante, String nroComprobante) {
     //String prologoXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     cadenaXML(xmlAutorizado);
     boolean procesarOK = true;
@@ -146,7 +147,7 @@ public class EditLineFactura {
           pZ1.getDsf57011Z1().setSzAutorizacionElectronica(nroAutorizacion);
           pZ1.getDsf57011Z1().setSzRefAutorizacion1(fechaAutorizacion);
           pZ1.setEsquema(esquema);
-          pZ1.setBD(BD);
+          //pZ1.setBD(BD);
           pZ1.editLine("2");
         } catch (Exception e) {          
           log.error(" Genero una expcial registrar el comprobante: {}", e.toString());
@@ -166,12 +167,14 @@ public class EditLineFactura {
         neg.setPaymentTransactionID(empresaDocumento + tipoDocumento + nroDocumento + neg.getSequence());
         neg.setPaymentAmount((this.pagosDetalle.get(i)).getMonto());
         neg.setTypeOperation((this.pagosDetalle.get(i)).getIdIntrumentoPago());
-        UDC udc = new UDC();
+        
+        /*UDC udc = new UDC();
         udc.setModulo("57");
         udc.setConstante("PY");
         udc.setDescripcion2((this.pagosDetalle.get(i)).getIdIntrumentoPago());
         udc.retrieveDescripcion2(BD, esquema);
         neg.setTypeOperation(udc.getCodigoDefinidoUsuario());
+        */
         neg.setValueDate(MainFechaString.fechaFormateada(new Date(), "yyyy-MM-dd"));
         neg.setUsuarioOriginador("DLAUTOM");
         neg.setUsuarioModficador("DLAUTOM");
