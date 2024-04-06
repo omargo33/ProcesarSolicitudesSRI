@@ -15,5 +15,4 @@ import com.leon.estructura.persistencia.entidad.T0711z1Id;
 @Repository
 public interface T0711z1CrudRepositorio extends CrudRepository<T0711z1, T0711z1Id> {
 
-    
 }

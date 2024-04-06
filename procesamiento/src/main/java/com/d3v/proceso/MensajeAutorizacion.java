@@ -1,26 +1,18 @@
 package com.d3v.proceso;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+/**
+ * Clase que representa un mensaje de autorización
+ * 
+ * @author omargo33
+ * @since 2024-04-05
+ */
+@Data
 public class MensajeAutorizacion {
-    private String identificador;
-    
-    private String mensaje;
-    
-    private String tipo;
-    
-    public MensajeAutorizacion() {
-      setIdentificador("");
-      setMensaje("");
-      setTipo("");
-    }
-    
-    public String toString() {
-      return "\nidentificador: " + getIdentificador() + "\nmensaje: " + 
-        getMensaje() + "\ntipo: " + getTipo();
-    }
-  }
-  
+  private String identificador;
+
+  private String mensaje;
+
+  private String tipo;
+}

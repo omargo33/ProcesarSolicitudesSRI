@@ -168,6 +168,7 @@ public class EditLineFactura {
         neg.setPaymentAmount((this.pagosDetalle.get(i)).getMonto());
         neg.setTypeOperation((this.pagosDetalle.get(i)).getIdIntrumentoPago());
         
+        //TODO: UDC 
         /*UDC udc = new UDC();
         udc.setModulo("57");
         udc.setConstante("PY");

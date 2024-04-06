@@ -32,19 +32,18 @@ public class SolicitaREST {
 
     public static final String CONSULTA_JSON = "JSON";
     public static final String CONSULTA_PARAMETROS = "URL_PARAMETROS";
-    
+
     public static final int SERVICIO_OK = 1;
     public static final int SERVICIO_ERROR = 0;
     public static final int SERVIDOR_ERROR = -1;
     public static final int CORTOCIRCUITO = -2;
-    
+
     private int timeOut;
     private int httpEstado = 0;
     private String jsonConsulta;
     private String parametrosConsulta;
     private String urlConsulta;
     private String respuesta;
-    private String errorRespuesta;
     private String tipoConsulta;
     private final Date fechaInicio;
     private Date fechaFin;
@@ -122,10 +121,10 @@ public class SolicitaREST {
 
         httpEstado = connection.getResponseCode();
 
-        if (getHttpEstado() != HttpURLConnection.HTTP_OK) {
-            inputStream = connection.getErrorStream();
+        if (isHttpstatusValido(getHttpEstado()) == SERVICIO_OK) {
+            inputStream = connection.getInputStream();            
         } else {
-            inputStream = connection.getInputStream();
+            inputStream = connection.getErrorStream();
         }
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -137,12 +136,33 @@ public class SolicitaREST {
         bufferedReader.close();
         fechaFin = new Date();
 
-        if (getHttpEstado() != HttpURLConnection.HTTP_OK) {
-            errorRespuesta = stringBuilder.toString();
+        if (isHttpstatusValido(getHttpEstado()) == SERVICIO_ERROR) {
+            respuesta = stringBuilder.toString();            
+        }
+
+        if(isHttpstatusValido(getHttpEstado()) == SERVIDOR_ERROR){
             throw new Exception(String.valueOf(getHttpEstado()));
         }
 
         respuesta = stringBuilder.toString();
+    }
+
+    /**
+     * Metodo para analizar el estado de la respues.
+     *
+     * @return
+     */
+    public int isHttpstatusValido(int httpStatus) {
+        if (httpStatus >= HttpURLConnection.HTTP_OK && httpStatus < HttpURLConnection.HTTP_MULT_CHOICE) {
+            return SERVICIO_OK;
+        }
+        
+        if (httpStatus >= HttpURLConnection.HTTP_MULT_CHOICE && httpStatus < HttpURLConnection.HTTP_UNSUPPORTED_TYPE) {
+            return SERVICIO_ERROR;
+        }
+
+        log.error("Error en la conexion al servidor. Estado: {}", httpStatus);
+        return SERVIDOR_ERROR;
     }
 
     /**
@@ -180,11 +200,9 @@ public class SolicitaREST {
             T entity = mapper.readValue(respuesta, type);
             return entity;
         } catch (JsonProcessingException e) {
-            log.error("Error al convertir la respuesta JSON", e);
             return null;
         }
     }
-
 
     /**
      * Metodo para ejecutar la consulta.
@@ -193,24 +211,18 @@ public class SolicitaREST {
      * 
      * Ejecuta la consulta y devuelve el resultado que es validado por el metodo
      * 
-     * Y luego con la respueta de error del servidor se procesa y se personaliza las acciones.
+     * Y luego con la respueta de error del servidor se procesa y se personaliza las
+     * acciones.
      * 
      * @return
      */
     public int ejecutar() {
         try {
             ejecutarConsultaRESTService();
+            return isHttpstatusValido(getHttpEstado());
         } catch (Exception e) {
             return SERVIDOR_ERROR;
         }
-        if (getHttpEstado() == 200) {
-            if (isRespuestaValida()) {
-                return SERVICIO_OK;
-            }
-            return SERVICIO_ERROR;
-        }
-        
-        return SERVIDOR_ERROR;
     }
 
     /**
@@ -220,44 +232,46 @@ public class SolicitaREST {
      * @return
      */
     public boolean isRespuestaValida() {
-        log.warn("no se ha personalizado la consulta");                   
+        log.warn("no se ha personalizado la consulta");
         return false;
     }
 
     /**
-	 * Metodo para implementar circuit breaker.
-	 * 
-	 * @param ingresoOk
-	 * @param email
-	 * @param urlString
-	 * @param atributos
-	 * @return
-	 */
-	public int ejecutarCortoCircutio(String nombreCortoCircuito) {
+     * Metodo para implementar circuit breaker.
+     * 
+     * @param ingresoOk
+     * @param email
+     * @param urlString
+     * @param atributos
+     * @return
+     */
+    public int ejecutarCortoCircutio(String nombreCortoCircuito) {
         int estadoEjecucion = SERVICIO_OK;
-		String circuitBreaker = System.getProperty(nombreCortoCircuito);
+        String circuitBreaker = System.getProperty("CortoCircuito="+nombreCortoCircuito);
 
-		if (circuitBreaker == null || circuitBreaker.isEmpty()) {
-			estadoEjecucion = ejecutar();
-		} else {
-			try {
-				long time = Long.parseLong(circuitBreaker);
-				time = time + 60000;
-				if (time < new Date().getTime()) {
-					estadoEjecucion = ejecutar();
-				}else {
+        if (circuitBreaker == null || circuitBreaker.isEmpty()) {
+            estadoEjecucion = ejecutar();
+        } else {
+            try {
+                long time = Long.parseLong(circuitBreaker);
+                time = time + 60000;
+                if (time < new Date().getTime()) {
+                    estadoEjecucion = ejecutar();
+                }else {
                     estadoEjecucion = CORTOCIRCUITO;
+                    log.warn("CortoCircuito ACTIVO: {}", nombreCortoCircuito);
                 }
-			} catch (NumberFormatException e) {
-				log.error(".cortoCircutio() {}", circuitBreaker);
+            } catch (NumberFormatException e) {
+                log.error(".cortoCircutio() {}", circuitBreaker);
                 estadoEjecucion = SERVIDOR_ERROR;
-			}
-		}
-
-        if (estadoEjecucion == SERVIDOR_ERROR) {
-            System.setProperty(nombreCortoCircuito, String.valueOf(new Date().getTime()));            
+            }
         }
 
-		return estadoEjecucion;
-	}
+        if (estadoEjecucion == SERVIDOR_ERROR) {
+            log.warn("CortoCircuito CREADO: {}", nombreCortoCircuito);
+            System.setProperty("CortoCircuito="+nombreCortoCircuito, String.valueOf(new Date().getTime()));
+        }
+
+        return estadoEjecucion;
+    }
 }

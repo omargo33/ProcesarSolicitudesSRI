@@ -2,11 +2,9 @@ package com.d3v.proceso;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
-@Slf4j
 public class EditLinerNroSiguiente {
   DsF0022 dsf0022 = new DsF0022();
 

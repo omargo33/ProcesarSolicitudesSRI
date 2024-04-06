@@ -51,7 +51,7 @@ public class TokenConsumo extends SolicitaREST {
         setTipoConsulta(CONSULTA_PARAMETROS);
         setParametrosConsulta(urlParameters);
 
-        return ejecutar();
+        return ejecutarCortoCircutio(this.getClass().getName());
     }
 
     /**
