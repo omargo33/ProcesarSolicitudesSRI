@@ -39,19 +39,18 @@ public class ConfiguracionService {
    /**
     * Metodo para obtener todos los parametros que intervienen en la el proceso de
     * archivos del SRI.
-    *
+    * 
+    * @return
     */
-
    public Optional<List<Parametro>> getParametros() {
       return parametroCrudRepositorio.findByIndices(
-         Arrays.asList(
-            Constantes.INDEX_USER_ID,
-            Constantes.INDEX_SECRET_ID,
-            Constantes.INDEX_MASTER_CREDENCIAL,
-            Constantes.INDEX_URL_TOKEN,
-            Constantes.INDEX_URL_SOLICITUD_DOCUMENTOS_RECIBIDOS,
-            Constantes.INDEX_URL_DOCUMENTOS_ENVIADOS,
-            Constantes.INDEX_PATH_CERTIFICADO_DIGITAL)
-      );
+            Arrays.asList(
+                  Constantes.INDEX_USER_ID,
+                  Constantes.INDEX_SECRET_ID,
+                  Constantes.INDEX_MASTER_CREDENCIAL,
+                  Constantes.INDEX_URL_TOKEN,
+                  Constantes.INDEX_URL_SOLICITUD_DOCUMENTOS_RECIBIDOS,
+                  Constantes.INDEX_URL_DOCUMENTOS_ENVIADOS,
+                  Constantes.INDEX_PATH_CERTIFICADO_DIGITAL));
    }
 }

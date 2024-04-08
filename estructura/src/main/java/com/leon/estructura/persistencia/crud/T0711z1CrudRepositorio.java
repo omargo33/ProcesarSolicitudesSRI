@@ -1,6 +1,7 @@
 package com.leon.estructura.persistencia.crud;
 
 import org.springframework.data.repository.CrudRepository;
+
 import org.springframework.stereotype.Repository;
 
 import com.leon.estructura.persistencia.entidad.T0711z1;

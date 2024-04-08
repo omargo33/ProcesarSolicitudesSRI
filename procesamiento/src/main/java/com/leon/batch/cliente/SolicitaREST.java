@@ -43,7 +43,9 @@ public class SolicitaREST {
     private String jsonConsulta;
     private String parametrosConsulta;
     private String urlConsulta;
+    
     private String respuesta;
+    
     private String tipoConsulta;
     private final Date fechaInicio;
     private Date fechaFin;

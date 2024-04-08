@@ -30,18 +30,19 @@ public class Probar {
         }
         probar.probarTokenOk();
 
+        /* 
         try {
             Thread.sleep(60000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
         probar.probarTokenOk();
     }
 
     private void probarTokenOk() {
 
         TokenConsumo tokenConsumo = new TokenConsumo();
-        int estadoConsumo = tokenConsumo.load("https://auth.invoicy.app/token", "33nda5ed9snbl7edpgp7f3it1c",
+        int estadoConsumo = tokenConsumo.load("https://auth.invoicy.app-1/token", "33nda5ed9snbl7edpgp7f3it1c",
                 "o0js143is9nh3rc0hdgu1uu83uluic11vvrv28h88sdh3h3nubq", "client_credentials");
 
         switch (estadoConsumo) {
@@ -51,6 +52,8 @@ public class Probar {
 
             case TokenConsumo.SERVICIO_OK:
                 TokenOk tokenOk = tokenConsumo.getJsonRespuesta(TokenOk.class);
+                System.out.println("Token: " + tokenOk.getAccessToken());
+
                 System.out.println("Token: " + tokenOk.toString());
 
                 break;

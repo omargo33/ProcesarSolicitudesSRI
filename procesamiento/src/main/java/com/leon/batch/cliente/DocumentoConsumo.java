@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
-
+import java.nio.charset.StandardCharsets;
 import com.leon.batch.cliente.estructuras.TokenOk;
+import java.util.Base64;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,10 +20,13 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class TokenConsumo extends SolicitaREST {
+public class DocumentoConsumo extends SolicitaREST {
 
     // Se define el tinmeout de la conexion en 10 segundos.
     int timeOut = 10000;
+    String token = "";
+    String usuario = "";
+    String credencial = "";
 
     /**
      * Metodo para cargar el token.
@@ -34,22 +37,14 @@ public class TokenConsumo extends SolicitaREST {
      * @param grantType
      * @return
      */
-    public int load(String ulString, String clientId, String clientSecret, String grantType) {
-        String urlParameters = "";
-
-        try {
-            urlParameters = String.format("client_id=%s&client_secret=%s&grant_type=%s",
-                    URLEncoder.encode(clientId, "UTF-8"),
-                    URLEncoder.encode(clientSecret, "UTF-8"),
-                    URLEncoder.encode(grantType, "UTF-8"));
-        } catch (Exception e) {
-            return SERVIDOR_ERROR;
-        }
+    public int load(String ulString, String token, String usuario, String credencial, String claveAcceso) {
+        this.token = token;
+        this.usuario = usuario;
+        this.credencial = credencial;
 
         setTimeOut(timeOut);
-        setUrlConsulta(ulString);
-        setTipoConsulta(CONSULTA_PARAMETROS);
-        setParametrosConsulta(urlParameters);
+        setUrlConsulta(ulString + "/" + claveAcceso);
+        setTipoConsulta(CONSULTA_JSON);
 
         return ejecutarCortoCircutio(this.getClass().getName());
     }
@@ -61,13 +56,19 @@ public class TokenConsumo extends SolicitaREST {
      * @throws MalformedURLException
      * @throws IOException
      */
-    @Override
+    @Override 
     public HttpURLConnection generarConexion() throws IOException {
+
+        String credencial = getUsuario() + ":" + getCredencial();
         URL url = new URL(getUrlConsulta());
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+        connection.setRequestMethod("GET");
         connection.setRequestProperty("Accept", "application/json");
+        connection.setRequestProperty("Authorization", "Bearer " + getToken());
+        connection.setRequestProperty("X-SRI-Credentials",
+                Base64.getEncoder().encodeToString(credencial.getBytes(StandardCharsets.UTF_8)));
+
         return connection;
     }
 

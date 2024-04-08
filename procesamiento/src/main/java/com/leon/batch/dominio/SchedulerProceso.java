@@ -1,6 +1,5 @@
 package com.leon.batch.dominio;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -45,13 +44,11 @@ public class SchedulerProceso {
         }
 
         Optional<List<Parametro>> parametros = clienteService.getParametros();
-        
+
         if (parametros.isPresent()) {
             List<Parametro> parametrosList = parametros.get();
             for (Parametro parametro : parametrosList) {
                 log.info(parametro.toString());
-
-                
             }
         } else {
             log.warn("No hay parametros a consultar.");

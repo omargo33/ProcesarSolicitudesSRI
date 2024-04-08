@@ -28,7 +28,6 @@ public class DataSourceRouting extends AbstractRoutingDataSource {
 	 * 
 	 * @param mapDataSources
 	 */	
-	@SuppressWarnings("null")
 	public void initDatasource(Map<Object, Object> mapDataSources) {
 		this.setTargetDataSources(mapDataSources);
 		this.setDefaultTargetDataSource(mapDataSources.get("config"));
