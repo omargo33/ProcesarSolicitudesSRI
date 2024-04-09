@@ -22,7 +22,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.leon.batch.utilitarios.Bundle;
+import com.leon.batch.utilitarios.BundleMessages;
 import com.leon.batch.utilitarios.MainFechaString;
 
 @Getter
@@ -30,7 +30,7 @@ import com.leon.batch.utilitarios.MainFechaString;
 @Slf4j
 public class EditLineFactura {
   
-  Bundle bundle = new Bundle();
+  BundleMessages bundle = new BundleMessages();
   
   DsF57011Z1 comprobanteCabecera = new DsF57011Z1();
   

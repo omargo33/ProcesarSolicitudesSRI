@@ -1,5 +1,6 @@
 package com.leon.batch.cliente;
 
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -18,10 +19,12 @@ import lombok.Setter;
  * @since 2024-04-04
  * 
  */
+
 @Getter
 @Setter
-public class TokenConsumo extends SolicitaREST {
+public class TokenConsumo extends SolicitaServicio {
 
+    
     // Se define el tinmeout de la conexion en 10 segundos.
     int timeOut = 10000;
 
@@ -48,7 +51,7 @@ public class TokenConsumo extends SolicitaREST {
 
         setTimeOut(timeOut);
         setUrlConsulta(ulString);
-        setTipoConsulta(CONSULTA_PARAMETROS);
+        setTipoConsulta(CONSULTA_FORM_PARAMETROS);
         setParametrosConsulta(urlParameters);
 
         return ejecutarCortoCircutio(this.getClass().getName());

@@ -1,82 +1,128 @@
 package com.leon.batch.cliente;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.leon.batch.cliente.estructuras.Documento;
+import com.leon.batch.cliente.estructuras.DocumentosKo;
+import com.leon.batch.cliente.estructuras.DocumentosOk;
 import com.leon.batch.cliente.estructuras.TokenKo;
 import com.leon.batch.cliente.estructuras.TokenOk;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Probar {
 
     public static void main(String[] args) {
+        String filePath = "/home/colaborador/ejemplo.json";
+        String fileContent = readFile(filePath);
+        
         Probar probar = new Probar();
-        probar.probarTokenOk();
+        DocumentosOk documentosOk = probar.getJsonRespuesta(DocumentosOk.class, fileContent);
 
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        //System.out.println("Documentos: " + documentosOk.toString());
+
+        System.out.println("Cantidad de documentos: " + documentosOk.getData().length);
+        
+    }
+
+    private static String readFile(String filePath) {
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
         }
-        probar.probarTokenOk();
+        return content.toString();
+    }
 
+    public <T> T getJsonRespuesta(Class<T> type, String respuesta) {
         try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            ObjectMapper mapper = new ObjectMapper();
+            T entity = mapper.readValue(respuesta, type);
+            return entity;
+        } catch (JsonProcessingException e) {
+            System.out.println("super error: " + e.toString());
+            return null;
         }
-        probar.probarTokenOk();
-
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        probar.probarTokenOk();
-
-        /* 
-        try {
-            Thread.sleep(60000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-        probar.probarTokenOk();
     }
 
     private void probarTokenOk() {
-
         TokenConsumo tokenConsumo = new TokenConsumo();
-        int estadoConsumo = tokenConsumo.load("https://auth.invoicy.app-1/token", "33nda5ed9snbl7edpgp7f3it1c",
+        int estadoConsumo = tokenConsumo.load("https://auth.invoicy.app/token", "33nda5ed9snbl7edpgp7f3it1c",
                 "o0js143is9nh3rc0hdgu1uu83uluic11vvrv28h88sdh3h3nubq", "client_credentials");
 
         switch (estadoConsumo) {
-            case TokenConsumo.SERVIDOR_ERROR:
+            case SolicitaServicio.SERVIDOR_ERROR:
                 System.err.println("Error en la conexion al servidor." + tokenConsumo.getRespuesta());
                 break;
 
-            case TokenConsumo.SERVICIO_OK:
+            case SolicitaServicio.SERVICIO_OK:
                 TokenOk tokenOk = tokenConsumo.getJsonRespuesta(TokenOk.class);
-                System.out.println("Token: " + tokenOk.getAccessToken());
-
-                System.out.println("Token: " + tokenOk.toString());
-
+                probarListaDocumentos(tokenOk.getAccessToken());
                 break;
 
-            case TokenConsumo.SERVICIO_ERROR:
+            case SolicitaServicio.SERVICIO_ERROR:
                 TokenKo tokenKo = tokenConsumo.getJsonRespuesta(TokenKo.class);
-
                 if (tokenKo == null) {
                     System.err.println("Error: " + tokenConsumo.getRespuesta());
                     break;
                 }
 
                 System.err.println("Error: " + tokenKo.getError());
-
                 break;
 
-            case TokenConsumo.CORTOCIRCUITO:
+            case SolicitaServicio.CORTOCIRCUITO:
                 System.err.println("Error esta en cortocircuito.");
                 break;
 
             default:
                 break;
         }
+    }
 
+    private void probarListaDocumentos(String token) {
+        DescargarDocumentosConsumo descargarDocumentosConsumo = new DescargarDocumentosConsumo();
+        int estadoConsumo = descargarDocumentosConsumo.load(
+                //"https://api.invoicy.app/v1/documents/sales",
+                "https://api.invoicy.app/v1/documents",
+                token,
+                "1715726772001",
+                "Indupan1111@",
+                "12",
+                "2023");
+        switch (estadoConsumo) {
+            case SolicitaServicio.SERVIDOR_ERROR:
+                System.err.println("Error en la conexion al servidor." + descargarDocumentosConsumo.toString());                
+                break;
+
+            case SolicitaServicio.SERVICIO_OK:
+                DocumentosOk documentosOk = descargarDocumentosConsumo.getJsonRespuesta(DocumentosOk.class);
+
+                for (Documento documento : documentosOk.getData()) {
+                    System.out.println("Documento: " + documento.toString());
+                }
+                break;
+
+            case SolicitaServicio.SERVICIO_ERROR:
+                DocumentosKo documentosKo = descargarDocumentosConsumo.getJsonRespuesta(DocumentosKo.class);
+                if (documentosKo == null) {
+                    System.err.println("Error: " + descargarDocumentosConsumo.getRespuesta());
+                    break;
+                }
+
+                System.err.println("Error: " + documentosKo.getMessage());
+                break;
+
+            case SolicitaServicio.CORTOCIRCUITO:
+                System.err.println("Error esta en cortocircuito.");
+                break;
+
+            default:
+                break;
+        }
     }
 }

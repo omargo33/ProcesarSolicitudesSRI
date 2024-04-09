@@ -6,16 +6,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -27,26 +35,27 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Getter
 @Setter
+@ToString
 @Slf4j
-public class SolicitaREST {
-
+public class SolicitaServicio {
+    public static final String CONSULTA_FORM_PARAMETROS = "FORM_PARAMETROS";
     public static final String CONSULTA_JSON = "JSON";
-    public static final String CONSULTA_PARAMETROS = "URL_PARAMETROS";
+    public static final String CONSULTA_SOAP = "SOAP";
+    public static final String CONSULTA_URL_PARAMETROS = "URL_PARAMETROS";
 
-    public static final int SERVICIO_OK = 1;
-    public static final int SERVICIO_ERROR = 0;
-    public static final int SERVIDOR_ERROR = -1;
     public static final int CORTOCIRCUITO = -2;
+    public static final int SERVICIO_ERROR = 0;
+    public static final int SERVICIO_OK = 1;
+    public static final int SERVIDOR_ERROR = -1;
 
-    private int timeOut;
     private int httpEstado = 0;
+    private int timeOut;
     private String jsonConsulta;
     private String parametrosConsulta;
-    private String urlConsulta;
-    
+    private String xmlConsulta;
     private String respuesta;
-    
     private String tipoConsulta;
+    private String urlConsulta;
     private final Date fechaInicio;
     private Date fechaFin;
 
@@ -54,16 +63,17 @@ public class SolicitaREST {
      * Metodo para crear el objeto.
      *
      */
-    public SolicitaREST() {
+    public SolicitaServicio() {
         super();
-        timeOut = 0;
         httpEstado = 0;
+        timeOut = 0;
         jsonConsulta = "";
         parametrosConsulta = "";
-        urlConsulta = "";
+        xmlConsulta = "";
         respuesta = "";
-        fechaInicio = new Date();
+        urlConsulta = "";
         fechaFin = new Date();
+        fechaInicio = new Date();
     }
 
     /**
@@ -73,11 +83,11 @@ public class SolicitaREST {
      * datos para la conexion. Prepara a la conexion para enviar, recibir datos
      * y tiempos de espera en conexion y de escritura. Abre el puerto output y
      * envia el xml a ser consultado y cierra el puerto. Pregunta el estado de
-     * la respuesta. Si la respuesta es HTTP_OK estado html 200 "respuesta ok
+     * la respuesta. Si la respuesta es 20X "respuesta ok
      * del servidor consultado" Lee el contendio del imputStream Caso contrario
      * Lee el contenido del imputStream de Error
      *
-     * Consume el contenido del imputStream y pasa a un respuestaSOAP Cierra la
+     * Consume el contenido del imputStream y pasa a un respuestaSOAP/JSON Cierra la
      * conexion al servidor.
      *
      * Si existio un error en el servidor lo notifica Devuelve el valor de la
@@ -86,7 +96,7 @@ public class SolicitaREST {
      * @throws Exception
      *
      */
-    private void ejecutarConsultaRESTService() throws Exception {
+    private void ejecutarConsultaService() throws Exception {
         String responseString = "";
         StringBuilder stringBuilder = new StringBuilder();
         InputStream inputStream = null;
@@ -94,43 +104,24 @@ public class SolicitaREST {
         HttpURLConnection connection = generarConexion();
         connection.setDoOutput(true);
         connection.setDoInput(true);
-        connection.setConnectTimeout(getTimeOut());
-        connection.setReadTimeout(getTimeOut());
 
-        switch (tipoConsulta) {
-            case CONSULTA_JSON:
-                // Ejecuta si la consulta tiene una solicitud JSON
-                if (jsonConsulta != null && jsonConsulta.length() > 0) {
-                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(connection.getOutputStream());
-                    outputStreamWriter.write(jsonConsulta);
-                    outputStreamWriter.close();
-                }
-                break;
-            case CONSULTA_PARAMETROS:
-                // Ejecuta si la consulta tiene una solicitud Param URL
-                if (parametrosConsulta != null && parametrosConsulta.length() > 0) {
-                    DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-                    outputStream.writeBytes(parametrosConsulta);
-                    outputStream.flush();
-                    outputStream.close();
-                }
-                break;
+        if (getTimeOut() > 0) {
+            connection.setConnectTimeout(getTimeOut());
+            connection.setReadTimeout(getTimeOut());
+        }
 
-            default:
-                log.warn("Tipo de consulta no definido");
-                break;
+        if (rutearSolicitud(connection)) {
+            log.warn("Tipo de consulta no definido");
         }
 
         httpEstado = connection.getResponseCode();
-
         if (isHttpstatusValido(getHttpEstado()) == SERVICIO_OK) {
-            inputStream = connection.getInputStream();            
+            inputStream = connection.getInputStream();
         } else {
             inputStream = connection.getErrorStream();
         }
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
         while ((responseString = bufferedReader.readLine()) != null) {
             stringBuilder.append(responseString);
         }
@@ -139,14 +130,57 @@ public class SolicitaREST {
         fechaFin = new Date();
 
         if (isHttpstatusValido(getHttpEstado()) == SERVICIO_ERROR) {
-            respuesta = stringBuilder.toString();            
+            respuesta = stringBuilder.toString();
         }
-
-        if(isHttpstatusValido(getHttpEstado()) == SERVIDOR_ERROR){
+        if (isHttpstatusValido(getHttpEstado()) == SERVIDOR_ERROR) {
             throw new Exception(String.valueOf(getHttpEstado()));
         }
 
         respuesta = stringBuilder.toString();
+    }
+
+    /**
+     * Metodo para hacer el enrutamiento de la solicitud.
+     * 
+     * Si es una solicitud SOAP(XML), JSON({atributo:"valor"}),
+     * FORM_PARAMETROS(semejante a form de html) o
+     * URL_PARAMETROS(?key1=valor1&key20valor2).
+     * 
+     * Este ultimo es directo a la URL y por eso no se envia nada.
+     * 
+     * @param connection
+     * @return
+     * @throws IOException
+     */
+    private boolean rutearSolicitud(HttpURLConnection connection) throws IOException {
+        switch (tipoConsulta) {
+            case CONSULTA_SOAP:
+                if (xmlConsulta != null && xmlConsulta.length() > 0) {
+                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(connection.getOutputStream());
+                    outputStreamWriter.write(xmlConsulta);
+                    outputStreamWriter.close();
+                }
+                break;
+            case CONSULTA_JSON:
+                if (jsonConsulta != null && jsonConsulta.length() > 0) {
+                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(connection.getOutputStream());
+                    outputStreamWriter.write(jsonConsulta);
+                    outputStreamWriter.close();
+                }
+                break;
+            case CONSULTA_FORM_PARAMETROS:
+                if (parametrosConsulta != null && parametrosConsulta.length() > 0) {
+                    DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+                    outputStream.writeBytes(parametrosConsulta);
+                    outputStream.flush();
+                    outputStream.close();
+                }
+                break;
+            default:
+                return false;
+        }
+
+        return true;
     }
 
     /**
@@ -158,7 +192,7 @@ public class SolicitaREST {
         if (httpStatus >= HttpURLConnection.HTTP_OK && httpStatus < HttpURLConnection.HTTP_MULT_CHOICE) {
             return SERVICIO_OK;
         }
-        
+
         if (httpStatus >= HttpURLConnection.HTTP_MULT_CHOICE && httpStatus < HttpURLConnection.HTTP_UNSUPPORTED_TYPE) {
             return SERVICIO_ERROR;
         }
@@ -202,6 +236,27 @@ public class SolicitaREST {
             T entity = mapper.readValue(respuesta, type);
             return entity;
         } catch (JsonProcessingException e) {
+            log.info("Respuesta: {}", respuesta);
+            log.warn("Conversion por getJsonRespuesta() {}", e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Metodo para convertir una salida XML a un objeto.
+     * 
+     * @return
+     */
+    public Document getXMLRespuesta() {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        try {
+            factory.setNamespaceAware(true);
+            builder = factory.newDocumentBuilder();
+            return builder.parse(new InputSource(new StringReader(respuesta)));            
+        } catch (Exception e) {
+            log.info("Respuesta: {}", respuesta);
+            log.warn("Conversion por getJsonRespuesta() {}", e.getMessage());
             return null;
         }
     }
@@ -220,9 +275,10 @@ public class SolicitaREST {
      */
     public int ejecutar() {
         try {
-            ejecutarConsultaRESTService();
+            ejecutarConsultaService();
             return isHttpstatusValido(getHttpEstado());
         } catch (Exception e) {
+            log.warn("Error al ejecutar la consulta. {}", e.getMessage());
             return SERVIDOR_ERROR;
         }
     }
@@ -234,7 +290,7 @@ public class SolicitaREST {
      * @return
      */
     public boolean isRespuestaValida() {
-        log.warn("no se ha personalizado la consulta");
+        log.info("No se ha personalizado la consulta");
         return false;
     }
 
@@ -249,7 +305,7 @@ public class SolicitaREST {
      */
     public int ejecutarCortoCircutio(String nombreCortoCircuito) {
         int estadoEjecucion = SERVICIO_OK;
-        String circuitBreaker = System.getProperty("CortoCircuito="+nombreCortoCircuito);
+        String circuitBreaker = System.getProperty("CortoCircuito=" + nombreCortoCircuito);
 
         if (circuitBreaker == null || circuitBreaker.isEmpty()) {
             estadoEjecucion = ejecutar();
@@ -259,7 +315,7 @@ public class SolicitaREST {
                 time = time + 60000;
                 if (time < new Date().getTime()) {
                     estadoEjecucion = ejecutar();
-                }else {
+                } else {
                     estadoEjecucion = CORTOCIRCUITO;
                     log.warn("CortoCircuito ACTIVO: {}", nombreCortoCircuito);
                 }
@@ -271,7 +327,7 @@ public class SolicitaREST {
 
         if (estadoEjecucion == SERVIDOR_ERROR) {
             log.warn("CortoCircuito CREADO: {}", nombreCortoCircuito);
-            System.setProperty("CortoCircuito="+nombreCortoCircuito, String.valueOf(new Date().getTime()));
+            System.setProperty("CortoCircuito=" + nombreCortoCircuito, String.valueOf(new Date().getTime()));
         }
 
         return estadoEjecucion;

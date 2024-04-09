@@ -21,10 +21,10 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class DescargarDocumentosConsumo extends SolicitaREST {
+public class DescargarDocumentosConsumo extends SolicitaServicio {
 
-    // Se define el tinmeout de la conexion en 10 segundos.
-    int timeOut = 10000;
+    // Se define el tinmeout de la conexion en negativo para que no afecte a la consulta.
+    int timeOut = -1;
     String token = "";
     String usuario = "";
     String credencial = "";
@@ -47,19 +47,18 @@ public class DescargarDocumentosConsumo extends SolicitaREST {
         this.credencial = credencial;
 
         try {
-            urlParameters = String.format("month=%s&year=%s",
-                    URLEncoder.encode(mes, "UTF-8"),
-                    URLEncoder.encode(anio, "UTF-8"));
+            urlParameters = String.format("?year=%s&month=%s",
+                    URLEncoder.encode(anio, "UTF-8"),
+                    URLEncoder.encode(mes, "UTF-8"));
         } catch (Exception e) {
             return SERVIDOR_ERROR;
         }
 
-        setTimeOut(timeOut);
-        setUrlConsulta(ulString);
-        setTipoConsulta(CONSULTA_PARAMETROS);
-        setParametrosConsulta(urlParameters);
-
-        return ejecutarCortoCircutio(this.getClass().getName());
+        setTimeOut(timeOut);        
+        setTipoConsulta(CONSULTA_URL_PARAMETROS);
+        setUrlConsulta(ulString + urlParameters);
+        
+        return ejecutarCortoCircutio(this.getClass().getName());        
     }
 
     /**
@@ -72,16 +71,16 @@ public class DescargarDocumentosConsumo extends SolicitaREST {
     @Override
     public HttpURLConnection generarConexion() throws IOException {
 
-        String credencial = getUsuario() + ":" + getCredencial();
+        String credencial = getUsuario() + ":" + getCredencial(); 
+        String credencial64 = Base64.getEncoder().encodeToString(credencial.getBytes(StandardCharsets.UTF_8));
         URL url = new URL(getUrlConsulta());
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("Authorization", "Bearer " + getToken());
-        connection.setRequestProperty("X-SRI-Credentials",
-                Base64.getEncoder().encodeToString(credencial.getBytes(StandardCharsets.UTF_8)));
-
+        connection.setRequestProperty("X-SRI-Credentials",credencial64);
+ 
         return connection;
     }
 

@@ -1,6 +1,6 @@
 package com.leon.batch.cliente.estructuras;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 
@@ -12,7 +12,8 @@ import lombok.Data;
  * 
  */
 @Data
-public class DocumentoOk {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Documento {
     int documentId;
     String rucIssuer;
     String commercialName;
@@ -28,7 +29,9 @@ public class DocumentoOk {
     double totalValueWithoutTaxes;
     double tip;
     double totalDiscount;
+    String typeEmission;
     double totalAmount;
     String taxpayerId;
+    String authorizationAt;
     Taxes[] taxes;
 }
