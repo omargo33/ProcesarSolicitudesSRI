@@ -13,17 +13,18 @@ import java.io.IOException;
 
 public class Probar {
 
-    public static void main(String[] args) {
+    public static void main001(String[] args) {
+        Probar probar = new Probar();
+        // probar.validarData(probar);
+        probar.probarTokenOk();
+    }
+
+    private void validarData(Probar probar) {
         String filePath = "/home/colaborador/ejemplo.json";
         String fileContent = readFile(filePath);
-        
-        Probar probar = new Probar();
         DocumentosOk documentosOk = probar.getJsonRespuesta(DocumentosOk.class, fileContent);
-
-        //System.out.println("Documentos: " + documentosOk.toString());
-
+        // System.out.println("Documentos: " + documentosOk.toString());
         System.out.println("Cantidad de documentos: " + documentosOk.getData().length);
-        
     }
 
     private static String readFile(String filePath) {
@@ -62,7 +63,7 @@ public class Probar {
 
             case SolicitaServicio.SERVICIO_OK:
                 TokenOk tokenOk = tokenConsumo.getJsonRespuesta(TokenOk.class);
-                probarListaDocumentos(tokenOk.getAccessToken());
+                probarRide(tokenOk.getAccessToken());
                 break;
 
             case SolicitaServicio.SERVICIO_ERROR:
@@ -85,9 +86,9 @@ public class Probar {
     }
 
     private void probarListaDocumentos(String token) {
-        DescargarDocumentosConsumo descargarDocumentosConsumo = new DescargarDocumentosConsumo();
+        DocumentosRecibidosConsumo descargarDocumentosConsumo = new DocumentosRecibidosConsumo();
         int estadoConsumo = descargarDocumentosConsumo.load(
-                //"https://api.invoicy.app/v1/documents/sales",
+                // "https://api.invoicy.app/v1/documents/sales",
                 "https://api.invoicy.app/v1/documents",
                 token,
                 "1715726772001",
@@ -96,7 +97,7 @@ public class Probar {
                 "2023");
         switch (estadoConsumo) {
             case SolicitaServicio.SERVIDOR_ERROR:
-                System.err.println("Error en la conexion al servidor." + descargarDocumentosConsumo.toString());                
+                System.err.println("Error en la conexion al servidor." + descargarDocumentosConsumo.toString());
                 break;
 
             case SolicitaServicio.SERVICIO_OK:
@@ -125,4 +126,38 @@ public class Probar {
                 break;
         }
     }
+
+    private void probarRide(String token) {
+        DescargarConsumo descargarConsumo = new DescargarConsumo();
+        int estadoConsumo = descargarConsumo.load(
+                // "https://api.invoicy.app/v1/documents/sales",
+                "https://api.invoicy.app/v1/documents",
+                token,
+                "1715726772001",
+                "Indupan1111@",
+                "0412202301019048909400120010060000108370103321411");
+        switch (estadoConsumo) {
+            case SolicitaServicio.SERVIDOR_ERROR:
+                System.err.println("Error en la conexion al servidor." + descargarConsumo.toString());
+                break;
+
+            case SolicitaServicio.SERVICIO_OK:
+                String respuesta = descargarConsumo.getRespuesta();
+                System.out.println("Documento: " + respuesta);
+                break;
+
+            case SolicitaServicio.SERVICIO_ERROR:
+                String respuestaError = descargarConsumo.getRespuesta();
+                System.out.println("Documento: " + respuestaError);
+                break;
+
+            case SolicitaServicio.CORTOCIRCUITO:
+                System.err.println("Error esta en cortocircuito.");
+                break;
+
+            default:
+                break;
+        }
+    }
+
 }

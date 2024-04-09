@@ -21,13 +21,13 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class DescargarDocumentosConsumo extends SolicitaServicio {
+public class DocumentosRecibidosConsumo extends SolicitaServicio {
 
     // Se define el tinmeout de la conexion en negativo para que no afecte a la consulta.
     int timeOut = -1;
+    String credencial = "";
     String token = "";
     String usuario = "";
-    String credencial = "";
 
     /**
      * Metodo para cargar el token.
@@ -70,7 +70,6 @@ public class DescargarDocumentosConsumo extends SolicitaServicio {
      */
     @Override
     public HttpURLConnection generarConexion() throws IOException {
-
         String credencial = getUsuario() + ":" + getCredencial(); 
         String credencial64 = Base64.getEncoder().encodeToString(credencial.getBytes(StandardCharsets.UTF_8));
         URL url = new URL(getUrlConsulta());

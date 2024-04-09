@@ -37,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @ToString
 @Slf4j
-public class SolicitaServicio {
+public class SolicitaServicio{
     public static final String CONSULTA_FORM_PARAMETROS = "FORM_PARAMETROS";
     public static final String CONSULTA_JSON = "JSON";
     public static final String CONSULTA_SOAP = "SOAP";
@@ -159,6 +159,8 @@ public class SolicitaServicio {
                     OutputStreamWriter outputStreamWriter = new OutputStreamWriter(connection.getOutputStream());
                     outputStreamWriter.write(xmlConsulta);
                     outputStreamWriter.close();
+                }else{
+                    log.warn("No se ha definido el xml de la consulta");
                 }
                 break;
             case CONSULTA_JSON:
@@ -166,6 +168,8 @@ public class SolicitaServicio {
                     OutputStreamWriter outputStreamWriter = new OutputStreamWriter(connection.getOutputStream());
                     outputStreamWriter.write(jsonConsulta);
                     outputStreamWriter.close();
+                }else{
+                    log.warn("No se ha definido el json de la consulta");
                 }
                 break;
             case CONSULTA_FORM_PARAMETROS:
@@ -174,6 +178,8 @@ public class SolicitaServicio {
                     outputStream.writeBytes(parametrosConsulta);
                     outputStream.flush();
                     outputStream.close();
+                } else{
+                    log.warn("No se ha definido los parametros de formulario de la consulta");
                 }
                 break;
             default:
