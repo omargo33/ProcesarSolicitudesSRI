@@ -7,13 +7,15 @@ import com.leon.batch.cliente.estructuras.DocumentosKo;
 import com.leon.batch.cliente.estructuras.DocumentosOk;
 import com.leon.batch.cliente.estructuras.TokenKo;
 import com.leon.batch.cliente.estructuras.TokenOk;
+import com.leon.batch.cliente.estructuras.autorizacion.Authorization;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class Probar {
 
-    public static void main001(String[] args) {
+    public static void main(String[] args) {
         Probar probar = new Probar();
         // probar.validarData(probar);
         probar.probarTokenOk();
@@ -138,12 +140,19 @@ public class Probar {
                 "0412202301019048909400120010060000108370103321411");
         switch (estadoConsumo) {
             case SolicitaServicio.SERVIDOR_ERROR:
-                System.err.println("Error en la conexion al servidor." + descargarConsumo.toString());
+                System.err.println("Error en la conexion al servidor." + descargarConsumo.getRespuesta());
                 break;
 
             case SolicitaServicio.SERVICIO_OK:
                 String respuesta = descargarConsumo.getRespuesta();
+
+                Authorization authorization = descargarConsumo.construirAuthorization(descargarConsumo.getRespuesta());
+
                 System.out.println("Documento: " + respuesta);
+                System.out.println("Ambiente: " + authorization.getAmbiente());
+                System.out.println("Estado: " + authorization.getEstado());
+                System.out.println("Fecha Autorizacion: " + authorization.getFechaAutorizacion());
+                System.out.println("No autorizacion: " + authorization.getNumeroAutorizacion());
                 break;
 
             case SolicitaServicio.SERVICIO_ERROR:

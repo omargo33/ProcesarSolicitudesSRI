@@ -1,15 +1,26 @@
 package com.leon.batch.cliente;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Base64;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
 import org.w3c.dom.Document;
+
+import com.leon.batch.cliente.estructuras.autorizacion.Authorization;
+
 import java.nio.charset.StandardCharsets;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Clase para realizar solicitudes JSON para descargar el XML.
@@ -20,6 +31,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Slf4j
 public class DescargarConsumo extends SolicitaServicio {
 
     // Se define el tinmeout de la conexion.
@@ -82,5 +94,24 @@ public class DescargarConsumo extends SolicitaServicio {
     public boolean isRespuestaValida() {
         Document document = getXMLRespuesta();
         return (document != null);
+    }
+
+    /**
+     * Metodo para construir el objeto Authorization.
+     *
+     * @param xml
+     * @return
+     */
+    public Authorization construirAuthorization(String xml) {
+        try {
+            JAXBContext jc = JAXBContext.newInstance(Authorization.class);
+            Unmarshaller unmarshaller = jc.createUnmarshaller();
+            Authorization authorization = (Authorization) unmarshaller
+                    .unmarshal(new ByteArrayInputStream(xml.getBytes()));
+            return authorization;
+        } catch (JAXBException e) {
+            log.error("Error al construir el objeto Authorization: " + e.getMessage());
+            return null;
+        }
     }
 }
