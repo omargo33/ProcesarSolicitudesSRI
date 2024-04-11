@@ -37,18 +37,6 @@ public class Cliente implements Serializable {
     private String usuario;
 
     @NotNull(message = "{NotNull.message}")
-    @Column(name = "base_datos", length = 256)
-    private String baseDatos;
-
-    @NotNull(message = "{NotNull.message}")
-    @Column(name = "base_datos_user", length = 256)
-    private String baseDatosUser;
-
-    @NotNull(message = "{NotNull.message}")
-    @Column(name = "base_datos_credencial", length = 256)
-    private String baseDatosCredencial;
-
-    @NotNull(message = "{NotNull.message}")
     @Column(name = "sri_usuario", length = 16)
     private String sriUsuario;
 

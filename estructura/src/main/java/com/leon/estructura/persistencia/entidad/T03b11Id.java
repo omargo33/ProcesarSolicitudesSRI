@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -21,10 +22,8 @@ import javax.persistence.Table;
  * 
  */
 @Data
-@Entity 
-@Table(name = "xx")
+@Embeddable
 public class T03b11Id   implements Serializable {
-
 
      private int nroDoc;
      private String tipoDoc;

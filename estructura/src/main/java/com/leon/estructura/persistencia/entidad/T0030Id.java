@@ -7,10 +7,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.Embeddable;
 import javax.persistence.Id;
-import javax.persistence.Table;
-
  
 
 /**
@@ -21,8 +19,7 @@ import javax.persistence.Table;
  * 
  */
 @Data
-@Entity 
-@Table(name = "xx")
+@Embeddable
 public class T0030Id   implements Serializable {
 
 

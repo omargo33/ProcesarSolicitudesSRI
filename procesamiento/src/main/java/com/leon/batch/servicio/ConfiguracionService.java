@@ -47,10 +47,9 @@ public class ConfiguracionService {
             Arrays.asList(
                   Constantes.INDEX_USER_ID,
                   Constantes.INDEX_SECRET_ID,
-                  Constantes.INDEX_MASTER_CREDENCIAL,
+                  Constantes.INDEX_GRANT_TYPE,
                   Constantes.INDEX_URL_TOKEN,
-                  Constantes.INDEX_URL_SOLICITUD_DOCUMENTOS_RECIBIDOS,
-                  Constantes.INDEX_URL_DOCUMENTOS_ENVIADOS,
-                  Constantes.INDEX_PATH_CERTIFICADO_DIGITAL));
+                  Constantes.INDEX_URL_DOCUMENTOS_RECIBIDOS,
+                  Constantes.INDEX_URL_DESCARGA_AUTORIZACION));
    }
 }
