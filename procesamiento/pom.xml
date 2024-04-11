@@ -25,6 +25,12 @@
 			<artifactId>estructura</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<!-- Documentos electronicos -->
+		<dependency>
+			<groupId>com.aplicaciones13</groupId>
+			<artifactId>documentos</artifactId>
+			<version>1.0</version>
+		</dependency>	
 		<!-- actuator -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -22,7 +22,7 @@ public interface ClientesCrudRepositorio extends CrudRepository<Cliente, Integer
      * Buscar todos los clientes cuyo estado no sea 'X'
      * 
      */
-    @Query(value = "SELECT c FROM Cliente c WHERE c.estado <> 'X'")
+    @Query(value = "SELECT c FROM Cliente c WHERE c.estado = 'A'")
     Optional<List<Cliente>> findAllActivos();
 
     /**

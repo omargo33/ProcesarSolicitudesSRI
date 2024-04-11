@@ -1,0 +1,13 @@
+
+
+fecha      TipoComprobante RUC           Ambiente Serie  No Comprobante Cod numerico Tipo Emision Mod 11
+21 10 2011 01              1792146739001 1        002001 000000001      12345678     1            3
+                           1792146739001
+
+
+
+factura 01
+Nota credito 04
+Nota debito 05
+Guia remision 06
+Comprobante retencion 07
