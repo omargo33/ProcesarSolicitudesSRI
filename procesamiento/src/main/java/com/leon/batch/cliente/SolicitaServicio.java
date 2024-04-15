@@ -242,7 +242,6 @@ public class SolicitaServicio{
             T entity = mapper.readValue(respuesta, type);
             return entity;
         } catch (JsonProcessingException e) {
-            log.info("Respuesta: {}", respuesta);
             log.warn("Conversion por getJsonRespuesta() {}", e.getMessage());
             return null;
         }
@@ -261,7 +260,6 @@ public class SolicitaServicio{
             builder = factory.newDocumentBuilder();
             return builder.parse(new InputSource(new StringReader(respuesta)));            
         } catch (Exception e) {
-            log.info("Respuesta: {}", respuesta);
             log.warn("Conversion por getJsonRespuesta() {}", e.getMessage());
             return null;
         }

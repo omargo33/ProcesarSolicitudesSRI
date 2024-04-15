@@ -109,8 +109,6 @@
 						<exclude>**/entidad/T57001.java</exclude>
 						<exclude>**/entidad/T57001d.java</exclude>
 						<exclude>**/entidad/T57001Id.java</exclude>
-						<exclude>**/entidad/T57011z1.java</exclude>
-						<exclude>**/entidad/T57011z1Id.java</exclude>
 						<exclude>**/entidad/T079801.java</exclude>
 						<exclude>**/entidad/T079801Id.java</exclude>
 						<exclude>**/entidad/T079802.java</exclude>

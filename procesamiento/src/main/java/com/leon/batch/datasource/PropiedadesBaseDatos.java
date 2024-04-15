@@ -8,7 +8,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-
 /**
  * Clase para recupear las credenciales de las bases de datos.
  * 
@@ -52,6 +51,7 @@ public class PropiedadesBaseDatos {
             dataSource.setUsername(environment.getProperty("datasource"+i+".datasource.username"));
             dataSource.setPassword(environment.getProperty("datasource"+i+".datasource.password"));
             listaPropiedades.add(dataSource);
+
             i++;        
         }
 

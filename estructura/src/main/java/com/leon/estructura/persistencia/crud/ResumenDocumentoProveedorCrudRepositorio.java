@@ -1,10 +1,13 @@
 package com.leon.estructura.persistencia.crud;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.leon.estructura.persistencia.entidad.ResumenDocumentoProveedor;
-
 
 /**
  * Interface para manejar los documentos del proveedor crud.
@@ -13,7 +16,13 @@ import com.leon.estructura.persistencia.entidad.ResumenDocumentoProveedor;
  * @since 2024-04-10
  */
 @Repository
-public interface ResumenDocumentoProveedorCrudRepositorio extends CrudRepository<ResumenDocumentoProveedor, String>{
+public interface ResumenDocumentoProveedorCrudRepositorio extends CrudRepository<ResumenDocumentoProveedor, String> {
 
-    
+    /**
+     * Metodo para listar los resumenDocumentosProveedor que no esten en la JPA
+     * T57011 por el campo szClaveAcceso con un query personaizado
+     *
+     */
+    @Query(value = "SELECT * FROM resumen_documento_proveedor rdp WHERE rdp.szClaveAcceso NOT IN (SELECT t.szClaveAcceso FROM T57011 t)", nativeQuery = true)
+    Optional<List<ResumenDocumentoProveedor>> findBySzClaveAccesoNotInT57011();
 }

@@ -1,159 +1,411 @@
-package  com.leon.estructura.persistencia.entidad;
+package com.leon.estructura.persistencia.entidad;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.Data;
 
-
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
-
- 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
- * JPA 
+ * JPA
  * 
  * @author omargo33
  * @version 1.0
  * 
  */
 @Data
-@Entity 
-@Table(name = "xx")
-public class T57011z1   implements Serializable {
+@Entity
+@Table(name = "T57011z1")
+public class T57011z1 implements Serializable {
 
+   @EmbeddedId
+   private T57011z1Id id;
 
-     private T57011z1Id id;
-     private String szBachType;
-     private int mnBachNumber;
-     private String szReferenceLegal;
-     private String szReference;
-     private String szMember;
-     private String mnLegalNumber;
-     private Date jdDateEfective;
-     private Date jdDateExpired;
-     private String szOperationType;
-     private String szThruCaseStatusCode;
-     private Integer mnCodCliente;
-     private String szNameAlpha;
-     private String szTaxId;
-     private String szAddressLine01;
-     private String szAddressLine02;
-     private Integer mnCodClienteShipTo;
-     private String szBodega;
-     private String szCompany;
-     private String szName;
-     private String szTaxIdentificationNumber;
-     private String szAddressLine1;
-     private String szAddressLine2;
-     private String szAddressLine3;
-     private String szAddressLine4;
-     private Integer mnCodItemNumberShort;
-     private String szPrintDataYn;
-     private String szDescription;
-     private String szDescription2;
-     private String mnItemNumber;
-     private String szUnitofMeasureasInput;
-     private String szUnitofMeasurePricing;
-     private BigDecimal mnQuantityShipped;
-     private BigDecimal mnUnitsQtyBackordered;
-     private BigDecimal mnUnitsQuantityCanceledScrapped;
-     private BigDecimal mnAmountPriceUnit;
-     private BigDecimal mnAmountGross;
-     private BigDecimal mnAmountExtendedPrice;
-     private BigDecimal mnAmountExtendedCost;
-     private BigDecimal mnPercent1;
-     private Date jdDateRequested;
-     private String szCommitted;
-     private String szLineType;
-     private Date jdDateInvoice;
-     private Date jdDateNetDue;
-     private Integer mnRelatedNumber;
-     private String szRelatedOrderType;
-     private String szCompanyRelatedOrder;
-     private String szPrintMessage;
-     private String szSalesTaxableYn;
-     private String szTaxRateArea;
-     private String szTaxExplCode;
-     private String szDescriptionTaxArea;
-     private BigDecimal mnTaxAuthority;
-     private BigDecimal mnTaxAuthority2;
-     private BigDecimal mnTaxAuthority3;
-     private BigDecimal mnTaxAuthority4;
-     private BigDecimal mnTaxAuthority5;
-     private BigDecimal mnTaxRate1;
-     private BigDecimal mnTaxRate2;
-     private BigDecimal mnTaxRate3;
-     private BigDecimal mnTaxRate4;
-     private BigDecimal mnTaxRate5;
-     private String szTaxCalculationMethod;
-     private BigDecimal mnAmountTaxable;
-     private BigDecimal mnAmountTax;
-     private String szPaymentTermsCode;
-     private BigDecimal mnDiscountAvailable;
-     private String szUserId;
-     private String szProgramId;
-     private String szWorkStationId;
-     private Date jdDateUpdated;
-     private Date mnTimeofDay;
-     private Integer mnEdidocumentNumber;
-     private String szEdidocumentType;
-     private String szEdidocumentKeyCo;
-     private Integer mnEdilineNumber;
-     private Integer mnOrderSuffix;
-     private Integer mnCodClienteParent;
-     private BigDecimal mnDiscountAmount;
-     private BigDecimal mnAmountSalesTaxTotal1;
-     private BigDecimal mnAmountSalesTaxTotal2;
-     private BigDecimal mnAmountSalesTaxTotal3;
-     private BigDecimal mnAmountSalesTaxTotal4;
-     private BigDecimal mnAmountSalesTaxTotal5;
-     private BigDecimal mnAmountNonTaxable;
-     private BigDecimal mnAmountListPrice;
-     private String sz2ndItemNumber;
-     private Integer mnCarrierNumber;
-     private String szAgreementSupplementDistribution;
-     private String szEstablecimiento;
-     private Integer mnTripNumber;
-     private BigDecimal mnWeightResult;
-     private String szDutyStatus;
-     private String szLotSerialNumber;
-     private String szParameterDataItem01;
-     private String szParameterDataItem02;
-     private String szParameterDataItem03;
-     private String szParameterDataItem04;
-     private String szParameterDataItem05;
-     private String szParameterDataItem06;
-     private String szParameterDataItem07;
-     private String szParameterDataItem08;
-     private String szParameterDataItem09;
-     private String szParameterDataItem10;
-     private String szLegalDocumentTitle;
-     private String szClaveAcceso;
-     private String szClaveAccesoContingencia;
-     private String szAutorizacionElectronica;
-     private String szRefAutorizacion1;
-     private String szRefAutorizacion2;
-     private String szRefAutorizacion3;
-     private String szRefAutorizacion4;
-     private String szAmbiente;
-     private String szTipoEmision;
-     private String szContribuyenteEspecial;
-     private String szObligadoContabilidad;
-     private String szMoneda;
-     private String szCatSales01;
-     private String szCatSales02;
-     private String szCatSales03;
-     private String szCatSales04;
-     private String szCatSales05;
-     private String szPeriodoFiscal;
-     private String szRise;
+   @Column(name = "szBachType", length = 12)
+   private String szBachType;
 
-  }
+   @Column(name = "mnBachNumber")
+   private int mnBachNumber;
+
+   @Column(name = "szReferenceLegal", length = 20)
+   private String szReferenceLegal;
+
+   @Column(name = "szReference", length = 20)
+   private String szReference;
+
+   @Column(name = "szMember", length = 20)
+   private String szMember;
+
+   @Column(name = "mnMemberNumber", length = 10)
+   private String mnLegalNumber;
+
+   @Column(name = "jdDateEfective")
+   @Temporal(TemporalType.DATE)
+   private Date jdDateEfective;
+
+   @Column(name = "jdDateExpired")
+   @Temporal(TemporalType.DATE)
+   private Date jdDateExpired;
+
+   @Column(name = "szOperationType", length = 2)
+   private String szOperationType;
+
+   @Column(name = "szThruCaseStatusCode", length = 3)
+   private String szThruCaseStatusCode;
+
+   @Column(name = "mnCodCliente")
+   private Integer mnCodCliente;
+
+   @Column(name = "szNameAlpha", length = 150)
+   private String szNameAlpha;
+
+   @Column(name = "szTaxId", length = 20)
+   private String szTaxId;
+
+   @Column(name = "szAddressLine01", length = 200)
+   private String szAddressLine01;
+
+   @Column(name = "szAddressLine02", length = 200)
+   private String szAddressLine02;
+
+   @Column(name = "mnCodClienteShipTo")
+   private Integer mnCodClienteShipTo;
+
+   @Column(name = "szBodega", length = 12)
+   private String szBodega;
+
+   @Column(name = "szCompany", length = 5)
+   private String szCompany;
+
+   @Column(name = "szName", length = 60)
+   private String szName;
+
+   @Column(name = "szTaxIdentificationNumber", length = 20)
+   private String szTaxIdentificationNumber;
+
+   @Column(name = "szAddressLine1", length = 200)
+   private String szAddressLine1;
+
+   @Column(name = "szAddressLine2", length = 200)
+   private String szAddressLine2;
+
+   @Column(name = "szAddressLine3", length = 200)
+   private String szAddressLine3;
+
+   @Column(name = "szAddressLine4", length = 200)
+   private String szAddressLine4;
+
+   @Column(name = "mnCodItemNumberShort")
+   private Integer mnCodItemNumberShort;
+
+   @Column(name = "szPrintDataYn", length = 2)
+   private String szPrintDataYn;
+
+   @Column(name = "szDescription", length = 250)
+   private String szDescription;
+
+   @Column(name = "szDescription2", length = 250)
+   private String szDescription2;
+
+   @Column(name = "mnItemNumber", length = 25)
+   private String mnItemNumber;
+
+   @Column(name = "szUnitofMeasureasInput", length = 3)
+   private String szUnitofMeasureasInput;
+
+   @Column(name = "szUnitofMeasurePricing", length = 3)
+   private String szUnitofMeasurePricing;
+
+   @Column(name = "mnQuantityShipped")
+   private BigDecimal mnQuantityShipped;
+
+   @Column(name = "mnUnitsQtyBackordered")
+   private BigDecimal mnUnitsQtyBackordered;
+
+   @Column(name = "mnUnitsQtyCanceledScrapped")
+   private BigDecimal mnUnitsQuantityCanceledScrapped;
+
+   @Column(name = "mnAmountPriceUnit")
+   private BigDecimal mnAmountPriceUnit;
+
+   @Column(name = "mnAmountGross")
+   private BigDecimal mnAmountGross;
+
+   @Column(name = "mnAmountExtendedPrice")
+   private BigDecimal mnAmountExtendedPrice;
+
+   @Column(name = "mnAmountExtendedCost")
+   private BigDecimal mnAmountExtendedCost;
+
+   @Column(name = "mnPercent1")
+   private BigDecimal mnPercent1;
+
+   @Column(name = "jdDateRequested")
+   @Temporal(TemporalType.DATE)
+   private Date jdDateRequested;
+
+   @Column(name = "szCommitted", length = 2)
+   private String szCommitted;
+
+   @Column(name = "szLineType", length = 15)
+   private String szLineType;
+
+   @Column(name = "jdDateInvoice")
+   @Temporal(TemporalType.DATE)
+   private Date jdDateInvoice;
+
+   @Column(name = "jdDateNetDue")
+   @Temporal(TemporalType.DATE)
+   private Date jdDateNetDue;
+
+   @Column(name = "mnRelatedNumber")
+   private Integer mnRelatedNumber;
+
+   @Column(name = "szRelatedOrderType", length = 2)
+   private String szRelatedOrderType;
+
+   @Column(name = "szCompanyRelatedOrder", length = 5)
+   private String szCompanyRelatedOrder;
+
+   @Column(name = "szPrintMessage", length = 30)
+   private String szPrintMessage;
+
+   @Column(name = "szSalesTaxableYN", length = 2)
+   private String szSalesTaxableYn;
+
+   @Column(name = "szTaxRateArea", length = 30)
+   private String szTaxRateArea;
+
+   @Column(name = "szTaxExplCode", length = 50)
+   private String szTaxExplCode;
+
+   @Column(name = "szDescriptionTaxArea", length = 50)
+   private String szDescriptionTaxArea;
+
+   @Column(name = "mnTaxAuthority")
+   private BigDecimal mnTaxAuthority;
+
+   @Column(name = "mnTaxAuthority2")
+   private BigDecimal mnTaxAuthority2;
+
+   @Column(name = "mnTaxAuthority3")
+   private BigDecimal mnTaxAuthority3;
+
+   @Column(name = "mnTaxAuthority4")
+   private BigDecimal mnTaxAuthority4;
+
+   @Column(name = "mnTaxAuthority5")
+   private BigDecimal mnTaxAuthority5;
+
+   @Column(name = "mnTaxRate1")
+   private BigDecimal mnTaxRate1;
+
+   @Column(name = "mnTaxRate2")
+   private BigDecimal mnTaxRate2;
+
+   @Column(name = "mnTaxRate3")
+   private BigDecimal mnTaxRate3;
+
+   @Column(name = "mnTaxRate4")
+   private BigDecimal mnTaxRate4;
+
+   @Column(name = "mnTaxRate5")
+   private BigDecimal mnTaxRate5;
+
+   @Column(name = "szTaxCalculationMethod", length = 20)
+   private String szTaxCalculationMethod;
+
+   @Column(name = "mnAmountTaxable")
+   private BigDecimal mnAmountTaxable;
+
+   @Column(name = "mnAmountTax")
+   private BigDecimal mnAmountTax;
+
+   @Column(name = "szPaymentTermsCode", length = 20)
+   private String szPaymentTermsCode;
+
+   @Column(name = "mnDiscountAvailable")
+   private BigDecimal mnDiscountAvailable;
+
+   @Column(name = "szUserID", length = 15)
+   private String szUserId;
+
+   @Column(name = "szProgramID", length = 30)
+   private String szProgramId;
+
+   @Column(name = "szWorkStationID", length = 30)
+   private String szWorkStationId;
+
+   @Column(name = "jdDateUpdated")
+   @Temporal(TemporalType.DATE)
+   private Date jdDateUpdated;
+
+   @Column(name = "mnTimeofDay")
+   @Temporal(TemporalType.TIME)
+   private Date mnTimeofDay;
+
+   @Column(name = "mnEDIDocumentNumber")
+   private Integer mnEdidocumentNumber;
+
+   @Column(name = "szEDIDocumentType", length = 2)
+   private String szEdidocumentType;
+
+   @Column(name = "szEDIDocumentKeyCo", length = 5)
+   private String szEdidocumentKeyCo;
+
+   @Column(name = "mnEDILineNumber")
+   private Integer mnEdilineNumber;
+
+   @Column(name = "mnOrderSuffix")
+   private Integer mnOrderSuffix;
+
+   @Column(name = "mnCodClienteParent")
+   private Integer mnCodClienteParent;
+
+   @Column(name = "mnDiscountAmount")
+   private BigDecimal mnDiscountAmount;
+
+   @Column(name = "mnAmountSalesTaxTotal1")
+   private BigDecimal mnAmountSalesTaxTotal1;
+
+   @Column(name = "mnAmountSalesTaxTotal2")
+   private BigDecimal mnAmountSalesTaxTotal2;
+
+   @Column(name = "mnAmountSalesTaxTotal3")
+   private BigDecimal mnAmountSalesTaxTotal3;
+
+   @Column(name = "mnAmountSalesTaxTotal4")
+   private BigDecimal mnAmountSalesTaxTotal4;
+
+   @Column(name = "mnAmountSalesTaxTotal5")
+   private BigDecimal mnAmountSalesTaxTotal5;
+
+   @Column(name = "mnAmountNonTaxable")
+   private BigDecimal mnAmountNonTaxable;
+
+   @Column(name = "mnAmountListPrice")
+   private BigDecimal mnAmountListPrice;
+
+   @Column(name = "sz2ndItemNumber", length = 25)
+   private String sz2ndItemNumber;
+
+   @Column(name = "mnCarrierNumber")
+   private Integer mnCarrierNumber;
+
+   @Column(name = "szAgreementSupplementDistribution", length = 30)
+   private String szAgreementSupplementDistribution;
+
+   @Column(name = "szEstablecimiento", length = 12)
+   private String szEstablecimiento;
+
+   @Column(name = "mnTripNumber")
+   private Integer mnTripNumber;
+
+   @Column(name = "mnWeightResult")
+   private BigDecimal mnWeightResult;
+
+   @Column(name = "szDutyStatus", length = 15)
+   private String szDutyStatus;
+
+   @Column(name = "szLotSerialNumber", length = 30)
+   private String szLotSerialNumber;
+
+   @Column(name = "szParameterDataItem01", length = 500)
+   private String szParameterDataItem01;
+
+   @Column(name = "szParameterDataItem02", length = 500)
+   private String szParameterDataItem02;
+
+   @Column(name = "szParameterDataItem03", length = 500)
+   private String szParameterDataItem03;
+
+   @Column(name = "szParameterDataItem04", length = 500)
+   private String szParameterDataItem04;
+
+   @Column(name = "szParameterDataItem05", length = 500)
+   private String szParameterDataItem05;
+
+   @Column(name = "szParameterDataItem06", length = 500)
+   private String szParameterDataItem06;
+
+   @Column(name = "szParameterDataItem07", length = 500)
+   private String szParameterDataItem07;
+
+   @Column(name = "szParameterDataItem08", length = 500)
+   private String szParameterDataItem08;
+
+   @Column(name = "szParameterDataItem09", length = 500)
+   private String szParameterDataItem09;
+
+   @Column(name = "szParameterDataItem10", length = 500)
+   private String szParameterDataItem10;
+
+   @Column(name = "szLegalDocumentTitle", length = 100)
+   private String szLegalDocumentTitle;
+
+   @Column(name = "szClaveAcceso", length = 100)
+   private String szClaveAcceso;
+
+   @Column(name = "szClaveAccesoContingencia", length = 100)
+   private String szClaveAccesoContingencia;
+
+   @Column(name = "szAutorizacionElectronica", length = 100)
+   private String szAutorizacionElectronica;
+
+   @Column(name = "szRefAutorizacion1", length = 100)
+   private String szRefAutorizacion1;
+
+   @Column(name = "szRefAutorizacion2", length = 100)
+   private String szRefAutorizacion2;
+
+   @Column(name = "szRefAutorizacion3", length = 100)
+   private String szRefAutorizacion3;
+
+   @Column(name = "szRefAutorizacion4", length = 100)
+   private String szRefAutorizacion4;
+
+   @Column(name = "szAmbiente", length = 10)
+   private String szAmbiente;
+
+   @Column(name = "szTipoEmision", length = 10)
+   private String szTipoEmision;
+
+   @Column(name = "szContribuyenteEspecial", length = 15)
+   private String szContribuyenteEspecial;
+
+   @Column(name = "szObligadoContabilidad", length = 3)
+   private String szObligadoContabilidad;
+
+   @Column(name = "szMoneda", length = 3)
+   private String szMoneda;
+
+   @Column(name = "szCatSales01", length = 200)
+   private String szCatSales01;
+
+   @Column(name = "szCatSales02", length = 200)
+   private String szCatSales02;
+
+   @Column(name = "szCatSales03", length = 200)
+   private String szCatSales03;
+
+   @Column(name = "szCatSales04", length = 200)
+   private String szCatSales04;
+
+   @Column(name = "szCatSales05", length = 200)
+   private String szCatSales05;
+
+   @Column(name = "szPeriodoFiscal", length = 5)
+   private String szPeriodoFiscal;
+
+   @Column(name = "szRise", length = 20)
+   private String szRise;
+
+}

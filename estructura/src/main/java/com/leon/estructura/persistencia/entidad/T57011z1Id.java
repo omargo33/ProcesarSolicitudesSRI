@@ -1,41 +1,66 @@
-package  com.leon.estructura.persistencia.entidad;
+package com.leon.estructura.persistencia.entidad;
 
 import lombok.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
- 
+import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
 /**
- * JPA 
+ * JPA
  * 
  * @author omargo33
  * @version 1.0
  * 
  */
 @Data
-@Entity 
-@Table(name = "xx")
-public class T57011z1Id  implements Serializable {
+@Embeddable
+public class T57011z1Id implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    @NotNull(message = "{NotNull.message}")
+    @Column(name = "szComputerId", length = 15)
     private String szComputerId;
+
+    @Column(name = "mnJobNumber")
     private int mnJobNumber;
+
+    @Column(name = "mnDocumentNumber")
     private int mnDocumentNumber;
+
+    @NotNull(message = "{NotNull.message}")
+    @Column(name = "szDocumentType", length = 2)
     private String szDocumentType;
+
+    @NotNull(message = "{NotNull.message}")
+    @Column(name = "szDocumentCompany", length = 5)
     private String szDocumentCompany;
+
+    @Column(name = "mnInvoiceNumber")
     private int mnInvoiceNumber;
+
+    @NotNull(message = "{NotNull.message}")
+    @Column(name = "szInvoiceType", length = 2)
     private String szInvoiceType;
+
+    @NotNull(message = "{NotNull.message}")
+    @Column(name = "szInvoiceCompany", length = 5)
     private String szInvoiceCompany;
+
+    @Column(name = "mnLineNumber")
     private int mnLineNumber;
+
+    @Column(name = "mnSequenceNumber")
     private int mnSequenceNumber;
+
+    @Column(name = "mnSubSequenceNumber")
     private int mnSubSequenceNumber;
+
+    @NotNull(message = "{NotNull.message}")
+    @Column(name = "szJobTypeDescription", length = 30)
     private String szJobTypeDescription;
 
     public boolean equals(Object other) {
@@ -89,5 +114,4 @@ public class T57011z1Id  implements Serializable {
         result = 37 * result + (getSzJobTypeDescription() == null ? 0 : this.getSzJobTypeDescription().hashCode());
         return result;
     }
-
 }
