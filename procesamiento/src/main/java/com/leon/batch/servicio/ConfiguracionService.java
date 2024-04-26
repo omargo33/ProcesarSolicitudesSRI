@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.leon.estructura.persistencia.crud.ClientesCrudRepositorio;
@@ -30,10 +29,8 @@ import java.util.HashMap;
 @Transactional
 public class ConfiguracionService {
 
-   @Autowired
    private ClientesCrudRepositorio clientesCrudRepositorio;
 
-   @Autowired
    private ParametroCrudRepositorio parametroCrudRepositorio;
 
    /**
@@ -64,8 +61,10 @@ public class ConfiguracionService {
                   Constantes.INDEX_URL_DOCUMENTOS_RECIBIDOS,
                   Constantes.INDEX_URL_DESCARGA_AUTORIZACION));
 
-      for (Parametro parametro : listaParametros.get()) {
-         mapaParametros.put(parametro.getIndice(), parametro);
+      if (listaParametros.isPresent()) {
+         for (Parametro parametro : listaParametros.get()) {
+            mapaParametros.put(parametro.getIndice(), parametro);
+         }
       }
 
       return mapaParametros;

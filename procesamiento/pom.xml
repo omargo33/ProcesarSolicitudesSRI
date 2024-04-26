@@ -28,7 +28,7 @@
 		<!-- Documentos electronicos -->
 		<dependency>
 			<groupId>com.aplicaciones13</groupId>
-			<artifactId>documentos</artifactId>
+			<artifactId>documentos-data</artifactId>
 			<version>1.0</version>
 		</dependency>	
 		<!-- actuator -->
@@ -60,7 +60,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- TODO validar si es necesario -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
@@ -105,27 +104,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jaxb2-maven-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>xjc1</id>
-						<goals>
-							<goal>xjc</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>src/main/java</outputDirectory>
-							<clearOutputDir>false</clearOutputDir>
-							<packageName>com.leon.batch.cliente.estructuras.autorizacion</packageName>
-							<schemaDirectory>src/main/resources</schemaDirectory>
-							<schemaFiles>autorizacion.xsd</schemaFiles>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+			</plugin>			
 		</plugins>
 	</build>
 </project>

@@ -3,7 +3,6 @@ package com.leon.batch.datasource;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Component;
 @PropertySource("classpath:databases.properties")
 public class PropiedadesBaseDatos {
 
-    @Autowired
     private Environment environment;
 
     /**
@@ -33,8 +31,6 @@ public class PropiedadesBaseDatos {
      * @return lista de propiedades de las bases de datos.
      */
     public List<DataSourcePropiedad> getAllProperties() {
-        //TODO falta condificar el perfil de spring: dev, test, prod
-        int i=0;
         List<DataSourcePropiedad> listaPropiedades = new ArrayList<>();
 
         DataSourcePropiedad dataSourceConfig = new DataSourcePropiedad();
@@ -44,15 +40,14 @@ public class PropiedadesBaseDatos {
         dataSourceConfig.setPassword(environment.getProperty("datasourceConfig.datasource.password"));
         listaPropiedades.add(dataSourceConfig);
         
-        while (environment.containsProperty("datasource"+i+".datasource.id")) {
+        for (int i = 0; environment.containsProperty("datasource"+i+".datasource.id"); i++){
+            String llave = "datasource"+i+".datasource.id";
             DataSourcePropiedad dataSource = new DataSourcePropiedad();
-            dataSource.setId(environment.getProperty("datasource"+i+".datasource.id"));
-            dataSource.setUrl(environment.getProperty("datasource"+i+".datasource.url"));
-            dataSource.setUsername(environment.getProperty("datasource"+i+".datasource.username"));
-            dataSource.setPassword(environment.getProperty("datasource"+i+".datasource.password"));
+            dataSource.setId(environment.getProperty(llave));
+            dataSource.setUrl(environment.getProperty(llave));
+            dataSource.setUsername(environment.getProperty(llave));
+            dataSource.setPassword(environment.getProperty(llave));
             listaPropiedades.add(dataSource);
-
-            i++;        
         }
 
         return listaPropiedades;

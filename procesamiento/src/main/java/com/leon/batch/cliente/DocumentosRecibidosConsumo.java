@@ -70,8 +70,8 @@ public class DocumentosRecibidosConsumo extends SolicitaServicio {
      */
     @Override
     public HttpURLConnection generarConexion() throws IOException {
-        String credencial = getUsuario() + ":" + getCredencial(); 
-        String credencial64 = Base64.getEncoder().encodeToString(credencial.getBytes(StandardCharsets.UTF_8));
+        String usuarioCredencial = getUsuario() + ":" + getCredencial(); 
+        String credencial64 = Base64.getEncoder().encodeToString(usuarioCredencial.getBytes(StandardCharsets.UTF_8));
         URL url = new URL(getUrlConsulta());
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -93,9 +93,6 @@ public class DocumentosRecibidosConsumo extends SolicitaServicio {
     @Override
     public boolean isRespuestaValida() {
         DocumentosOk documentos = getJsonRespuesta(DocumentosOk.class);
-        if (documentos != null && documentos.getStatus().equals("success") && documentos.getData().length > 0) {
-            return true;
-        }
-        return false;
+        return (documentos != null && documentos.getStatus().equals("success") && documentos.getData().length > 0);
     }
 }

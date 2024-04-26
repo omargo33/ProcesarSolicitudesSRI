@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
+import com.aplicaciones13.documentos.estructuras.autorizacion.Autorizacion;
+import com.aplicaciones13.documentos.utilidades.Conversion;
 import com.leon.batch.Constantes;
 import com.leon.batch.cliente.DescargarConsumo;
 import com.leon.batch.cliente.SolicitaServicio;
 import com.leon.batch.cliente.TokenConsumo;
 import com.leon.batch.cliente.estructuras.TokenOk;
-import com.leon.batch.cliente.estructuras.autorizacion.Authorization;
+
 import com.leon.batch.utilitarios.ConversionesFecha;
 import com.leon.estructura.persistencia.crud.ResumenDocumentoProveedorCrudRepositorio;
 import com.leon.estructura.persistencia.entidad.Parametro;
@@ -24,7 +24,6 @@ public class DescargaService {
 
     Map<Integer, Parametro> mapaParametros;
 
-    @Autowired
     private ResumenDocumentoProveedorCrudRepositorio resumenDocumentoProveedorCrudRepositorio;
 
     /**
@@ -74,20 +73,11 @@ public class DescargaService {
             if (estadoConsumo == SolicitaServicio.SERVICIO_OK) {
                 String respuesta = descargarConsumo.getRespuesta();
 
-                Authorization authorization = descargarConsumo.construirAuthorization(descargarConsumo.getRespuesta());
-                System.out.println("Documento: " + respuesta);
-                System.out.println("Ambiente: " + authorization.getAmbiente());
-                System.out.println("Estado: " + authorization.getEstado());
-                System.out.println("Fecha Autorizacion: " + authorization.getFechaAutorizacion());
-                System.out.println("Fecha Autorizacion: " + ConversionesFecha.stringDateIso(authorization.getFechaAutorizacion()));
-
-                System.out.println("No autorizacion: " + authorization.getNumeroAutorizacion());
-
-                System.out.println("Documento: " + authorization.getComprobante());
-
-                
-                
-
+                Autorizacion authorization = Conversion.xmlToPojo(descargarConsumo.getRespuesta(), Autorizacion.class);
+                log.info("Documento: {}", respuesta);
+                log.info("Fecha Autorizacion: {}", authorization.getFechaAutorizacion());
+                log.info("Fecha Autorizacion: {}",
+                        ConversionesFecha.stringDateIso(authorization.getFechaAutorizacion()));
             } else {
                 log.error("No se puede obtener el XML autorizado. " + descargarConsumo.toString());
             }

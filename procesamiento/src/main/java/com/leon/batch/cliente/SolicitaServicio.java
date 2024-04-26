@@ -218,8 +218,7 @@ public class SolicitaServicio{
      */
     public HttpURLConnection generarConexion() throws IOException {
         URL url = new URL(this.urlConsulta);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        return connection;
+        return (HttpURLConnection) url.openConnection();
     }
 
     /**
@@ -239,8 +238,7 @@ public class SolicitaServicio{
     public <T> T getJsonRespuesta(Class<T> type) {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            T entity = mapper.readValue(respuesta, type);
-            return entity;
+            return type.cast(mapper.readValue(respuesta, type));
         } catch (JsonProcessingException e) {
             log.warn("Conversion por getJsonRespuesta() {}", e.getMessage());
             return null;
@@ -308,7 +306,7 @@ public class SolicitaServicio{
      * @return
      */
     public int ejecutarCortoCircutio(String nombreCortoCircuito) {
-        int estadoEjecucion = SERVICIO_OK;
+        int estadoEjecucion = 1;
         String circuitBreaker = System.getProperty("CortoCircuito=" + nombreCortoCircuito);
 
         if (circuitBreaker == null || circuitBreaker.isEmpty()) {

@@ -37,6 +37,10 @@ package com.leon.batch.datasource;
 public class DataSourceContextHolder {
 	private static ThreadLocal<String> threadLocal = new ThreadLocal<>();
 
+	private DataSourceContextHolder() {
+		super();
+	}
+
 	public static void setBranchContext(String dataSourceEnum) {
 		threadLocal.set(dataSourceEnum);
 	}

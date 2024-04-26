@@ -9,6 +9,10 @@ package com.leon.batch;
  */
 public class Constantes {
 
+    private Constantes() {
+        super();
+    }
+
     public static final int INDEX_USER_ID = 50;
     public static final int INDEX_SECRET_ID = 51;
     public static final int INDEX_GRANT_TYPE = 52;

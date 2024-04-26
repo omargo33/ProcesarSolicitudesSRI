@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.leon.estructura.persistencia.crud.ResumenDocumentoProveedorCrudRepositorio;
@@ -40,7 +39,6 @@ public class DocumentosRecibidosService {
 
    Map<Integer, Parametro> mapaParametros;
 
-   @Autowired
    private ResumenDocumentoProveedorCrudRepositorio resumenDocumentoProveedorCrudRepositorio;
 
    /**

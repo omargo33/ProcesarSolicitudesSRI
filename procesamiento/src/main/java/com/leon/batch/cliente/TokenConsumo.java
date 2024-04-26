@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import com.leon.batch.cliente.estructuras.TokenOk;
 
@@ -38,13 +39,12 @@ public class TokenConsumo extends SolicitaServicio {
      * @return
      */
     public int load(String ulString, String clientId, String clientSecret, String grantType) {
-        String urlParameters = "";
-
+        String urlParameters = "";        
         try {
             urlParameters = String.format("client_id=%s&client_secret=%s&grant_type=%s",
-                    URLEncoder.encode(clientId, "UTF-8"),
-                    URLEncoder.encode(clientSecret, "UTF-8"),
-                    URLEncoder.encode(grantType, "UTF-8"));
+                    URLEncoder.encode(clientId, StandardCharsets.UTF_8),
+                    URLEncoder.encode(clientSecret, StandardCharsets.UTF_8),
+                    URLEncoder.encode(grantType, StandardCharsets.UTF_8));
         } catch (Exception e) {
             return SERVIDOR_ERROR;
         }
@@ -84,9 +84,6 @@ public class TokenConsumo extends SolicitaServicio {
     @Override
     public boolean isRespuestaValida() {
         TokenOk tokenOk = getJsonRespuesta(TokenOk.class);
-        if (tokenOk != null && tokenOk.getAccessToken() != null && !tokenOk.getAccessToken().isEmpty()) {
-            return true;
-        }
-        return false;
+        return (tokenOk != null && tokenOk.getAccessToken() != null && !tokenOk.getAccessToken().isEmpty());
     }
 }

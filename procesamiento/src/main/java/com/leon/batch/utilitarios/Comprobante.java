@@ -20,12 +20,12 @@ import java.nio.file.Paths;
 @Slf4j
 public class Comprobante {
 
-    public static String FACTURA = "01";
-    public static String LIQUIDACION_COMPRA = "03";
-    public static String NOTA_CREDITO = "04";
-    public static String NOTA_DEBITO = "05";
-    public static String GUIA_REMISION = "06";
-    public static String COMPROBANTE_RETENCION = "07";
+    public static final String FACTURA = "01";
+    public static final String LIQUIDACION_COMPRA = "03";
+    public static final String NOTA_CREDITO = "04";
+    public static final String NOTA_DEBITO = "05";
+    public static final String GUIA_REMISION = "06";
+    public static final String COMPROBANTE_RETENCION = "07";
 
     /**
      * Metodo para conocer el tipo de documento.
@@ -68,14 +68,19 @@ public class Comprobante {
      * @return
      */
     public static String crearPathFile(String ruc, String producto, String fecha) {
-        String fullPath = System.getProperty("user.home") + "/" + ruc + "/" + producto + "/" + fecha;
+        String fileSeparador = System.getProperty("file.separator");
+        String fullPath = System.getProperty("user.home") + 
+            fileSeparador + ruc + 
+            fileSeparador + producto + 
+            fileSeparador + fecha;
+
         try {
             Path path = Paths.get(fullPath);
             if (!Files.exists(path)) {
                 Files.createDirectories(path);
             }
         } catch (IOException e) {
-            log.error("No se pudo crear: {} por {}", fullPath,  e.getMessage());
+            log.error("No se pudo crear: {} por {}", fullPath, e.getMessage());
         }
 
         return fullPath;
@@ -90,7 +95,7 @@ public class Comprobante {
      */
     public static void guardarArchivo(String path, String nombre, String contenido) {
         try {
-            Path pathFile = Paths.get(path + "/" + nombre);
+            Path pathFile = Paths.get(path + System.getProperty("file.separator") + nombre);
             Files.write(pathFile, contenido.getBytes());
         } catch (IOException e) {
             log.error("No se pudo guardar el archivo: {} por {}", nombre, e.getMessage());

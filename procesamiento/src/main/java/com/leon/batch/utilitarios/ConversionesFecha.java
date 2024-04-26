@@ -73,7 +73,6 @@ public class ConversionesFecha {
     OffsetDateTime fechaOffset = OffsetDateTime.parse(fechaStr, formato);
 
     Instant instant = fechaOffset.toInstant();
-    Date fecha = Date.from(instant);
-    return fecha;
+    return  Date.from(instant);
   }
 }
