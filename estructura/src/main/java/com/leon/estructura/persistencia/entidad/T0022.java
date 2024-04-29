@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 
@@ -17,6 +19,7 @@ import javax.persistence.EmbeddedId;
  */
 @Entity
 @Table(name = "T0022")
+@Data
 public class T0022 implements Serializable {
     
     private static final long serialVersionUID = 1L;

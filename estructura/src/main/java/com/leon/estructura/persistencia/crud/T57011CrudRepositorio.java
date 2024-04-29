@@ -17,10 +17,4 @@ import com.leon.estructura.persistencia.entidad.T57011Id;
 @Repository
 public interface T57011CrudRepositorio extends CrudRepository<T57011, T57011Id> {
 
-    /**
-     * Metodo para buscar max( mnJobNumber ) en la tabla T57011, con un query personalizado
-     */
-    @Query(value = "SELECT MAX(mnJobNumber) FROM T57011", nativeQuery = true)
-    Integer findMaxMnJobNumber();
-
 }

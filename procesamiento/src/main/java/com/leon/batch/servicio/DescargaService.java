@@ -12,7 +12,6 @@ import com.leon.batch.cliente.SolicitaServicio;
 import com.leon.batch.cliente.TokenConsumo;
 import com.leon.batch.cliente.estructuras.TokenOk;
 
-import com.leon.batch.utilitarios.ConversionesFecha;
 import com.leon.estructura.persistencia.crud.ResumenDocumentoProveedorCrudRepositorio;
 import com.leon.estructura.persistencia.entidad.Parametro;
 import com.leon.estructura.persistencia.entidad.ResumenDocumentoProveedor;
@@ -76,13 +75,9 @@ public class DescargaService {
                 Autorizacion authorization = Conversion.xmlToPojo(descargarConsumo.getRespuesta(), Autorizacion.class);
                 log.info("Documento: {}", respuesta);
                 log.info("Fecha Autorizacion: {}", authorization.getFechaAutorizacion());
-                log.info("Fecha Autorizacion: {}",
-                        ConversionesFecha.stringDateIso(authorization.getFechaAutorizacion()));
             } else {
                 log.error("No se puede obtener el XML autorizado. " + descargarConsumo.toString());
             }
         }
-
     }
-
 }
