@@ -240,7 +240,7 @@ public class SolicitaServicio{
             ObjectMapper mapper = new ObjectMapper();
             return type.cast(mapper.readValue(respuesta, type));
         } catch (JsonProcessingException e) {
-            log.warn("Conversion por getJsonRespuesta() {}", e.getMessage());
+            log.warn("Conversion por getJsonRespuesta() {}", e.toString());
             return null;
         }
     }
@@ -258,7 +258,7 @@ public class SolicitaServicio{
             builder = factory.newDocumentBuilder();
             return builder.parse(new InputSource(new StringReader(respuesta)));            
         } catch (Exception e) {
-            log.warn("Conversion por getJsonRespuesta() {}", e.getMessage());
+            log.warn("Conversion por getJsonRespuesta() {}", e.toString());
             return null;
         }
     }
@@ -280,7 +280,7 @@ public class SolicitaServicio{
             ejecutarConsultaService();
             return isHttpstatusValido(getHttpEstado());
         } catch (Exception e) {
-            log.warn("Error al ejecutar la consulta. {}", e.getMessage());
+            log.warn("Error al ejecutar la consulta. {}", e.toString());
             return SERVIDOR_ERROR;
         }
     }

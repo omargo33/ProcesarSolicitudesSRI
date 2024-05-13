@@ -308,7 +308,7 @@ public class T57011 implements Serializable {
     @Column(name = "mnTripNumber")
     private Integer mnTripNumber;
 
-    @Column(name = "mnWeightResult")
+    @Column(name = "mnWeightResult", columnDefinition = "default '0'")
     private Double mnWeightResult;
 
     @Column(name = "szDutyStatus", length = 15)
@@ -401,9 +401,9 @@ public class T57011 implements Serializable {
     @Column(name = "szCatSales05", length = 150)
     private String szCatSales05;
 
-    @Column(name = "szPeriodoFiscal", length = 5)
+    @Column(name = "szPeriodoFiscal", length = 5, columnDefinition = "default ''")
     private String szPeriodoFiscal;
 
-    @Column(name = "szRise", length = 20)
+    @Column(name = "szRise", length = 20, columnDefinition = "default ''")
     private String szRise;
 }

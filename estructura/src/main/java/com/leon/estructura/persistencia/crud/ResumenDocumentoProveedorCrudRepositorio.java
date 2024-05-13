@@ -23,6 +23,6 @@ public interface ResumenDocumentoProveedorCrudRepositorio extends CrudRepository
      * T57011 por el campo szClaveAcceso con un query personaizado
      *
      */
-    @Query(value = "SELECT * FROM resumen_documento_proveedor rdp WHERE rdp.szClaveAcceso NOT IN (SELECT t.szClaveAcceso FROM T57011 t)", nativeQuery = true)
+    @Query(value = "SELECT * FROM resumenDocumentosProveedores rdp WHERE rdp.access_key NOT IN (SELECT t.szClaveAcceso FROM t57011 t)", nativeQuery = true)
     Optional<List<ResumenDocumentoProveedor>> findBySzClaveAccesoNotInT57011();
 }

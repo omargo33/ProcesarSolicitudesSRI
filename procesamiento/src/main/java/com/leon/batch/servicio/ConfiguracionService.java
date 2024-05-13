@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.leon.estructura.persistencia.crud.ClientesCrudRepositorio;
@@ -29,8 +30,10 @@ import java.util.HashMap;
 @Transactional
 public class ConfiguracionService {
 
+   @Autowired
    private ClientesCrudRepositorio clientesCrudRepositorio;
 
+   @Autowired
    private ParametroCrudRepositorio parametroCrudRepositorio;
 
    /**

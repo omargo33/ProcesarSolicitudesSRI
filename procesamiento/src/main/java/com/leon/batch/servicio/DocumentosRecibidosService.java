@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.leon.estructura.persistencia.crud.ResumenDocumentoProveedorCrudRepositorio;
@@ -39,6 +40,7 @@ public class DocumentosRecibidosService {
 
    Map<Integer, Parametro> mapaParametros;
 
+   @Autowired
    private ResumenDocumentoProveedorCrudRepositorio resumenDocumentoProveedorCrudRepositorio;
 
    /**
@@ -59,7 +61,7 @@ public class DocumentosRecibidosService {
          TokenOk tokenOk = tokenConsumo.getJsonRespuesta(TokenOk.class);
          consumirServicioDocumentosRecibidos(tokenOk.getAccessToken(), ruc, credencial);
       } else {
-         log.error("tokenConsumo: " + tokenConsumo.toString());
+         log.error("tokenConsumo: {}", tokenConsumo.toString());
       }
    }
 
@@ -83,7 +85,7 @@ public class DocumentosRecibidosService {
          DocumentosOk documentosOk = descargarDocumentosConsumo.getJsonRespuesta(DocumentosOk.class);
          guardarDocumentosRecibidos(ruc, documentosOk.getData());
       } else {
-         log.error("No se puede obtener los documentos recibidos. " + descargarDocumentosConsumo.toString());
+         log.error("No se puede obtener los documentos recibidos. {}", descargarDocumentosConsumo.toString());
       }
    }
 
@@ -109,7 +111,6 @@ public class DocumentosRecibidosService {
     * @return
     */
    private ResumenDocumentoProveedor crearEntidad(Documento documento) {
-
       ResumenDocumentoProveedor resumenDocumentoProveedor = new ResumenDocumentoProveedor();
       resumenDocumentoProveedor.setAccessKey(documento.getAccessKey());
       resumenDocumentoProveedor.setCommercialName(documento.getCommercialName());

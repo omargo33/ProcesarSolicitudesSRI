@@ -3,14 +3,18 @@ package com.leon.batch.datasource;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Clase para recupear las credenciales de las bases de datos.
  * 
- * Lee las base de datos y crea una lista con todos los datos de las bases de datos.
+ * Lee las base de datos y crea una lista con todos los datos de las bases de
+ * datos.
  * 
  * El archivo que se lee es databases.properties
  * 
@@ -20,9 +24,11 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
+@Slf4j
 @PropertySource("classpath:databases.properties")
 public class PropiedadesBaseDatos {
 
+    @Autowired
     private Environment environment;
 
     /**
@@ -34,20 +40,22 @@ public class PropiedadesBaseDatos {
         List<DataSourcePropiedad> listaPropiedades = new ArrayList<>();
 
         DataSourcePropiedad dataSourceConfig = new DataSourcePropiedad();
-        dataSourceConfig.setId(environment.getProperty("datasourceConfig.datasource.id"));
-        dataSourceConfig.setUrl(environment.getProperty("datasourceConfig.datasource.url"));
-        dataSourceConfig.setUsername(environment.getProperty("datasourceConfig.datasource.username"));
-        dataSourceConfig.setPassword(environment.getProperty("datasourceConfig.datasource.password"));
+        dataSourceConfig.setId(environment.getProperty("datasource.datasource.id"));
+        dataSourceConfig.setUrl(environment.getProperty("datasource.datasource.url"));
+        dataSourceConfig.setUsername(environment.getProperty("datasource.datasource.username"));
+        dataSourceConfig.setPassword(environment.getProperty("datasource.datasource.password"));
         listaPropiedades.add(dataSourceConfig);
-        
-        for (int i = 0; environment.containsProperty("datasource"+i+".datasource.id"); i++){
-            String llave = "datasource"+i+".datasource.id";
+        log.info("llave agregada datasource {}", dataSourceConfig.toString());
+
+        for (int i = 0; environment.containsProperty("datasource" + i + ".datasource.id"); i++) {
+            String llave = "datasource" + i + ".datasource";
             DataSourcePropiedad dataSource = new DataSourcePropiedad();
-            dataSource.setId(environment.getProperty(llave));
-            dataSource.setUrl(environment.getProperty(llave));
-            dataSource.setUsername(environment.getProperty(llave));
-            dataSource.setPassword(environment.getProperty(llave));
+            dataSource.setId(environment.getProperty(llave + ".id"));
+            dataSource.setUrl(environment.getProperty(llave + ".url"));
+            dataSource.setUsername(environment.getProperty(llave + ".username"));
+            dataSource.setPassword(environment.getProperty(llave + ".password"));
             listaPropiedades.add(dataSource);
+            log.info("llave agregada {} {}", llave, dataSource.toString());
         }
 
         return listaPropiedades;

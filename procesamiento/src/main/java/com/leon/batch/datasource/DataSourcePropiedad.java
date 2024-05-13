@@ -10,8 +10,8 @@ import lombok.Data;
  * @author omargo33
  * @since 2024-04-02
  */
-@Component
 @Data
+@Component
 public class DataSourcePropiedad {
     private String id;
 	private String url;

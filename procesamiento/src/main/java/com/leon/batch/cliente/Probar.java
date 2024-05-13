@@ -40,7 +40,7 @@ public class Probar {
                 content.append(line).append("\n");
             }
         } catch (IOException e) {
-            log.error("Error reading file: {}", e.getMessage());
+            log.error("Error reading file: {}", e.toString());
         }
         return content.toString();
     }
@@ -119,7 +119,7 @@ public class Probar {
                     break;
                 }
 
-                log.error("Error: ListaDocumentos {}", documentosKo.getMessage());
+                log.error("Error: ListaDocumentos {}", documentosKo.toString());
                 break;
 
             case SolicitaServicio.CORTOCIRCUITO:

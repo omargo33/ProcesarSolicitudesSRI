@@ -2,6 +2,7 @@ package com.leon.batch.servicio;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.leon.estructura.persistencia.crud.T00221CrudRepositorio;
@@ -21,7 +22,10 @@ import com.leon.estructura.persistencia.entidad.T00221;
 @Transactional
 public class IndicesService {
     
+    @Autowired
     private T0022CrudRepositorio t0022CrudRepositorio;
+    
+    @Autowired
     private T00221CrudRepositorio t00221CrudRepositorio;
 
     /**

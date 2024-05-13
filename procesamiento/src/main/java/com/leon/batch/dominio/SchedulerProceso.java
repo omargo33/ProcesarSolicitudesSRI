@@ -4,13 +4,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.leon.estructura.persistencia.entidad.Cliente;
+import com.leon.batch.Constantes;
 import com.leon.batch.datasource.DataSourceContextHolder;
 import com.leon.batch.servicio.ConfiguracionService;
+import com.leon.batch.servicio.DescargaService;
 import com.leon.batch.servicio.DocumentosRecibidosService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,9 +25,14 @@ import com.leon.estructura.persistencia.entidad.Parametro;
 @EnableScheduling
 public class SchedulerProceso {
 
+    @Autowired
     ConfiguracionService clienteService;
 
+    @Autowired
     DocumentosRecibidosService documentosRecibidosService;
+    
+    @Autowired
+    DescargaService descargaService;
 
     Map<Integer, Parametro> mapaParametro;
     List<Cliente> listaClientes;
@@ -40,7 +48,11 @@ public class SchedulerProceso {
     public void reportCurrentTime() {
         if (ejecutarConfiguracion()) {
             for (Cliente cliente : listaClientes) {
-                ejecutarConsultasDocumentosRecibidos(cliente.getSriUsuario(), cliente.getSriCredencial());
+                //
+                // Todo se suspende para probar la descarga.
+                //ejecutarConsultasDocumentosRecibidos(cliente.getSriUsuario(), cliente.getSriCredencial());
+                
+                ejecutarDescargaDocumentosRecibidos(cliente.getSriUsuario(), cliente.getSriCredencial());
             }
         }
     }
@@ -52,7 +64,19 @@ public class SchedulerProceso {
      */
     private boolean ejecutarConfiguracion() {
         DataSourceContextHolder.setBranchContext("config");
+        
+        log.error("Configuracion de parametros: 123");
         mapaParametro = clienteService.generarParametros();
+
+        log.error("Configuracion de parametros: 456");
+
+        for (Map.Entry<Integer, Parametro> entry : mapaParametro.entrySet()) {
+            Integer key = entry.getKey();
+            Parametro value = entry.getValue();
+            log.error("Parametro: {}, valor: {}", key, value.toString());
+        }
+
+
         Optional<List<Cliente>> clientesOptional = clienteService.getClientes();
         if (clientesOptional.isPresent()) {
             listaClientes = clientesOptional.get();
@@ -63,7 +87,7 @@ public class SchedulerProceso {
             return false;
         }
 
-        if (mapaParametro.size() > 0 && !listaClientes.isEmpty()) {
+        if (mapaParametro.size() > 0 && listaClientes.isEmpty()) {
             log.error("Faltan parametros o clientes en la configuracion, parametros: {}, clientes: {}",
                     mapaParametro.size(), listaClientes.size());
             return false;
@@ -80,7 +104,21 @@ public class SchedulerProceso {
      */
     private void ejecutarConsultasDocumentosRecibidos(String ruc, String credencial) {
         DataSourceContextHolder.setBranchContext(ruc);
+
         documentosRecibidosService.setMapaParametros(mapaParametro);
         documentosRecibidosService.consultarDocumentosRecibidos(ruc, credencial);
+    }
+
+    /**
+     * Metodo para ejecutar la descarga de documentos recibidos.
+     * 
+     * @param ruc
+     * @param credencial
+     */
+    private void ejecutarDescargaDocumentosRecibidos(String ruc, String credencial) {
+        DataSourceContextHolder.setBranchContext(ruc);
+
+        descargaService.setMapaParametros(mapaParametro);
+        descargaService.descargarDocumentosRecibidos(ruc, credencial);
     }
 }

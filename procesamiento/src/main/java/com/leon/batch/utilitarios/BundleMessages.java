@@ -33,7 +33,7 @@ public class BundleMessages {
             String message = resource.getString(key);
             return MessageFormat.format(message, params);
         } catch (Exception e) {
-            return "Error: " + e.getMessage();
+            return "Error: " + e.toString();
         }
     }
 }

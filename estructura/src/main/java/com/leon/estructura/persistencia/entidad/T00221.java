@@ -27,7 +27,7 @@ public class T00221 implements Serializable {
 
     @Id
     @Column(name = "szObjeto", length = 10)
-    private String szObString;
+    private String szObjeto;
 
     @Column(name = "mnNextNumber")
     private Integer mnNextNumber;
