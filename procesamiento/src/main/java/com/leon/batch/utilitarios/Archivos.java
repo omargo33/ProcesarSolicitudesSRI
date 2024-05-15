@@ -1,7 +1,9 @@
 package com.leon.batch.utilitarios;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,28 @@ public class Archivos {
     }
 
     /**
+     * Metodo para obtener el texto de un archivo
+     * @param ruta
+     * @return
+     */
+    public static String getTexto(String ruta) {
+        try {
+            File file = new File(ruta);
+            StringBuilder sb = new StringBuilder();
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            br.close();
+            return sb.toString();
+        } catch (IOException e) {
+            log.error("Error al leer archivo: {}", e.toString());
+            return null;
+        }
+    }
+
+    /**
      * Metodo para guardar un archivo en una ubicacion especifica y la crea si no
      * existe
      *
@@ -32,7 +56,6 @@ public class Archivos {
      */
     public static void guardarArchivo(String ruta, String contenidoArchivo) {
         try {
-
             FileOutputStream fos = new FileOutputStream(ruta);
             fos.write(contenidoArchivo.getBytes());
             fos.close();

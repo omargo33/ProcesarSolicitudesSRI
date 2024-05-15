@@ -121,7 +121,7 @@ SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
         t57011.getId().setSzDocumentType("FX");
 
 
-        t57011.getId().setSzDocumentCompany(empresaDocumento);
+       /*  t57011.getId().setSzDocumentCompany(empresaDocumento);
         t57011.getId().setSzDocumentType(tipoDocumento);
         t57011.getId().setMnDocumentNumber(nroDocumento);
         t57011.getId().setMnLineNumber(String.valueOf(i + 1));
@@ -142,6 +142,6 @@ SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
 
         t57011CrudRepositorio.save(t57011);
 
-
+*/
     }
 }
