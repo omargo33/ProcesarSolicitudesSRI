@@ -5,6 +5,7 @@ import com.aplicaciones13.documentos.estructuras.factura.v2_1_0.Factura.Detalles
 import com.aplicaciones13.documentos.estructuras.factura.v2_1_0.Factura;
 import com.aplicaciones13.documentos.utilidades.Conversion;
 import com.aplicaciones13.documentos.utilidades.Route;
+import com.leon.batch.utilitarios.BundleMessages;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,6 +23,8 @@ public class Test {
     double valorIRBPNR = 0;
     String mensajeInfoAdicional = "";
     double montoTotalConImpuestos = 0;
+
+    BundleMessages bundleMessages = new BundleMessages();
 
     public static void main(String[] args) {
         Test test = new Test();
@@ -70,10 +73,6 @@ public class Test {
                     String.valueOf(detalle.getPrecioUnitario()), detalle.getUnidadMedida());
 
             detalle.getImpuestos().getImpuesto().forEach(impuesto -> {
-
-                //log.info("impuesto: {} {} {} {} {}", impuesto.getBaseImponible(), String.valueOf(impuesto.getValor()),
-                //        impuesto.getCodigo(), impuesto.getCodigoPorcentaje(), String.valueOf(impuesto.getTarifa()));
-
                 if (impuesto.getCodigo().equals("2")) {
                     baseImponibleIva += impuesto.getBaseImponible().doubleValue();
                     valorIva += impuesto.getValor().doubleValue();
@@ -84,7 +83,8 @@ public class Test {
                         baseImponibleIvaVigente += impuesto.getBaseImponible().doubleValue();
                         valorIvaVigente += impuesto.getValor().doubleValue();
                         log.info("IVA: {} {} {}", impuesto.getBaseImponible(), impuesto.getValor(),
-                                porcentajeIva(impuesto.getCodigoPorcentaje()));
+                                // porcentajeIva(impuesto.getCodigoPorcentaje())
+                                bundleMessages.getMessage("iva_" + impuesto.getCodigoPorcentaje()));
                     }
                     montoTotalConImpuestos += impuesto.getBaseImponible().doubleValue()
                             + impuesto.getValor().doubleValue();
@@ -144,39 +144,5 @@ public class Test {
                 log.error("No hay campos adicionales", e.toString());
             }
         });
-    }
-
-    /**
-     * Metodo que retorna el porcentaje de IVA segun el codigo de porcentaje
-     * 
-     * @param codigo
-     * @return
-     */
-    private double porcentajeIva(String codigo) {
-
-        switch (codigo) {
-            case "0":
-                return 0;
-
-            case "2":
-                return 12;
-
-            case "3":
-                return 14;
-
-            case "4":
-                return 15;
-
-            case "5":
-                return 5;
-
-            case "10":
-                return 13;
-
-            default:
-                log.warn("Codigo de porcentaje de IVA no encontrado: {}", codigo);
-                return -1;
-
-        }
     }
 }
