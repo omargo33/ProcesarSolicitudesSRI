@@ -19,6 +19,8 @@ import com.aplicaciones13.documentos.utilidades.Route;
 import com.leon.batch.utilitarios.BundleMessages;
 import lombok.extern.slf4j.Slf4j;
 
+import java.text.SimpleDateFormat;
+
 @Slf4j
 @Service
 @Transactional
@@ -30,7 +32,7 @@ public class ProcesarFacturaService {
     @Autowired
     private IndicesService indicesService;
 
-    int i=0;
+    int i = 0;
 
     double baseImponibleIva0 = 0;
     double baseImponibleIva = 0;
@@ -44,11 +46,17 @@ public class ProcesarFacturaService {
     String mensajeInfoAdicional = "";
     double montoTotalConImpuestos = 0;
 
+    double impuestoCodigo = 0.0;
+    double impuestoCodigoPorcentaje = 0.0;
+    double impuestoBaseImponible = 0.0;
+    double impuestoValor = 0.0;
+
+    String informacionAdicionalObservacion = "";
+    String informacionAdicionalDireccion = "";
+
     BundleMessages bundleMessages = new BundleMessages();
 
-
-
-    /** 
+    /**
      * Metodo que carga la factura en la base de datos
      */
     public void cargarFactura() {
@@ -58,7 +66,7 @@ public class ProcesarFacturaService {
         String companiaDocumento = "00001";
         int numeroDocumento = indicesService.getT0022Secuencial(companiaDocumento, tipoDocumento, getCurrentYear());
         int numeroFactura = indicesService.getT0022Secuencial(companiaDocumento, tipoFactura, getCurrentYear());
-        
+
         Autorizacion autorizacion = Route.getAuthorization(
                 "/home/ovelez/Documentos/clientes/Leon/documentos/0103153425001/1791984722001/01/2024-04-02/27210020000853005932341.xml");
         Factura factura = Conversion.xmlToPojo(autorizacion.getComprobante(), Factura.class);
@@ -79,10 +87,9 @@ public class ProcesarFacturaService {
             t57011.getId().setSzInvoiceType(tipoFactura);
             t57011.getId().setSzInvoiceCompany(companiaDocumento);
             t57011.setSzReferenceLegal(
-                factura.getInfoTributaria().getEstab()+"-"+
-                factura.getInfoTributaria().getPtoEmi()+"-"+
-                factura.getInfoTributaria().getSecuencial()
-            );
+                    factura.getInfoTributaria().getEstab() + "-" +
+                            factura.getInfoTributaria().getPtoEmi() + "-" +
+                            factura.getInfoTributaria().getSecuencial());
             t57011.setSzReference("");
             t57011.getId().setMnLineNumber(getLineNumber());
             t57011.getId().setMnSequenceNumber(0);
@@ -120,15 +127,96 @@ public class ProcesarFacturaService {
             t57011.setMnUnitsQuantityCanceledScrapped(0.0);
             t57011.setMnAmountPriceUnit(detalle.getPrecioUnitario().doubleValue());
             t57011.setMnAmountGross(0.0);
-            t57011.setMnAmountExtendedPrice(baseImponibleIva0 + baseImponibleIva + baseImponibleIvaVigente );
+            t57011.setMnAmountExtendedPrice(baseImponibleIva0 + baseImponibleIva + baseImponibleIvaVigente);
             t57011.setMnAmountExtendedCost(0.0);
             t57011.setMnPercent1(0.0);
             t57011.setJdDateRequested(new Date());
             t57011.setSzCommitted("");
-
-            
-
-            
+            t57011.setSzLineType("");
+            t57011.setJdDateInvoice(convertirFechaEmision(factura.getInfoFactura().getFechaEmision()));
+            t57011.setJdDateNetDue(new Date());
+            t57011.setMnRelatedNumber(0);
+            t57011.setSzRelatedOrderType("");
+            t57011.setSzCompanyRelatedOrder("");
+            t57011.setSzPrintMessage("");
+            t57011.setSzTaxRateArea("");
+            t57011.setSzTaxRateArea("");
+            t57011.setSzTaxExplCode("");
+            t57011.setSzDescriptionTaxArea("");
+            t57011.setMnTaxAuthority(0.0);
+            t57011.setMnTaxAuthority2(0.0);
+            t57011.setMnTaxAuthority3(0.0);
+            t57011.setMnTaxAuthority4(0.0);
+            t57011.setMnTaxAuthority5(0.0);
+            t57011.setMnTaxRate1(impuestoCodigo);
+            t57011.setMnTaxRate2(impuestoCodigoPorcentaje);
+            t57011.setMnTaxRate3(0.0);
+            t57011.setMnTaxRate4(0.0);
+            t57011.setMnTaxRate5(0.0);
+            t57011.setSzTaxCalculationMethod("");
+            t57011.setMnAmountExtendedPrice(impuestoBaseImponible);
+            t57011.setMnAmountTax(impuestoValor);
+            t57011.setMnAmountTaxable(0.0);
+            t57011.setSzPaymentTermsCode("");
+            t57011.setMnDiscountAvailable(0.0);
+            t57011.setSzUserID("ROBOT-002");
+            t57011.setSzProgramID("");
+            t57011.setSzWorkStationID("-");
+            t57011.setJdDateUpdated(new Date());
+            t57011.setMnTimeofDay(new java.sql.Time(new Date().getTime()));
+            t57011.setMnEDIDocumentNumber(0);
+            t57011.setSzEDIDocumentType("");
+            t57011.setSzEDIDocumentKeyCo("");
+            t57011.setMnEDILineNumber(0);
+            t57011.setMnOrderSuffix(0);
+            t57011.setMnCodClienteParent(0);
+            t57011.setMnDiscountAmount(detalle.getDescuento().doubleValue());
+            t57011.setMnAmountSalesTaxTotal1(factura.getInfoFactura().getPropina().doubleValue());
+            t57011.setMnAmountSalesTaxTotal2(0.0);
+            t57011.setMnAmountSalesTaxTotal3(0.0);
+            t57011.setMnAmountSalesTaxTotal4(0.0);
+            t57011.setMnAmountSalesTaxTotal5(0.0);
+            t57011.setMnAmountNonTaxable(0.0);
+            t57011.setMnAmountListPrice(0.0);
+            t57011.setSz2ndItemNumber(detalle.getCodigoPrincipal());
+            t57011.setMnCarrierNumber(0);
+            t57011.setSzAgreementSupplementDistribution("");
+            t57011.setSzEstablecimiento("");
+            t57011.setMnTripNumber(0);
+            t57011.setMnWeightResult(0.0);
+            t57011.setSzDutyStatus("");
+            t57011.setSzLotSerialNumber("");
+            t57011.setSzParameterDataItem01("");
+            t57011.setSzParameterDataItem02("");
+            t57011.setSzParameterDataItem03("");
+            t57011.setSzParameterDataItem04(factura.getInfoTributaria().getContribuyenteRimpe());
+            t57011.setSzParameterDataItem05(factura.getInfoTributaria().getAgenteRetencion());
+            t57011.setSzParameterDataItem06(getObservacionDeInfoAdicional(factura.getInfoAdicional()));
+            t57011.setSzParameterDataItem07("");
+            t57011.setSzParameterDataItem08("");
+            t57011.setSzParameterDataItem09("");
+            t57011.setSzParameterDataItem10("");
+            t57011.setSzLegalDocumentTitle("");
+            t57011.setSzClaveAcceso(factura.getInfoTributaria().getClaveAcceso());
+            t57011.setSzClaveAccesoContingencia("");
+            t57011.setSzAutorizacionElectronica(autorizacion.getNumeroAutorizacion());
+            t57011.setSzRefAutorizacion1(String.valueOf(autorizacion.getFechaAutorizacion()));
+            t57011.setSzAddressLine3(getDireccionDeInfoAdicional(factura.getInfoAdicional()));
+            t57011.setSzRefAutorizacion2("");
+            t57011.setSzRefAutorizacion3("");
+            t57011.setSzRefAutorizacion4("");
+            t57011.setSzAmbiente(autorizacion.getAmbiente());
+            t57011.setSzTipoEmision(factura.getInfoTributaria().getTipoEmision());
+            t57011.setSzContribuyenteEspecial(factura.getInfoFactura().getContribuyenteEspecial());
+            t57011.setSzObligadoContabilidad(String.valueOf(factura.getInfoFactura().getObligadoContabilidad()));
+            t57011.setSzMoneda(factura.getInfoFactura().getMoneda());
+            t57011.setSzCatSales01(factura.getInfoFactura().getTipoIdentificacionComprador());
+            t57011.setSzCatSales02("");
+            t57011.setSzCatSales03("");
+            t57011.setSzCatSales04("");
+            t57011.setSzCatSales05("");
+            t57011.setSzPeriodoFiscal("");
+            t57011.setSzRise("");
             t57011CrudRepositorio.save(t57011);
         });
     }
@@ -145,7 +233,7 @@ public class ProcesarFacturaService {
         return i++;
     }
 
-      /**
+    /**
      * Metodo que carga los valores de los impuestos de la factura
      * 
      * @param detalle
@@ -153,6 +241,16 @@ public class ProcesarFacturaService {
     private void cargarValoresIva(Factura.Detalles.Detalle detalle) {
 
         detalle.getImpuestos().getImpuesto().forEach(impuesto -> {
+            if (impuesto.getCodigo() != null && impuesto.getCodigoPorcentaje().length() > 0) {
+                impuestoCodigo = Double.valueOf(impuesto.getCodigo());
+            }
+            if (impuesto.getCodigoPorcentaje() != null && impuesto.getCodigoPorcentaje().length() > 0) {
+                impuestoCodigoPorcentaje = Double.valueOf(impuesto.getCodigoPorcentaje());
+            }
+
+            impuestoBaseImponible = impuesto.getBaseImponible().doubleValue();
+            impuestoValor = impuesto.getValor().doubleValue();
+
             if (impuesto.getCodigo().equals("2")) {
                 baseImponibleIva += impuesto.getBaseImponible().doubleValue();
                 valorIva += impuesto.getValor().doubleValue();
@@ -193,6 +291,59 @@ public class ProcesarFacturaService {
                 valorIRBPNR,
                 mensajeInfoAdicional,
                 montoTotalConImpuestos);
+    }
 
+    /**
+     * Metodo que convierte la fecha de la factura al formato de la base de datos
+     * 
+     * @param date
+     * @return
+     */
+    public Date convertirFechaEmision(String date) {
+        try {
+            SimpleDateFormat dmyFormat = new SimpleDateFormat("dd/MM/yyyy");
+            return dmyFormat.parse(date);
+        } catch (Exception ex) {
+            log.error("Error al convertir la fecha 1 {}", ex);
+        }
+        try {
+            SimpleDateFormat dmyFormat = new SimpleDateFormat("dd-MM-yyyy");
+            return dmyFormat.parse(date);
+        } catch (Exception ex) {
+            log.error("Error al convertir la fecha 2 {}", ex);
+        }
+        return new Date();
+    }
+
+    /**
+     * Metodo que obtiene la observacion de la factura
+     * 
+     * @param infoAdicional
+     * @return
+     */
+    private String getObservacionDeInfoAdicional(Factura.InfoAdicional infoAdicional) {
+        infoAdicional.getCampoAdicional().forEach(campo -> {
+
+            if (campo.getNombre() != null && campo.getNombre().toUpperCase().startsWith("OBERVACI")) {
+                informacionAdicionalObservacion = campo.getValue();
+            }
+        });
+        return informacionAdicionalObservacion;
+    }
+
+    /**
+     * Metodo que obtiene la observacion de la factura
+     * 
+     * @param infoAdicional
+     * @return
+     */
+    private String getDireccionDeInfoAdicional(Factura.InfoAdicional infoAdicional) {
+        infoAdicional.getCampoAdicional().forEach(campo -> {
+
+            if (campo.getNombre() != null && campo.getNombre().toUpperCase().startsWith("DIRECCI")) {
+                informacionAdicionalDireccion = campo.getValue();
+            }
+        });
+        return informacionAdicionalDireccion;
     }
 }

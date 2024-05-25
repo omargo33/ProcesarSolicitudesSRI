@@ -2,6 +2,7 @@ package  com.leon.estructura.persistencia.entidad;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.sql.Time;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -253,7 +254,7 @@ public class T57011 implements Serializable {
 
     @Column(name = "mnTimeofDay")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date mnTimeofDay;
+    private Time mnTimeofDay;
 
     @Column(name = "mnEDIDocumentNumber")
     private Integer mnEDIDocumentNumber;
