@@ -38,9 +38,13 @@ public class T57011 implements Serializable {
 
     @Column(name = "szReference", length = 20)
     private String szReference;
-
+    
     @Column(name = "szNumber", length = 15)
     private String szNumber;
+
+
+    @Column(name = "szMember", length = 15)
+    private String szMember;
 
     @Column(name = "mnLegalNumber", length = 10)
     private String mnLegalNumber;

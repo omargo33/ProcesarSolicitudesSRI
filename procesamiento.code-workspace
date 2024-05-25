@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "estructura"
+		},
+		{
+			"path": "../../13Aplicaciones/comprobantes"
 		}
 	],
 	"settings": {

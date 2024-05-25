@@ -72,53 +72,13 @@ public class Test {
                     String.valueOf(detalle.getPrecioSinSubsidio()), String.valueOf(detalle.getPrecioTotalSinImpuesto()),
                     String.valueOf(detalle.getPrecioUnitario()), detalle.getUnidadMedida());
 
-            detalle.getImpuestos().getImpuesto().forEach(impuesto -> {
-                if (impuesto.getCodigo().equals("2")) {
-                    baseImponibleIva += impuesto.getBaseImponible().doubleValue();
-                    valorIva += impuesto.getValor().doubleValue();
-
-                    if (impuesto.getCodigoPorcentaje().compareTo("0") == 0) {
-                        baseImponibleIva0 += impuesto.getBaseImponible().doubleValue();
-                    } else {
-                        baseImponibleIvaVigente += impuesto.getBaseImponible().doubleValue();
-                        valorIvaVigente += impuesto.getValor().doubleValue();
-                        log.info("IVA: {} {} {}", impuesto.getBaseImponible(), impuesto.getValor(),
-                                // porcentajeIva(impuesto.getCodigoPorcentaje())
-                                bundleMessages.getMessage("iva_" + impuesto.getCodigoPorcentaje()));
-                    }
-                    montoTotalConImpuestos += impuesto.getBaseImponible().doubleValue()
-                            + impuesto.getValor().doubleValue();
-
-                }
-                if (impuesto.getCodigo().equals("3")) {
-                    baseImponibleICE += impuesto.getBaseImponible().doubleValue();
-                    valorICE += impuesto.getValor().doubleValue();
-                }
-                if (impuesto.getCodigo().equals("5")) {
-                    baseImponibleIRBPNR += impuesto.getBaseImponible().doubleValue();
-                    valorIRBPNR += impuesto.getValor().doubleValue();
-                }
-            });
-
-            log.info("impuesto: {} {} {} {} {} {} {} {} {} {} {}",
-                    baseImponibleIva0,
-                    baseImponibleIva,
-                    valorIva,
-                    baseImponibleIvaVigente,
-                    valorIvaVigente,
-                    baseImponibleICE,
-                    valorICE,
-                    baseImponibleIRBPNR,
-                    valorIRBPNR,
-                    mensajeInfoAdicional,
-                    montoTotalConImpuestos);
+            cargarValoresIva(detalle);
 
             try {
                 detalle.getDetallesAdicionales().getDetAdicional().forEach(detalleAdicional -> {
                     log.info("detalle adicional: {} {}", detalleAdicional.getNombre(),
                             String.valueOf(detalleAdicional.getValor()));
                 });
-
             } catch (NullPointerException e) {
                 log.info("No hay detalles adicionales");
             }
@@ -144,5 +104,56 @@ public class Test {
                 log.error("No hay campos adicionales", e.toString());
             }
         });
+    }
+
+    /**
+     * Metodo que carga los valores de los impuestos de la factura
+     * 
+     * @param detalle
+     */
+    private void cargarValoresIva(Factura.Detalles.Detalle detalle) {
+
+        detalle.getImpuestos().getImpuesto().forEach(impuesto -> {
+            if (impuesto.getCodigo().equals("2")) {
+                baseImponibleIva += impuesto.getBaseImponible().doubleValue();
+                valorIva += impuesto.getValor().doubleValue();
+
+                if (impuesto.getCodigoPorcentaje().compareTo("0") == 0) {
+                    baseImponibleIva0 += impuesto.getBaseImponible().doubleValue();
+                } else {
+                    baseImponibleIvaVigente += impuesto.getBaseImponible().doubleValue();
+                    valorIvaVigente += impuesto.getValor().doubleValue();
+                    log.info("IVA: {} {} {}", impuesto.getBaseImponible(), impuesto.getValor(),
+                            // porcentajeIva(impuesto.getCodigoPorcentaje())
+                            bundleMessages.getMessage("iva_" + impuesto.getCodigoPorcentaje()));
+                }
+                montoTotalConImpuestos += impuesto.getBaseImponible().doubleValue()
+                        + impuesto.getValor().doubleValue();
+
+            }
+            if (impuesto.getCodigo().equals("3")) {
+                baseImponibleICE += impuesto.getBaseImponible().doubleValue();
+                valorICE += impuesto.getValor().doubleValue();
+            }
+            if (impuesto.getCodigo().equals("5")) {
+                baseImponibleIRBPNR += impuesto.getBaseImponible().doubleValue();
+                valorIRBPNR += impuesto.getValor().doubleValue();
+
+            }
+        });
+
+        log.info("impuesto: {} {} {} {} {} {} {} {} {} {} {}",
+                baseImponibleIva0,
+                baseImponibleIva,
+                valorIva,
+                baseImponibleIvaVigente,
+                valorIvaVigente,
+                baseImponibleICE,
+                valorICE,
+                baseImponibleIRBPNR,
+                valorIRBPNR,
+                mensajeInfoAdicional,
+                montoTotalConImpuestos);
+
     }
 }
