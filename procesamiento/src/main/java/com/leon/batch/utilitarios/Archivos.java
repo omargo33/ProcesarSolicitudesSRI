@@ -27,6 +27,7 @@ public class Archivos {
 
     /**
      * Metodo para obtener el texto de un archivo
+     * 
      * @param ruta
      * @return
      */
@@ -42,7 +43,7 @@ public class Archivos {
             br.close();
             return sb.toString();
         } catch (IOException e) {
-            log.error("Error al leer archivo: {}", e.toString());
+            log.warn("Error al leer archivo: {}", e.toString());
             return null;
         }
     }
@@ -60,7 +61,7 @@ public class Archivos {
             fos.write(contenidoArchivo.getBytes());
             fos.close();
         } catch (IOException e) {
-            log.error("Error al guardar archivo: {}", e.toString());
+            log.warn("Error al guardar archivo: {}", e.toString());
         }
     }
 
@@ -80,11 +81,10 @@ public class Archivos {
             String tipo = clave.substring(8, 10);
             String numeroComprobante = clave.substring(23, 46);
             String separador = System.getProperty("file.separator");
-
             String ruta = rutaBase + separador + "documentos" + separador +
                     rucCliente + separador + ruc + separador +
                     tipo + separador + anio + "-" + mes + "-" + dia;
-                    
+
             File directorio = new File(ruta);
             if (!directorio.exists()) {
                 directorio.mkdirs();
@@ -92,7 +92,7 @@ public class Archivos {
 
             return ruta + separador + numeroComprobante + ".xml";
         } catch (Exception e) {
-            log.error("Error al crear ruta: {}", e.toString());
+            log.warn("Error al crear ruta: {}", e.toString());
             return null;
         }
     }

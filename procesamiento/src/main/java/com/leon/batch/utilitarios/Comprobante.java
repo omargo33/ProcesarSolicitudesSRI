@@ -54,7 +54,7 @@ public class Comprobante {
             Unmarshaller unmarshaller = jc.createUnmarshaller();
             return type.cast(unmarshaller.unmarshal(new ByteArrayInputStream(documentoXml.getBytes())));
         } catch (JAXBException e) {
-            log.error("Error al construir el objeto XML: {}", e.toString());
+            log.warn("Error al construir el objeto XML: {}", e.toString());
             return null;
         }
     }
@@ -80,7 +80,7 @@ public class Comprobante {
                 Files.createDirectories(path);
             }
         } catch (IOException e) {
-            log.error("No se pudo crear: {} por {}", fullPath, e.toString());
+            log.warn("No se pudo crear: {} por {}", fullPath, e.toString());
         }
 
         return fullPath;
@@ -98,7 +98,7 @@ public class Comprobante {
             Path pathFile = Paths.get(path + System.getProperty("file.separator") + nombre);
             Files.write(pathFile, contenido.getBytes());
         } catch (IOException e) {
-            log.error("No se pudo guardar el archivo: {} por {}", nombre, e.toString());
+            log.warn("No se pudo guardar el archivo: {} por {}", nombre, e.toString());
         }
     }
 }

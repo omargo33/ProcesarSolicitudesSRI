@@ -61,7 +61,7 @@ public class DocumentosRecibidosService {
          TokenOk tokenOk = tokenConsumo.getJsonRespuesta(TokenOk.class);
          consumirServicioDocumentosRecibidos(tokenOk.getAccessToken(), ruc, credencial);
       } else {
-         log.error("tokenConsumo: {}", tokenConsumo.toString());
+         log.error("No se ha podido obtener el token de acceso. {}", tokenConsumo.toString());
       }
    }
 
@@ -107,6 +107,8 @@ public class DocumentosRecibidosService {
     * Metodo para mapear los documentos recibidos a la entidad de resumen a la
     * entidad.
     *
+    * documento.getIssuedAt() -> Llega vacio y se pone la fecha IssuedAtFormatted
+    * 
     * @param documento
     * @return
     */
@@ -118,9 +120,10 @@ public class DocumentosRecibidosService {
       resumenDocumentoProveedor.setDocumentType(documento.getDocumentType());
       resumenDocumentoProveedor.setDocumentTypeId(documento.getDocumentTypeId());
       resumenDocumentoProveedor.setEstablishment(documento.getEstablishment());
-      // documento.getIssuedAt() -> Llega vacio y se pone la fecha IssuedAtFormatted
-      resumenDocumentoProveedor
-            .setIssuedAt(ConversionesFecha.stringAFecha(documento.getIssuedAtFormatted(), "dd/MM/yyyy"));
+      resumenDocumentoProveedor.setIssuedAt(
+         ConversionesFecha.stringAFecha(
+            documento.getIssuedAtFormatted(), "dd/MM/yyyy")
+            );
       resumenDocumentoProveedor.setIssuedAtFormatted(documento.getIssuedAtFormatted());
       resumenDocumentoProveedor.setPointIssue(documento.getPointIssue());
       resumenDocumentoProveedor.setRucIssuer(documento.getRucIssuer());

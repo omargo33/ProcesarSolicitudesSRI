@@ -2,6 +2,7 @@ package com.leon.batch.servicio;
 
 import com.leon.estructura.persistencia.crud.T57011CrudRepositorio;
 import com.leon.estructura.persistencia.entidad.T57011;
+import com.leon.estructura.persistencia.entidad.T57011Id;
 
 import javax.transaction.Transactional;
 
@@ -21,6 +22,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
 
+/**
+ * Clase que procesa la factura y la carga en la base de datos.
+ * 
+ * @author omargo33
+ * @since 2024-05-26
+ * 
+ */
 @Slf4j
 @Service
 @Transactional
@@ -46,8 +54,8 @@ public class ProcesarFacturaService {
     String mensajeInfoAdicional = "";
     double montoTotalConImpuestos = 0;
 
-    double impuestoCodigo = 0.0;
-    double impuestoCodigoPorcentaje = 0.0;
+    int impuestoCodigo = 0;
+    int impuestoCodigoPorcentaje = 0;
     double impuestoBaseImponible = 0.0;
     double impuestoValor = 0.0;
 
@@ -59,22 +67,22 @@ public class ProcesarFacturaService {
     /**
      * Metodo que carga la factura en la base de datos
      */
-    public void cargarFactura() {
-
+    public void cargarFactura(String pathFile) {
         String tipoDocumento = "FX";
         String tipoFactura = "RX";
         String companiaDocumento = "00001";
         int numeroDocumento = indicesService.getT0022Secuencial(companiaDocumento, tipoDocumento, getCurrentYear());
         int numeroFactura = indicesService.getT0022Secuencial(companiaDocumento, tipoFactura, getCurrentYear());
 
-        Autorizacion autorizacion = Route.getAuthorization(
-                "/home/ovelez/Documentos/clientes/Leon/documentos/0103153425001/1791984722001/01/2024-04-02/27210020000853005932341.xml");
+        Autorizacion autorizacion = Route.getAuthorization(pathFile);
         Factura factura = Conversion.xmlToPojo(autorizacion.getComprobante(), Factura.class);
 
         Detalles detalles = factura.getDetalles();
         detalles.getDetalle().forEach(detalle -> {
             T57011 t57011 = new T57011();
-            cargarValoresIva(detalle);
+            t57011.setId(new T57011Id());
+
+            calcularValoresIva(detalle);
 
             t57011.getId().setSzComputerId("-");
             t57011.getId().setMnJobNumber(indicesService.getT00221Secuencial("t57011z1"));
@@ -148,8 +156,8 @@ public class ProcesarFacturaService {
             t57011.setMnTaxAuthority3(0.0);
             t57011.setMnTaxAuthority4(0.0);
             t57011.setMnTaxAuthority5(0.0);
-            t57011.setMnTaxRate1(impuestoCodigo);
-            t57011.setMnTaxRate2(impuestoCodigoPorcentaje);
+            t57011.setMnTaxRate1(Double.valueOf(impuestoCodigo));
+            t57011.setMnTaxRate2(Double.valueOf(impuestoCodigoPorcentaje));
             t57011.setMnTaxRate3(0.0);
             t57011.setMnTaxRate4(0.0);
             t57011.setMnTaxRate5(0.0);
@@ -163,7 +171,10 @@ public class ProcesarFacturaService {
             t57011.setSzProgramID("");
             t57011.setSzWorkStationID("-");
             t57011.setJdDateUpdated(new Date());
-            t57011.setMnTimeofDay(new java.sql.Time(new Date().getTime()));
+
+            // TODO: el campo de time of day no se esta guardando
+            // t57011.setMnTimeofDay(LocalTime.now());
+
             t57011.setMnEDIDocumentNumber(0);
             t57011.setSzEDIDocumentType("");
             t57011.setSzEDIDocumentKeyCo("");
@@ -217,10 +228,19 @@ public class ProcesarFacturaService {
             t57011.setSzCatSales05("");
             t57011.setSzPeriodoFiscal("");
             t57011.setSzRise("");
-            t57011CrudRepositorio.save(t57011);
+            try {
+                t57011CrudRepositorio.save(t57011);
+            } catch (Exception e) {
+                log.warn("Error al guardar la factura: {}", e.toString());
+            }
         });
     }
 
+    /**
+     * Metodo que obtiene el año actual
+     * 
+     * @return
+     */
     private int getCurrentYear() {
         Calendar calendar = Calendar.getInstance();
         return calendar.get(Calendar.YEAR);
@@ -234,48 +254,60 @@ public class ProcesarFacturaService {
     }
 
     /**
-     * Metodo que carga los valores de los impuestos de la factura
+     * Metodo que carga los valores de los impuestos de la factura.
+     * 
+     * Carga codigo de impuesto y codigo de porcentaje.
+     * 
+     * Evalua el codigo de impuesto y el codigo del porcentaje, en el caso de IVA se toma el iva 0.
+     * 
+     * Luego verifica el ICE y el IRBPNR.
+     * 
+     * Presentar los valores de los impuestos en el log para validacion.
      * 
      * @param detalle
      */
-    private void cargarValoresIva(Factura.Detalles.Detalle detalle) {
-
+    private void calcularValoresIva(Factura.Detalles.Detalle detalle) {
         detalle.getImpuestos().getImpuesto().forEach(impuesto -> {
-            if (impuesto.getCodigo() != null && impuesto.getCodigoPorcentaje().length() > 0) {
-                impuestoCodigo = Double.valueOf(impuesto.getCodigo());
+            if (impuesto.getCodigo() != null && impuesto.getCodigo().length() > 0) {
+                impuestoCodigo = Integer.valueOf(impuesto.getCodigo());
             }
             if (impuesto.getCodigoPorcentaje() != null && impuesto.getCodigoPorcentaje().length() > 0) {
-                impuestoCodigoPorcentaje = Double.valueOf(impuesto.getCodigoPorcentaje());
+                impuestoCodigoPorcentaje = Integer.valueOf(impuesto.getCodigoPorcentaje());
             }
 
             impuestoBaseImponible = impuesto.getBaseImponible().doubleValue();
             impuestoValor = impuesto.getValor().doubleValue();
 
-            if (impuesto.getCodigo().equals("2")) {
-                baseImponibleIva += impuesto.getBaseImponible().doubleValue();
-                valorIva += impuesto.getValor().doubleValue();
+            switch (impuestoCodigo) {
+                case 2:
+                    baseImponibleIva += impuesto.getBaseImponible().doubleValue();
+                    valorIva += impuesto.getValor().doubleValue();
 
-                if (impuesto.getCodigoPorcentaje().compareTo("0") == 0) {
-                    baseImponibleIva0 += impuesto.getBaseImponible().doubleValue();
-                } else {
-                    baseImponibleIvaVigente += impuesto.getBaseImponible().doubleValue();
-                    valorIvaVigente += impuesto.getValor().doubleValue();
-                    log.info("IVA: {} {} {}", impuesto.getBaseImponible(), impuesto.getValor(),
-                            // porcentajeIva(impuesto.getCodigoPorcentaje())
-                            bundleMessages.getMessage("iva_" + impuesto.getCodigoPorcentaje()));
-                }
-                montoTotalConImpuestos += impuesto.getBaseImponible().doubleValue()
-                        + impuesto.getValor().doubleValue();
+                    if (impuestoCodigoPorcentaje == 0) {
+                        baseImponibleIva0 += impuesto.getBaseImponible().doubleValue();
+                    } else {
+                        baseImponibleIvaVigente += impuesto.getBaseImponible().doubleValue();
+                        valorIvaVigente += impuesto.getValor().doubleValue();
+                        log.info("IVA: {} {} {}",
+                                impuesto.getBaseImponible(),
+                                impuesto.getValor(),
+                                bundleMessages.getMessage("iva_" + impuestoCodigoPorcentaje));
+                    }
+                    montoTotalConImpuestos += impuesto.getBaseImponible().doubleValue()
+                            + impuesto.getValor().doubleValue();
 
-            }
-            if (impuesto.getCodigo().equals("3")) {
-                baseImponibleICE += impuesto.getBaseImponible().doubleValue();
-                valorICE += impuesto.getValor().doubleValue();
-            }
-            if (impuesto.getCodigo().equals("5")) {
-                baseImponibleIRBPNR += impuesto.getBaseImponible().doubleValue();
-                valorIRBPNR += impuesto.getValor().doubleValue();
-
+                    break;
+                case 3:
+                    baseImponibleICE += impuesto.getBaseImponible().doubleValue();
+                    valorICE += impuesto.getValor().doubleValue();
+                    break;
+                case 5:
+                    baseImponibleIRBPNR += impuesto.getBaseImponible().doubleValue();
+                    valorIRBPNR += impuesto.getValor().doubleValue();
+                    break;
+                default:
+                    log.info("El codigo no de impuesto {} no se reconoce", impuestoCodigo);
+                    break;
             }
         });
 
@@ -294,29 +326,31 @@ public class ProcesarFacturaService {
     }
 
     /**
-     * Metodo que convierte la fecha de la factura al formato de la base de datos
+     * Metodo que convierte la fecha de la factura al formato de la base de datos y
+     * espera errores.
      * 
      * @param date
      * @return
      */
-    public Date convertirFechaEmision(String date) {
+    private Date convertirFechaEmision(String date) {
         try {
             SimpleDateFormat dmyFormat = new SimpleDateFormat("dd/MM/yyyy");
             return dmyFormat.parse(date);
         } catch (Exception ex) {
-            log.error("Error al convertir la fecha 1 {}", ex);
+            log.info("Error al convertir la fecha 1 {}", ex.toString());
         }
         try {
             SimpleDateFormat dmyFormat = new SimpleDateFormat("dd-MM-yyyy");
             return dmyFormat.parse(date);
         } catch (Exception ex) {
-            log.error("Error al convertir la fecha 2 {}", ex);
+            log.info("Error al convertir la fecha 2 {}", ex.toString());
         }
         return new Date();
     }
 
     /**
-     * Metodo que obtiene la observacion de la factura
+     * Metodo que obtiene la observacion de la factura desde la informacion
+     * adicional.
      * 
      * @param infoAdicional
      * @return
@@ -332,7 +366,7 @@ public class ProcesarFacturaService {
     }
 
     /**
-     * Metodo que obtiene la observacion de la factura
+     * Metodo que obtiene la direccion de la factura desde la informacion adicional.
      * 
      * @param infoAdicional
      * @return

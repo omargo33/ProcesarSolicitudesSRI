@@ -1,6 +1,5 @@
 package com.leon.batch;
 
-
 /**
  * Clase que contiene las constantes del sistema.
  * 

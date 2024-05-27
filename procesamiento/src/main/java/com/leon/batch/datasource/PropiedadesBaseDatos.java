@@ -45,7 +45,7 @@ public class PropiedadesBaseDatos {
         dataSourceConfig.setUsername(environment.getProperty("datasource.datasource.username"));
         dataSourceConfig.setPassword(environment.getProperty("datasource.datasource.password"));
         listaPropiedades.add(dataSourceConfig);
-        log.info("llave agregada datasource {}", dataSourceConfig.toString());
+        log.info("Data Source Base agregado {}", dataSourceConfig.toString());
 
         for (int i = 0; environment.containsProperty("datasource" + i + ".datasource.id"); i++) {
             String llave = "datasource" + i + ".datasource";
@@ -55,7 +55,7 @@ public class PropiedadesBaseDatos {
             dataSource.setUsername(environment.getProperty(llave + ".username"));
             dataSource.setPassword(environment.getProperty(llave + ".password"));
             listaPropiedades.add(dataSource);
-            log.info("llave agregada {} {}", llave, dataSource.toString());
+            log.info("Data sources {} agregado {}", llave, dataSource.toString());
         }
 
         return listaPropiedades;

@@ -18,7 +18,7 @@ import javax.persistence.EmbeddedId;
  * 
  */
 @Entity
-@Table(name = "T0022")
+@Table(name = "t0022")
 @Data
 public class T0022 implements Serializable {
     

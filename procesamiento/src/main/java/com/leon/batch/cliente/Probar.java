@@ -40,7 +40,7 @@ public class Probar {
                 content.append(line).append("\n");
             }
         } catch (IOException e) {
-            log.error("Error reading file: {}", e.toString());
+            log.warn("Error reading file: {}", e.toString());
         }
         return content.toString();
     }
@@ -50,7 +50,7 @@ public class Probar {
             ObjectMapper mapper = new ObjectMapper();
             return type.cast(mapper.readValue(respuesta, type));
         } catch (JsonProcessingException e) {
-            log.error("super error: {}", e.toString());
+            log.warn("super error: {}", e.toString());
             return null;
         }
     }

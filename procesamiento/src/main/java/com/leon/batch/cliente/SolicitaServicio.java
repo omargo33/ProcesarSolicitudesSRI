@@ -111,7 +111,7 @@ public class SolicitaServicio{
         }
 
         if (rutearSolicitud(connection)) {
-            log.warn("Tipo de consulta no definido");
+            log.error("Error Tipo de consulta no definido");
         }
 
         httpEstado = connection.getResponseCode();
@@ -160,7 +160,7 @@ public class SolicitaServicio{
                     outputStreamWriter.write(xmlConsulta);
                     outputStreamWriter.close();
                 }else{
-                    log.warn("No se ha definido el xml de la consulta");
+                    log.error("No se ha definido el xml de la consulta");
                 }
                 break;
             case CONSULTA_JSON:
@@ -169,7 +169,7 @@ public class SolicitaServicio{
                     outputStreamWriter.write(jsonConsulta);
                     outputStreamWriter.close();
                 }else{
-                    log.warn("No se ha definido el json de la consulta");
+                    log.error("No se ha definido el json de la consulta");
                 }
                 break;
             case CONSULTA_FORM_PARAMETROS:
@@ -179,7 +179,7 @@ public class SolicitaServicio{
                     outputStream.flush();
                     outputStream.close();
                 } else{
-                    log.warn("No se ha definido los parametros de formulario de la consulta");
+                    log.error("No se ha definido los parametros de formulario de la consulta");
                 }
                 break;
             default:
@@ -319,16 +319,16 @@ public class SolicitaServicio{
                     estadoEjecucion = ejecutar();
                 } else {
                     estadoEjecucion = CORTOCIRCUITO;
-                    log.warn("CortoCircuito ACTIVO: {}", nombreCortoCircuito);
+                    log.error("CortoCircuito ACTIVO: {}", nombreCortoCircuito);
                 }
             } catch (NumberFormatException e) {
-                log.error(".cortoCircutio() {}", circuitBreaker);
+                log.warn(".cortoCircutio() {}", circuitBreaker);
                 estadoEjecucion = SERVIDOR_ERROR;
             }
         }
 
         if (estadoEjecucion == SERVIDOR_ERROR) {
-            log.warn("CortoCircuito CREADO: {}", nombreCortoCircuito);
+            log.error("CortoCircuito CREADO: {}", nombreCortoCircuito);
             System.setProperty("CortoCircuito=" + nombreCortoCircuito, String.valueOf(new Date().getTime()));
         }
 

@@ -2,7 +2,8 @@ package  com.leon.estructura.persistencia.entidad;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.sql.Time;
+
+import java.time.LocalTime; 
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -39,11 +40,8 @@ public class T57011 implements Serializable {
 
     @Column(name = "szReference", length = 20)
     private String szReference;
-    
-    @Column(name = "szNumber", length = 15)
-    private String szNumber;
-
-
+   
+ 
     @Column(name = "szMember", length = 15)
     private String szMember;
 
@@ -60,7 +58,6 @@ public class T57011 implements Serializable {
 
     @Column(name = "szOperationType", length = 100)
     private String szOperationType;
-
 
     @Column(name = "szThruCaseStatusCode", length = 3)
     private String szThruCaseStatusCode;
@@ -252,9 +249,9 @@ public class T57011 implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date jdDateUpdated;
 
-    @Column(name = "mnTimeofDay")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Time mnTimeofDay;
+    @Column(name = "mnTimeofDay", columnDefinition = "TIME")
+   //@Temporal(TemporalType.TIME)
+   private LocalTime mnTimeofDay;
 
     @Column(name = "mnEDIDocumentNumber")
     private Integer mnEDIDocumentNumber;

@@ -80,7 +80,7 @@ public class Test {
                             String.valueOf(detalleAdicional.getValor()));
                 });
             } catch (NullPointerException e) {
-                log.info("No hay detalles adicionales");
+                log.info("No hay detalles adicionales {}", e.toString());
             }
 
             try {
@@ -101,7 +101,7 @@ public class Test {
                     log.info("mensajeInfoAdicional: {}", mensajeInfoAdicional);
                 }
             } catch (Exception e) {
-                log.error("No hay campos adicionales", e.toString());
+                log.warn("No hay campos adicionales", e.toString());
             }
         });
     }
@@ -154,6 +154,5 @@ public class Test {
                 valorIRBPNR,
                 mensajeInfoAdicional,
                 montoTotalConImpuestos);
-
     }
 }

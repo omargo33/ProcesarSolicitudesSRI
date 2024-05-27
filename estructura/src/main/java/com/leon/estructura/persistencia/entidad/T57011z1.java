@@ -2,6 +2,7 @@ package com.leon.estructura.persistencia.entidad;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.time.LocalTime; 
 
 import lombok.Data;
 
@@ -248,9 +249,9 @@ public class T57011z1 implements Serializable {
    @Temporal(TemporalType.DATE)
    private Date jdDateUpdated;
 
-   @Column(name = "mnTimeofDay")
-   @Temporal(TemporalType.TIME)
-   private Date mnTimeofDay;
+   @Column(name = "mnTimeofDay", columnDefinition = "TIME")
+   //@Temporal(TemporalType.TIME)
+   private LocalTime mnTimeofDay;
 
    @Column(name = "mnEDIDocumentNumber")
    private Integer mnEdidocumentNumber;

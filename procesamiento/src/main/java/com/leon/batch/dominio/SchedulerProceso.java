@@ -10,11 +10,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.leon.estructura.persistencia.entidad.Cliente;
-import com.leon.batch.Constantes;
 import com.leon.batch.datasource.DataSourceContextHolder;
 import com.leon.batch.servicio.ConfiguracionService;
 import com.leon.batch.servicio.DescargaService;
 import com.leon.batch.servicio.DocumentosRecibidosService;
+import com.leon.batch.servicio.ProcesarFacturaService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,9 +30,12 @@ public class SchedulerProceso {
 
     @Autowired
     DocumentosRecibidosService documentosRecibidosService;
-    
+
     @Autowired
     DescargaService descargaService;
+
+    @Autowired
+    ProcesarFacturaService procesarFacturaService;
 
     Map<Integer, Parametro> mapaParametro;
     List<Cliente> listaClientes;
@@ -48,34 +51,29 @@ public class SchedulerProceso {
     public void reportCurrentTime() {
         if (ejecutarConfiguracion()) {
             for (Cliente cliente : listaClientes) {
-                //
-                // Todo se suspende para probar la descarga.
-                //ejecutarConsultasDocumentosRecibidos(cliente.getSriUsuario(), cliente.getSriCredencial());
-                
+                ejecutarConsultasDocumentosRecibidos(cliente.getSriUsuario(), cliente.getSriCredencial());
+
                 ejecutarDescargaDocumentosRecibidos(cliente.getSriUsuario(), cliente.getSriCredencial());
+
+                ejecutarSubidaFactura(cliente.getSriUsuario());
             }
         }
     }
 
-    /** 
+    /**
      * Metodo para ejecutar la configuracion de parametros y clientes.
      * 
      * @return
      */
     private boolean ejecutarConfiguracion() {
         DataSourceContextHolder.setBranchContext("config");
-        
-        log.error("Configuracion de parametros: 123");
         mapaParametro = clienteService.generarParametros();
-
-        log.error("Configuracion de parametros: 456");
 
         for (Map.Entry<Integer, Parametro> entry : mapaParametro.entrySet()) {
             Integer key = entry.getKey();
             Parametro value = entry.getValue();
-            log.error("Parametro: {}, valor: {}", key, value.toString());
+            log.info("Parametro: {}, valor: {}", key, value.toString());
         }
-
 
         Optional<List<Cliente>> clientesOptional = clienteService.getClientes();
         if (clientesOptional.isPresent()) {
@@ -96,7 +94,7 @@ public class SchedulerProceso {
         return true;
     }
 
-    /** 
+    /**
      * Metodo para ejecutar las consultas de documentos recibidos.
      * 
      * @param ruc
@@ -120,5 +118,19 @@ public class SchedulerProceso {
 
         descargaService.setMapaParametros(mapaParametro);
         descargaService.descargarDocumentosRecibidos(ruc, credencial);
+    }
+
+    /**
+     * Metodo para ejecutar la subida de facturas.
+     * 
+     * @param ruc
+     */
+    private void ejecutarSubidaFactura(String ruc) {
+        DataSourceContextHolder.setBranchContext(ruc);
+
+        descargaService.getListaArchivos().forEach(archivo -> {
+            log.info("Archivo: {}", archivo);
+            procesarFacturaService.cargarFactura(archivo);
+        });
     }
 }
