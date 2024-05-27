@@ -37,11 +37,12 @@ public class DescargaService {
     Map<Integer, Parametro> mapaParametros;
 
     @Setter(AccessLevel.NONE)
-    List<String> listaArchivos = new ArrayList<>();
+    List<String> listaArchivos;
 
     @Autowired
     private ResumenDocumentoProveedorCrudRepositorio resumenDocumentoProveedorCrudRepositorio;
 
+   
     /**
      * Metodo para consultar el token de acceso al servicio del SRI.
      * 
@@ -72,6 +73,7 @@ public class DescargaService {
      * 
      */
     public void descargarDocumentosRecibidos(String ruc, String credencial) {
+        listaArchivos = new ArrayList<>();
         DescargarConsumo descargarConsumo = new DescargarConsumo();
 
         Optional<List<ResumenDocumentoProveedor>> listaDocumentosADescargar = resumenDocumentoProveedorCrudRepositorio
@@ -92,6 +94,7 @@ public class DescargaService {
 
                 String ruta = Archivos.crearRutaClaveAccesoRUC(documento.getAccessKey(), ruc, pathUser);
                 Archivos.guardarArchivo(ruta, respuesta);
+                listaArchivos.add(ruta);
             } else {
                 log.error("No se puede obtener el XML autorizado. {}", descargarConsumo.toString());
             }

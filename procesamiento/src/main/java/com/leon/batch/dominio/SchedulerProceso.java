@@ -47,7 +47,7 @@ public class SchedulerProceso {
      * 
      * @return
      */
-    @Scheduled(fixedRate = 180000)
+    @Scheduled(fixedRate = 600000)
     public void reportCurrentTime() {
         if (ejecutarConfiguracion()) {
             for (Cliente cliente : listaClientes) {

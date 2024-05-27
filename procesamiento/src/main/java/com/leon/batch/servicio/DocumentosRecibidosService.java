@@ -98,8 +98,13 @@ public class DocumentosRecibidosService {
    private void guardarDocumentosRecibidos(String keyDatasoruce, Documento[] arregloDocumentos) {
       DataSourceContextHolder.setBranchContext(keyDatasoruce);
 
-      for (Documento documento : arregloDocumentos) {
-         resumenDocumentoProveedorCrudRepositorio.save(crearEntidad(documento));
+      if (arregloDocumentos != null && arregloDocumentos.length > 0) {
+         log.info("Guardando documentos recibidos: {}", arregloDocumentos.length);
+         for (Documento documento : arregloDocumentos) {
+            resumenDocumentoProveedorCrudRepositorio.save(crearEntidad(documento));
+         }
+      } else {
+         log.error("No hay documentos recibidos para guardar");
       }
    }
 
@@ -121,9 +126,8 @@ public class DocumentosRecibidosService {
       resumenDocumentoProveedor.setDocumentTypeId(documento.getDocumentTypeId());
       resumenDocumentoProveedor.setEstablishment(documento.getEstablishment());
       resumenDocumentoProveedor.setIssuedAt(
-         ConversionesFecha.stringAFecha(
-            documento.getIssuedAtFormatted(), "dd/MM/yyyy")
-            );
+            ConversionesFecha.stringAFecha(
+                  documento.getIssuedAtFormatted(), "dd/MM/yyyy"));
       resumenDocumentoProveedor.setIssuedAtFormatted(documento.getIssuedAtFormatted());
       resumenDocumentoProveedor.setPointIssue(documento.getPointIssue());
       resumenDocumentoProveedor.setRucIssuer(documento.getRucIssuer());

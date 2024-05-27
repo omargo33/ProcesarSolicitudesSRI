@@ -110,7 +110,7 @@ public class SolicitaServicio{
             connection.setReadTimeout(getTimeOut());
         }
 
-        if (rutearSolicitud(connection)) {
+        if (!rutearSolicitud(connection)) {
             log.error("Error Tipo de consulta no definido");
         }
 
@@ -182,7 +182,11 @@ public class SolicitaServicio{
                     log.error("No se ha definido los parametros de formulario de la consulta");
                 }
                 break;
+            case CONSULTA_URL_PARAMETROS:
+                break;
+                
             default:
+                log.error("No se ha definido el tipo de consulta {}", tipoConsulta);
                 return false;
         }
 
