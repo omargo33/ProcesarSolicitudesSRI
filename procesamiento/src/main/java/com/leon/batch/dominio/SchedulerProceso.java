@@ -47,7 +47,7 @@ public class SchedulerProceso {
      * 
      * @return
      */
-    @Scheduled(fixedRate = 600000)
+    @Scheduled(fixedRate = 180000)
     public void reportCurrentTime() {
         if (ejecutarConfiguracion()) {
             for (Cliente cliente : listaClientes) {
@@ -68,12 +68,6 @@ public class SchedulerProceso {
     private boolean ejecutarConfiguracion() {
         DataSourceContextHolder.setBranchContext("config");
         mapaParametro = clienteService.generarParametros();
-
-        for (Map.Entry<Integer, Parametro> entry : mapaParametro.entrySet()) {
-            Integer key = entry.getKey();
-            Parametro value = entry.getValue();
-            log.info("Parametro: {}, valor: {}", key, value.toString());
-        }
 
         Optional<List<Cliente>> clientesOptional = clienteService.getClientes();
         if (clientesOptional.isPresent()) {
@@ -129,7 +123,6 @@ public class SchedulerProceso {
         DataSourceContextHolder.setBranchContext(ruc);
 
         descargaService.getListaArchivos().forEach(archivo -> {
-            log.info("Archivo: {}", archivo);
             procesarFacturaService.cargarFactura(archivo);
         });
     }

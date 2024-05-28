@@ -22,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Clase que procesa la factura y la carga en la base de datos.
  * 
@@ -110,22 +112,22 @@ public class ProcesarFacturaService {
             t57011.getId().setSzJobTypeDescription("");
             t57011.setSzThruCaseStatusCode("");
             t57011.setMnCodCliente(0);
-            t57011.setSzNameAlpha(factura.getInfoFactura().getRazonSocialComprador());
+            t57011.setSzNameAlpha( formatearUtf8Largo(  factura.getInfoFactura().getRazonSocialComprador(),150));
             t57011.setSzTaxID(factura.getInfoFactura().getIdentificacionComprador());
             t57011.setSzAddressLine01("");
             t57011.setSzAddressLine02("");
             t57011.setMnCodClienteShipTo(0);
             t57011.setSzBodega("");
             t57011.setSzCompany("");
-            t57011.setSzName(factura.getInfoTributaria().getRazonSocial());
+            t57011.setSzName(formatearUtf8Largo(factura.getInfoTributaria().getRazonSocial(),160));
             t57011.setSzTaxIdentificationNumber(factura.getInfoTributaria().getRuc());
-            t57011.setSzAddressLine1(factura.getInfoTributaria().getDirMatriz());
-            t57011.setSzAddressLine2(factura.getInfoFactura().getDirEstablecimiento());
-            t57011.setSzAddressLine3(factura.getInfoFactura().getDireccionComprador());
+            t57011.setSzAddressLine1(formatearUtf8Largo(factura.getInfoTributaria().getDirMatriz(),2000));
+            t57011.setSzAddressLine2(formatearUtf8Largo(factura.getInfoFactura().getDirEstablecimiento(),2000));
+            t57011.setSzAddressLine3(formatearUtf8Largo(factura.getInfoFactura().getDireccionComprador(),2000));
             t57011.setSzAddressLine4("");
             t57011.setMnCodItemNumberShort(0);
             t57011.setSzPrintDataYN("");
-            t57011.setSzDescription(detalle.getDescripcion());
+            t57011.setSzDescription(formatearUtf8Largo(detalle.getDescripcion(), 250));
             t57011.setSzDescription2("");
             t57011.setMnItemNumber("0");
             t57011.setSzUnitofMeasureasInput("");
@@ -246,6 +248,19 @@ public class ProcesarFacturaService {
         return calendar.get(Calendar.YEAR);
     }
 
+    private String formatearUtf8Largo(String valor, int largo) {
+        if(valor == null) {
+            return "";
+        }
+                
+        if (valor.length() > largo) {
+            valor = valor.substring(0, largo);
+        }
+        byte[] array = valor.getBytes(StandardCharsets.US_ASCII);
+        return new String(array, StandardCharsets.US_ASCII);
+        
+    }
+
     /**
      * Metodo para crear un numero secuencial de ingreso de linea.
      */
@@ -258,7 +273,8 @@ public class ProcesarFacturaService {
      * 
      * Carga codigo de impuesto y codigo de porcentaje.
      * 
-     * Evalua el codigo de impuesto y el codigo del porcentaje, en el caso de IVA se toma el iva 0.
+     * Evalua el codigo de impuesto y el codigo del porcentaje, en el caso de IVA se
+     * toma el iva 0.
      * 
      * Luego verifica el ICE y el IRBPNR.
      * 
